@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">recipe_finder</string>
+    <string name="welcome">Welcome!</string>
+    <string name="name">Name</string>
+    <string name="e_mail_address">E-mail Address</string>
+    <string name="register">REGISTER</string>
+    <string name="password">Password</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="login">Login</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="welcome_back">Welcome Back!</string>
+    <string name="username">Username</string>
+    <string name="don_t_have_an_account">Don’t have an account?</string>
+    <string name="sign_up_here">Sign up here</string>
+    <string name="chooking">Chooking</string>
+    <string name="tagline">crave. locate. create</string>
+    <string name="recipe_name">Recipe name</string>
+    <string name="difficulty">Difficulty:</string>
+    <string name="total_time">Total time:</string>
+    <string name="_5_0">5.0 ()</string>
+</resources>
