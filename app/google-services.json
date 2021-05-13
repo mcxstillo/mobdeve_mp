@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1007561181971",
+    "project_id": "mobdeve-b369a",
+    "storage_bucket": "mobdeve-b369a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007561181971:android:803def81cf4c77ab0068e6",
+        "android_client_info": {
+          "package_name": "com.mobdeve.castillo.recipe_finder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1007561181971-a3bglfps74ma8gbo9n4nh6v6jt5flnlp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBS-tn4lWOuYN-fYgyBg_jTdUFsqUuBbVQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1007561181971-a3bglfps74ma8gbo9n4nh6v6jt5flnlp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
