@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class register extends AppCompatActivity {
 
@@ -53,8 +54,27 @@ public class register extends AppCompatActivity {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d("TAG", "createUserWithEmail:success");
 
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                updateUI(user);
+//                                  FirebaseUser user = mAuth.getCurrentUser();
+                                User user = new User(reg_emailEt.getText().toString().trim(),reg_usernameEt.getText().toString().trim());
+//                                updateUI(user);
+
+                                FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
+                                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                        .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+
+                                        if(task.isSuccessful()){
+                                            Log.d("yay","successful");
+                                            updateUI(user);
+
+                                        }
+                                        else{
+                                            Log.d("aw","not successful");
+                                        }
+                                    }
+                                });
+
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w("TAG", "createUserWithEmail:failure", task.getException());
@@ -78,10 +98,10 @@ public class register extends AppCompatActivity {
         this.link_loginTv = findViewById(R.id.reg_loginTv);
     }
 
-    public void updateUI(FirebaseUser currentUser) {
+    public void updateUI(User currentUser) {
         Intent Login = new Intent(getApplicationContext(), login.class);
-        Login.putExtra("email", currentUser.getEmail());
-        Log.v("DATA", currentUser.getUid());
+//        Login.putExtra("email", currentUser.getEmail());
+//        Log.v("DATA", currentUser.getUid());
         startActivity(Login);
     }
 }
