@@ -25,7 +25,7 @@ public class results extends AppCompatActivity {
     private RecyclerView resultsRv;
     private ResultsAdapter adapter;
     public ImageView sidebar;
-    ArrayList<Recipe> recipes = new ArrayList<>();
+    ArrayList<Recipe> recipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,6 @@ public class results extends AppCompatActivity {
         resultsRv.setLayoutManager(lm);
         adapter = new ResultsAdapter(recipes);
         resultsRv.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
 
         DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -48,13 +47,12 @@ public class results extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
-                    Log.d("recipeItemName",""+recipeItem.getName());
                     dataSnapshot.getValue(Recipe.class);
-                    Log.d("dataSnapshot",""+dataSnapshot.getValue(Recipe.class).getName());
 
                     recipes.add(recipeItem);
                     Log.d("ArrayContent",""+recipes.toString());
                 }
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -62,9 +60,6 @@ public class results extends AppCompatActivity {
 
             }
         });
-
-
-
     }
 
     private void init() {
