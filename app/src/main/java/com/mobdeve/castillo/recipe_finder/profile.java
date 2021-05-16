@@ -28,7 +28,7 @@ public class profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-    //    this.emailProfile = findViewById(R.id.emailProfile);
+//        this.emailProfile = findViewById(R.id.emailProfile);
         this.nameProfile = findViewById(R.id.nameProfile);
 
         //if account is theirs, logout
@@ -44,12 +44,12 @@ public class profile extends AppCompatActivity {
 
                 if(userProfile != null){
                     String name = userProfile.name;
-                    String email = userProfile.email;
+//                    String email = userProfile.email;
 
-                    emailProfile.setText(email);
+//                    emailProfile.setText(email);
                     nameProfile.setText(name);
 
-                    Log.d("email",email +"");
+//                    Log.d("email",email +"");
                     Log.d("name",name +"");
 
                 }
