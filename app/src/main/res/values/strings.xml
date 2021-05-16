@@ -18,6 +18,49 @@
     <string name="difficulty">Difficulty:</string>
     <string name="total_time">Total time:</string>
     <string name="_5_0">5.0 ()</string>
+
+    // Create recipe strings
+    <string name="create">Create Recipe</string>
+    <string name="create_name">Recipe Name</string>
+    <string name="create_cuisine">Cuisine</string>
+    <string name="create_size">Serving Size</string>
+    <string name="create_preptime">Prep Time</string>
+    <string name="create_cooktime">Cooking Time</string>
+    <string name="create_desc">Description</string>
+
+    // Create recipe string arrays
+    <string-array name="cuisine_array">
+        <item>American</item>
+        <item>Cajun</item>
+        <item>Chinese</item>
+        <item>Filipino</item>
+        <item>German</item>
+        <item>Greek</item>
+        <item>Indian</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Korean</item>
+        <item>Mediterranean</item>
+        <item>Mexican</item>
+        <item>Spanish</item>
+        <item>Thai</item>
+        <item>Vietnamese</item>
+    </string-array>
+
+    <string-array name="size_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>10+</item>
+    </string-array>
+
     <string name="sample_name">Julia Moskin</string>
     <string name="sample_email">juliamoskin@gmail.com</string>
     <string name="update">Update</string>
