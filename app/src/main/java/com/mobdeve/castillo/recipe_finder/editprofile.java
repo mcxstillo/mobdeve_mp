@@ -8,7 +8,7 @@ import android.widget.EditText;
 
 public class editprofile extends AppCompatActivity {
 
-    public EditText profile_nameEt, oldpass, newpass, confirmpass;
+    public EditText profile_nameEt, descEt, oldpass, newpass, confirmpass;
     public Button updateBtn;
 
     @Override
@@ -21,6 +21,7 @@ public class editprofile extends AppCompatActivity {
 
     private void init() {
         this.profile_nameEt = findViewById(R.id.edit_nameEt);
+        this.descEt = findViewById(R.id.edit_descEt);
         this.updateBtn = findViewById(R.id.profile_updateBtn);
         this.oldpass = findViewById(R.id.edit_oldpassEt);
         this.newpass = findViewById(R.id.edit_newpassEt);
