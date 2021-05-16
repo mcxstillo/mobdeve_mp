@@ -1,5 +1,6 @@
 package com.mobdeve.castillo.recipe_finder;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         holder.setName(this.recipes.get(position).getName());
         holder.setRating(this.recipes.get(position).getRating());
         holder.setDifficulty(this.recipes.get(position).getDifficulty());
@@ -65,6 +67,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
 
     @Override
     public int getItemCount() {
+//        Log.d("itemCOuntResultsAd",""+recipes.size());
         return recipes.size();
     }
 }

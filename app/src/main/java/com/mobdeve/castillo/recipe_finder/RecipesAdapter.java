@@ -50,7 +50,6 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
     public RecipesAdapter.ViewHolder onCreateViewHolder(@NonNull  ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_layout, parent, false);
         RecipesAdapter.ViewHolder vh = new RecipesAdapter.ViewHolder(view);
-
         return vh;
     }
 

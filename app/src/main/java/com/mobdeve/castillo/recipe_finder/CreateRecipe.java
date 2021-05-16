@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -72,16 +73,9 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
 
                     }
                 });
+                startActivity(new Intent(CreateRecipe.this, results.class));
             }
         });
-
-
-        //SET VALUE within user
-
-//        FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
-//                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-//                .setValue(user)
-
 
     }
 
