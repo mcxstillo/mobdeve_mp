@@ -68,6 +68,6 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
     @Override
     public int getItemCount() {
 //        Log.d("itemCOuntResultsAd",""+recipes.size());
-        return recipes.size();
+        return this.recipes.size();
     }
 }

@@ -72,5 +72,6 @@ public class results extends AppCompatActivity {
         logo.setImageResource(R.drawable.chef);
         this.sidebar = findViewById(R.id.sidebarIv);
         this.resultsRv = findViewById(R.id.resultsRv);
+        this.recipes = new ArrayList<Recipe>();
     }
 }
