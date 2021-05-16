@@ -38,6 +38,7 @@ public class profile extends AppCompatActivity {
         this.viewBtn = findViewById(R.id.viewBtn);
 
         init();
+        initFirebase();
 
         //if account is theirs, logout
 
@@ -83,7 +84,9 @@ public class profile extends AppCompatActivity {
         this.viewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(profile.this, CreateRecipe.class));
+                Intent create = new Intent(profile.this, CreateRecipe.class);
+                create.putExtra("TYPE", "CREATE");
+                startActivity(create);
             }
         });
 

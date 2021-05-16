@@ -34,6 +34,8 @@
     <string name="create_preptime">Prep Time</string>
     <string name="create_cooktime">Cooking Time</string>
     <string name="create_desc">Description</string>
+    <string name="create_new">Next</string>
+    <string name="create_update">Update</string>
 
     // Create recipe string arrays
     <string-array name="cuisine_array">
