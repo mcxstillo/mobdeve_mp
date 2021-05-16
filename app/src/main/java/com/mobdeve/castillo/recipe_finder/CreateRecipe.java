@@ -83,6 +83,12 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         });
 
 
+        this.updateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // lagay mo nalang update stuff here yey
+            }
+        });
 
     }
 
