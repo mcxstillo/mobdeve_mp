@@ -3,8 +3,10 @@ package com.mobdeve.castillo.recipe_finder;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,13 +33,18 @@ public class profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-//        this.emailProfile = findViewById(R.id.emailProfile);
+        this.emailProfile = findViewById(R.id.emailProfile);
         this.nameProfile = findViewById(R.id.nameProfile);
 
         init();
 
         //if account is theirs, logout
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
+        userID = user.getUid();
+
+        Log.d("INPROFILE","HELLO");
         reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -45,12 +52,14 @@ public class profile extends AppCompatActivity {
 
                 if(userProfile != null){
                     String name = userProfile.name;
-//                    String email = userProfile.email;
+                    String email = userProfile.email;
+                    String desc = userProfile.desc;
 
-//                    emailProfile.setText(email);
+                    emailProfile.setText(email);
                     nameProfile.setText(name);
+                    descProfile.setText(desc);
 
-//                    Log.d("email",email +"");
+                    Log.d("email",email +"");
                     Log.d("name",name +"");
 
                 }
@@ -60,6 +69,13 @@ public class profile extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d("Sad", "User Profile Cannot be Displayed");
 
+            }
+        });
+
+        this.editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(profile.this, editprofile.class));
             }
         });
 

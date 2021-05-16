@@ -45,7 +45,6 @@ public class register extends AppCompatActivity {
         registerBtn.setOnClickListener(v -> {
             Log.d("onClick", reg_emailEt.getText().toString().trim());
 
-
             mAuth.createUserWithEmailAndPassword(reg_emailEt.getText().toString().trim(), reg_passwordEt.getText().toString().trim())
                     .addOnCompleteListener(register.this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -55,7 +54,7 @@ public class register extends AppCompatActivity {
                                 Log.d("TAG", "createUserWithEmail:success");
 
 //                                  FirebaseUser user = mAuth.getCurrentUser();
-                                User user = new User(reg_emailEt.getText().toString().trim(),reg_usernameEt.getText().toString().trim());
+                                User user = new User(reg_emailEt.getText().toString().trim(),reg_usernameEt.getText().toString().trim(),null);
 //                                updateUI(user);
 
                                 FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
@@ -84,6 +83,14 @@ public class register extends AppCompatActivity {
                         }
                     });
 
+        });
+
+        this.link_loginTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toLogin = new Intent(register.this, login.class);
+                startActivity(toLogin);
+            }
         });
     }
 
