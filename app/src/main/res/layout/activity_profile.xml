@@ -102,6 +102,12 @@
                 android:layout_height="wrap_content"
                 android:text="Edit Profile"
                 app:backgroundTint="#FF8227" />
+
+            <Button
+                android:id="@+id/recipesBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="create recipe" />
         </LinearLayout>
     </ScrollView>
 
