@@ -84,7 +84,7 @@ public class profile extends AppCompatActivity {
         this.viewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent create = new Intent(profile.this, CreateRecipe.class);
+                Intent create = new Intent(profile.this, RecipeBook.class);
                 create.putExtra("TYPE", "CREATE");
                 startActivity(create);
             }

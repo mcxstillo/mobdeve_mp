@@ -21,6 +21,8 @@ import java.util.Objects;
 
 public class results extends AppCompatActivity {
 
+
+    //POSTED RECIPES/SEARCH RESULTS
     private ImageView logo;
     private RecyclerView resultsRv;
     private ResultsAdapter adapter;
