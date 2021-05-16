@@ -62,7 +62,6 @@ public class editprofile extends AppCompatActivity {
                 startActivity(new Intent(editprofile.this,profile.class));
             }
         });
-
     }
 
     private void init() {

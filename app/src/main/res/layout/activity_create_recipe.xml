@@ -173,7 +173,16 @@
                 android:layout_width="135dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:text="Next"
+                android:text="@string/create_new"
+                app:backgroundTint="#FF8227" />
+
+            <Button
+                android:id="@+id/create_updateBtn"
+                android:layout_width="135dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/create_update"
+                android:visibility="gone"
                 app:backgroundTint="#FF8227" />
 
         </LinearLayout>

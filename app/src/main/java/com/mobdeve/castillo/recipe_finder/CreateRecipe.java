@@ -34,14 +34,19 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     private Spinner cuisine, size;
     ArrayAdapter<CharSequence> cuisine_adapter, size_adapter;
     private String selected_cuisine, selected_size; // hi cams use this string to get values ng cuisine and size since dito ko inassign yung values for dropdown
-    private Button nextBtn;
+    private Button nextBtn, updateBtn;
+
+    public String type;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe);
-        
+
+        Intent intent_type = getIntent();
+        type = intent_type.getStringExtra("TYPE");
+
         init();
 
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -77,6 +82,8 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
+
+
     }
 
     @Override
@@ -101,6 +108,13 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         this.cooktime = findViewById(R.id.create_cookEt);
         this.desc = findViewById(R.id.create_descEt);
         this.nextBtn = findViewById(R.id.create_nextBtn);
+        this.updateBtn = findViewById(R.id.create_updateBtn);
+
+        switch(type) {
+            case "CREATE": updateBtn.setVisibility(View.GONE); break;
+            case "UPDATE": nextBtn.setVisibility(View.GONE);
+                           updateBtn.setVisibility(View.VISIBLE); break;
+        }
 
         cuisine_adapter = ArrayAdapter.createFromResource(this,R.array.cuisine_array,R.layout.support_simple_spinner_dropdown_item);
         size_adapter = ArrayAdapter.createFromResource(this, R.array.size_array,R.layout.support_simple_spinner_dropdown_item);
