@@ -36,86 +36,91 @@
             app:srcCompat="@drawable/chef" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
-    <TextView
-        android:id="@+id/change_imgTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:text="Change profile photo"
-        android:textColor="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/edit_nameEt"
-        android:layout_width="255dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="72dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="56dp"
+                tools:srcCompat="@tools:sample/avatars" />
 
-    <EditText
-        android:id="@+id/edit_oldpassEt"
-        android:layout_width="255dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:hint="Old Password"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_nameEt" />
+            <TextView
+                android:id="@+id/change_imgTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="Change profile photo"
+                android:textColor="#000000" />
 
-    <EditText
-        android:id="@+id/edit_newpassEt"
-        android:layout_width="255dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:hint="New Password"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_oldpassEt" />
+            <EditText
+                android:id="@+id/edit_nameEt"
+                android:layout_width="255dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="40dp"
+                android:ems="10"
+                android:hint="Name"
+                android:inputType="textPersonName" />
 
-    <EditText
-        android:id="@+id/edit_confpassEt"
-        android:layout_width="255dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:hint="Confirm Password"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_newpassEt" />
+            <EditText
+                android:id="@+id/edit_descEt"
+                android:layout_width="255dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="Description"
+                android:inputType="textMultiLine" />
 
-    <Button
-        android:id="@+id/profile_updateBtn"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:background="#FFFFFF"
-        android:text="@string/update"
-        app:backgroundTint="#FF8227"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_confpassEt" />
+            <EditText
+                android:id="@+id/edit_newpassEt"
+                android:layout_width="255dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="24dp"
+                android:ems="10"
+                android:hint="New Password"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/edit_oldpassEt"
+                android:layout_width="255dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="24dp"
+                android:ems="10"
+                android:hint="Old Password"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/edit_confpassEt"
+                android:layout_width="255dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="24dp"
+                android:ems="10"
+                android:hint="Confirm Password"
+                android:inputType="textPassword" />
+
+            <Button
+                android:id="@+id/profile_updateBtn"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="64dp"
+                android:background="#FFFFFF"
+                android:text="@string/update"
+                app:backgroundTint="#FF8227" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

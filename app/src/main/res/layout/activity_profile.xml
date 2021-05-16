@@ -52,7 +52,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/imgProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="35dp"
@@ -69,7 +69,15 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/emailProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/sample_email"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/descProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
@@ -80,7 +88,7 @@
                 android:textSize="16sp" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/viewBtn"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -89,7 +97,7 @@
                 app:backgroundTint="#FF8227" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/editBtn"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:text="Edit Profile"
