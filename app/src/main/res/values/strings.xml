@@ -1,19 +1,26 @@
 <resources>
     <string name="app_name">recipe_finder</string>
     <string name="welcome">Welcome!</string>
+    <string name="recipebook">My Recipe Book</string>
+
+    // Registration strings
+    <string name="register">REGISTER</string>
     <string name="name">Name</string>
     <string name="e_mail_address">E-mail Address</string>
-    <string name="register">REGISTER</string>
     <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="login">Login</string>
-    <string name="confirm_password">Confirm Password</string>
+
+    // Login strings
     <string name="welcome_back">Welcome Back!</string>
     <string name="e_mail_login">E-mail Address</string>
     <string name="don_t_have_an_account">Don’t have an account?</string>
     <string name="sign_up_here">Sign up here</string>
     <string name="chooking">Chooking</string>
     <string name="tagline">crave. locate. create</string>
+
+    // Row layout strings
     <string name="recipe_name">Recipe name</string>
     <string name="difficulty">Difficulty:</string>
     <string name="total_time">Total time:</string>
@@ -64,8 +71,7 @@
     <string name="sample_name">Julia Moskin</string>
     <string name="sample_email">juliamoskin@gmail.com</string>
     <string name="update">Update</string>
-<!--    <string name="sample_about">-->
-<!--        Julia Moskin, a lifelong New Yorker, has been a Food staff reporter since 2004. She was part of a New York Times team that earned the 2018 Pulitzer Prize for public service, for her reporting on sexual harassment in the restaurant industry. Her beat covers everything food-related: news, trends, creators and recipes. In 2020, her investigation of the Court of Master Sommeliers exposed sexual abuse at the highest levels of the wine world.-->
-<!--    </string>-->
-    <string name="sample_about"></string>
+    <string name="sample_about">
+        Julia Moskin, a lifelong New Yorker, has been a Food staff reporter since 2004. She was part of a New York Times team that earned the 2018 Pulitzer Prize for public service, for her reporting on sexual harassment in the restaurant industry. Her beat covers everything food-related: news, trends, creators and recipes. In 2020, her investigation of the Court of Master Sommeliers exposed sexual abuse at the highest levels of the wine world.-->
+    </string>
 </resources>
