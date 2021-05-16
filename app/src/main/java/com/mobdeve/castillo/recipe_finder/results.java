@@ -48,6 +48,9 @@ public class results extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
+
+                    dataSnapshot.getValue(Recipe.class);
+
                     recipes.add(recipeItem);
                 }
                 adapter.notifyDataSetChanged();
@@ -60,7 +63,9 @@ public class results extends AppCompatActivity {
 
         });
 
-    }
+        }
+
+
 
     private void init() {
         this.logo = findViewById(R.id.results_logo);

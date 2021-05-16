@@ -7,6 +7,7 @@
     tools:context=".results">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
         android:layout_width="0dp"
         android:layout_height="79dp"
         android:background="#FEA841"
@@ -34,12 +35,14 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/chef" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/resultsRv"
-            android:layout_width="391dp"
-            android:layout_height="725dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/resultsRv"
+        android:layout_width="391dp"
+        android:layout_height="726dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
 </androidx.constraintlayout.widget.ConstraintLayout>
