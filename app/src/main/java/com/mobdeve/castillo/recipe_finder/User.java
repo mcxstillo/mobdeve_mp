@@ -23,7 +23,6 @@ public class User {
 
 
 
-
     //getters
     public String getName(){
         return this.name;

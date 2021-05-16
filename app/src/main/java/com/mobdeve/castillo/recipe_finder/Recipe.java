@@ -7,6 +7,21 @@ public class Recipe {
     public float rating;
     public String difficulty;
     public String preptime;
+    public String cookingtime;
+    public String desc;
+
+    public Recipe(){
+
+    }
+
+//    public Recipe(String name,String cuisine,String serving_size,float rating,String difficulty,String preptime){
+//        this.name = name;
+//        this.cuisine = cuisine;
+//        this.serving_size = serving_size;
+//        this.rating = rating;
+//        this.difficulty = difficulty;
+//        this.preptime = preptime;
+//    }
 
     public String getName() {
         return name;
@@ -55,4 +70,23 @@ public class Recipe {
     public void setPreptime(String preptime) {
         this.preptime = preptime;
     }
+
+    public String getCookingtime() {
+        return cookingtime;
+    }
+
+    public void setCookingtime(String cookingtime) {
+        this.cookingtime = cookingtime;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+
+
 }
