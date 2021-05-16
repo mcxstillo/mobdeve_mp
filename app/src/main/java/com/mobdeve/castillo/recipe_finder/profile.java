@@ -26,7 +26,7 @@ public class profile extends AppCompatActivity {
     private String userID;
     private ImageView imgProfile;
     private TextView emailProfile, nameProfile, descProfile;
-    private Button viewBtn, editBtn, recipesBtn;
+    private Button viewBtn, editBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,7 @@ public class profile extends AppCompatActivity {
 
         this.emailProfile = findViewById(R.id.emailProfile);
         this.nameProfile = findViewById(R.id.nameProfile);
-        this.recipesBtn = findViewById(R.id.recipesBtn);
+        this.viewBtn = findViewById(R.id.viewBtn);
 
         init();
 
@@ -80,7 +80,7 @@ public class profile extends AppCompatActivity {
             }
         });
 
-        this.recipesBtn.setOnClickListener(new View.OnClickListener() {
+        this.viewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(profile.this, CreateRecipe.class));
