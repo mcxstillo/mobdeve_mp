@@ -186,6 +186,12 @@
                 android:visibility="gone"
                 app:backgroundTint="#FF8227" />
 
+            <Button
+                android:id="@+id/photoBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="add photo" />
+
         </LinearLayout>
     </ScrollView>
 

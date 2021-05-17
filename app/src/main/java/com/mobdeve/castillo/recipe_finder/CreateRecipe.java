@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
@@ -27,6 +29,7 @@ import java.util.Objects;
 
 public class CreateRecipe extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     private FirebaseUser user;
     private DatabaseReference reference;
     private String userID;
@@ -34,7 +37,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     private Spinner cuisine, size;
     ArrayAdapter<CharSequence> cuisine_adapter, size_adapter;
     private String selected_cuisine, selected_size; // hi cams use this string to get values ng cuisine and size since dito ko inassign yung values for dropdown
-    private Button nextBtn, updateBtn;
+    private Button nextBtn, updateBtn, photoBtn;
 
     public String type;
 
@@ -90,6 +93,32 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
+        this.photoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+        private void takePhoto() {
+            Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePhotoIntent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(takePhotoIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                imageView.setImageBitmap(imageBitmap);
+            }
+        }
+
+
+
     }
 
     @Override
@@ -115,6 +144,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         this.desc = findViewById(R.id.create_descEt);
         this.nextBtn = findViewById(R.id.create_nextBtn);
         this.updateBtn = findViewById(R.id.create_updateBtn);
+        this.photoBtn = findViewById(R.id.photoBtn);
 
         switch(type) {
             case "CREATE": updateBtn.setVisibility(View.GONE); break;
