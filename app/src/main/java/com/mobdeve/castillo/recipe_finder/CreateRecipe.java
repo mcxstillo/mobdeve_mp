@@ -1,13 +1,22 @@
 package com.mobdeve.castillo.recipe_finder;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +28,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,12 +38,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 public class CreateRecipe extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    StorageReference storageReference;
+    String currentPhotoPath;
+    public static final int CAMERA_REQUEST_CODE = 102;
     private FirebaseUser user;
     private DatabaseReference reference;
     private String userID;
@@ -40,10 +61,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     private Spinner cuisine, size;
     ArrayAdapter<CharSequence> cuisine_adapter, size_adapter;
     private String selected_cuisine, selected_size; // hi cams use this string to get values ng cuisine and size since dito ko inassign yung values for dropdown
-    
     private Button nextBtn, updateBtn, add_imgBtn;
-
-
     public String type;
 
 
@@ -99,7 +117,115 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         });
 
 
+        //CAMERA BUTTON
+        this.add_imgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("clicked ","img btn");
+                dispatchTakePictureIntent();
+            }
+        });
+
     }
+
+//    private void openCamera(){
+//        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        startActivityForResult(camera, CAMERA_REQUEST_CODE);
+//    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //if camera button is chosen
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+
+                File f = new File(currentPhotoPath);
+                recipeimg.setImageURI(Uri.fromFile(f));
+                Log.d("URI","Absolute URI of image is "+Uri.fromFile(f));
+
+                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                Uri contentUri = Uri.fromFile(f);
+                mediaScanIntent.setData(contentUri);
+                this.sendBroadcast(mediaScanIntent);
+
+                uploadImageToFirebase(f.getName(),contentUri);
+                Log.d("filename",f.getName()+"");
+            }
+
+        }
+
+    }
+
+    private void uploadImageToFirebase(String name, Uri contentUri) {
+        StorageReference imageRef = storageReference.child("images/"+name);
+        imageRef.putFile(contentUri);
+        Log.d("IMAGEREF","DID IT WORK??");
+//        imageRef.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                    @Override
+//                    public void onSuccess(Uri uri) {
+//                        Log.d("success","very nice");
+//                    }
+//                });
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.d("upload failed","very sad");
+//            }
+//        });
+
+
+    }
+
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        //saved in local phone gallery
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (getApplicationContext().getPackageManager().hasSystemFeature(
+                PackageManager.FEATURE_CAMERA)) {
+//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(CreateRecipe.this, "com.example.android.fileprovider", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+            }
+        }
+        else{
+            Log.d("camera","does not exist here");
+        }
+    }
+
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -124,10 +250,9 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         this.desc = findViewById(R.id.create_descEt);
         this.nextBtn = findViewById(R.id.create_nextBtn);
         this.updateBtn = findViewById(R.id.create_updateBtn);
-
-        this.photoBtn = findViewById(R.id.photoBtn);
-
         this.add_imgBtn = findViewById(R.id.add_imbBtn);
+        this.storageReference =  FirebaseStorage.getInstance("gs://mobdeve-b369a.appspot.com/").getReference();
+
         this.recipeimg = (ImageView) findViewById(R.id.recipeIv);
 
 
