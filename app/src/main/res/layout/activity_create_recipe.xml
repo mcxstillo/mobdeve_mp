@@ -62,6 +62,20 @@
                 android:textColor="#000000"
                 android:textSize="40sp" />
 
+            <ImageView
+                android:id="@+id/recipeIv"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:layout_marginTop="20dp"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+            <Button
+                android:id="@+id/add_imbBtn"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Add Image" />
+
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"

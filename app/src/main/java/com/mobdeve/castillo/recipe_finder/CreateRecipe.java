@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,11 +32,12 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     private FirebaseUser user;
     private DatabaseReference reference;
     private String userID;
+    private ImageView recipeimg;
     private EditText name, preptime, cooktime, desc;
     private Spinner cuisine, size;
     ArrayAdapter<CharSequence> cuisine_adapter, size_adapter;
     private String selected_cuisine, selected_size; // hi cams use this string to get values ng cuisine and size since dito ko inassign yung values for dropdown
-    private Button nextBtn, updateBtn;
+    private Button nextBtn, updateBtn, add_imgBtn;
 
     public String type;
 
@@ -115,6 +118,8 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         this.desc = findViewById(R.id.create_descEt);
         this.nextBtn = findViewById(R.id.create_nextBtn);
         this.updateBtn = findViewById(R.id.create_updateBtn);
+        this.add_imgBtn = findViewById(R.id.add_imbBtn);
+        this.recipeimg = (ImageView) findViewById(R.id.recipeIv);
 
         switch(type) {
             case "CREATE": updateBtn.setVisibility(View.GONE); break;
