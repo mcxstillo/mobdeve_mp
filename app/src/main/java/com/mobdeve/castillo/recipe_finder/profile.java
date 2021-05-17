@@ -2,6 +2,8 @@ package com.mobdeve.castillo.recipe_finder;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class profile extends AppCompatActivity {
 
     private FirebaseUser user;
@@ -26,7 +30,10 @@ public class profile extends AppCompatActivity {
     private String userID;
     private ImageView imgProfile;
     private TextView emailProfile, nameProfile, descProfile;
-    private Button viewBtn, editBtn;
+    private Button editBtn;
+    private RecyclerView recipesRv;
+    private ResultsAdapter adapter;
+    private ArrayList<Recipe> recipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +42,15 @@ public class profile extends AppCompatActivity {
 
         this.emailProfile = findViewById(R.id.emailProfile);
         this.nameProfile = findViewById(R.id.nameProfile);
-        this.viewBtn = findViewById(R.id.viewBtn);
+        // this.viewBtn = findViewById(R.id.viewBtn);
 
         init();
         initFirebase();
+
+        LinearLayoutManager lm = new LinearLayoutManager(profile.this);
+        recipesRv.setLayoutManager(lm);
+        adapter = new ResultsAdapter(recipes);
+        recipesRv.setAdapter(adapter);
 
         //if account is theirs, logout
 
@@ -80,16 +92,6 @@ public class profile extends AppCompatActivity {
                 startActivity(new Intent(profile.this, editprofile.class));
             }
         });
-
-        this.viewBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent create = new Intent(profile.this, RecipeBook.class);
-                create.putExtra("TYPE", "CREATE");
-                startActivity(create);
-            }
-        });
-
     }
 
     private void init() {
@@ -97,13 +99,37 @@ public class profile extends AppCompatActivity {
         this.emailProfile = findViewById(R.id.emailProfile);
         this.nameProfile = findViewById(R.id.nameProfile);
         this.descProfile = findViewById(R.id.descProfile);
-        this.viewBtn = findViewById(R.id.viewBtn);
         this.editBtn = findViewById(R.id.editBtn);
+        this.recipes = new ArrayList<Recipe>();
+
+        this.recipesRv = (RecyclerView) findViewById(R.id.user_recipesRv);
     }
 
     private void initFirebase() {
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
         userID = user.getUid();
+
+        DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        DB.child("Recipes").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
+
+                    dataSnapshot.getValue(Recipe.class);
+
+                    recipes.add(recipeItem);
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
