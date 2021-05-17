@@ -2,7 +2,12 @@ package com.mobdeve.castillo.recipe_finder;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class editprofile extends AppCompatActivity {
 
+    DrawerLayout navbar;
     private FirebaseUser user;
     private DatabaseReference reference;
     private String userID;
@@ -65,11 +71,62 @@ public class editprofile extends AppCompatActivity {
     }
 
     private void init() {
+        this.navbar = findViewById(R.id.navdrawer);
         this.profile_nameEt = findViewById(R.id.edit_nameEt);
         this.descEt = findViewById(R.id.edit_descEt);
         this.updateBtn = findViewById(R.id.profile_updateBtn);
         this.oldpass = findViewById(R.id.edit_oldpassEt);
         this.newpass = findViewById(R.id.edit_newpassEt);
         this.confirmpass = findViewById(R.id.edit_confpassEt);
+    }
+
+    // NAVBAR FUNCTIONS
+    public void ClickMenu(View view) {
+        openDrawer(navbar);
+    }
+
+    public static void openDrawer (DrawerLayout drawer) {
+        drawer.openDrawer(GravityCompat.START);
+    }
+
+    public static void closeDrawer(DrawerLayout drawer) {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+    }
+
+    public void ClickProfile (View view){
+        startActivity(new Intent(editprofile.this, profile.class));
+    }
+
+    public void ClickRecipebook (View view){
+        startActivity(new Intent(editprofile.this, RecipeBook.class));
+    }
+
+    public void ClickMyRecipes (View view){
+        Intent type = new Intent(editprofile.this, results.class);
+        type.putExtra("TYPE", "MY_RECIPES");
+        startActivity(type);
+    }
+
+    public void ClickLogout(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Logout");
+        builder.setMessage("Are you sure you want to logout?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Logout user form firebase in this function and redirect to MainActivity
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
     }
 }
