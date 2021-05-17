@@ -2,13 +2,23 @@ package com.mobdeve.castillo.recipe_finder;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,12 +31,12 @@ import java.util.Objects;
 
 public class results extends AppCompatActivity {
 
-
     //POSTED RECIPES/SEARCH RESULTS
-    private ImageView logo;
+    DrawerLayout navbar;
     private RecyclerView resultsRv;
     private ResultsAdapter adapter;
-    public ImageView sidebar;
+    private FloatingActionButton createBtn;
+    private TextView noticeTv;
     ArrayList<Recipe> recipes;
 
     @Override
@@ -36,11 +46,25 @@ public class results extends AppCompatActivity {
 
         init();
 
-        LinearLayoutManager lm = new LinearLayoutManager(results.this);
-        resultsRv.setLayoutManager(lm);
-        adapter = new ResultsAdapter(recipes);
-        resultsRv.setAdapter(adapter);
+        this.createBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent create = new Intent(results.this, CreateRecipe.class);
+                create.putExtra("TYPE", "CREATE");
+                startActivity(create);
+            }
+        });
 
+        if(recipes == null) {
+            noticeTv.setVisibility(View.VISIBLE);
+            resultsRv.setVisibility(View.GONE);
+        } else {
+            noticeTv.setVisibility(View.GONE);
+            LinearLayoutManager lm = new LinearLayoutManager(results.this);
+            resultsRv.setLayoutManager(lm);
+            adapter = new ResultsAdapter(recipes);
+            resultsRv.setAdapter(adapter);
+        }
 
         DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -67,13 +91,60 @@ public class results extends AppCompatActivity {
 
         }
 
-
-
     private void init() {
-        this.logo = findViewById(R.id.results_logo);
-        logo.setImageResource(R.drawable.chef);
-        this.sidebar = findViewById(R.id.sidebarIv);
+        this.navbar = findViewById(R.id.navdrawer);
         this.resultsRv = findViewById(R.id.resultsRv);
         this.recipes = new ArrayList<Recipe>();
+        this.createBtn = findViewById(R.id.createBtn);
+        this.noticeTv = findViewById(R.id.recipes_noticeTv);
+    }
+
+    // NAVBAR FUNCTIONS
+    public void ClickMenu(View view) {
+        openDrawer(navbar);
+    }
+
+    public static void openDrawer (DrawerLayout drawer) {
+        drawer.openDrawer(GravityCompat.START);
+    }
+
+    public static void closeDrawer(DrawerLayout drawer) {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+    }
+
+    public void ClickProfile (View view){
+        startActivity(new Intent(results.this, profile.class));
+    }
+
+    public void ClickRecipebook (View view){
+        startActivity(new Intent(results.this, RecipeBook.class));
+    }
+
+    public void ClickMyRecipes (View view){
+        Toast error = Toast.makeText(getApplicationContext(), "You are currently here.", Toast.LENGTH_SHORT);
+        error.show();
+    }
+
+    public void ClickLogout(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Logout");
+        builder.setMessage("Are you sure you want to logout?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Logout user form firebase in this function and redirect to MainActivity
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
     }
 }

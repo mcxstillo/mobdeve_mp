@@ -2,9 +2,13 @@ package com.mobdeve.castillo.recipe_finder;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
@@ -32,6 +36,7 @@ import java.util.Objects;
 public class CreateRecipe extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    DrawerLayout navbar;
     private FirebaseUser user;
     private DatabaseReference reference;
     private String userID;
@@ -40,9 +45,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     private Spinner cuisine, size;
     ArrayAdapter<CharSequence> cuisine_adapter, size_adapter;
     private String selected_cuisine, selected_size; // hi cams use this string to get values ng cuisine and size since dito ko inassign yung values for dropdown
-    
     private Button nextBtn, updateBtn, add_imgBtn;
-
 
     public String type;
 
@@ -98,7 +101,6 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
-
     }
 
     @Override
@@ -116,6 +118,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void init() {
+        this.navbar = findViewById(R.id.navdrawer);
         this.name = findViewById(R.id.create_nameEt);
         this.cuisine = (Spinner) findViewById(R.id.create_cuisineEt);
         this.size = (Spinner) findViewById(R.id.create_sizeEt);
@@ -124,12 +127,8 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         this.desc = findViewById(R.id.create_descEt);
         this.nextBtn = findViewById(R.id.create_nextBtn);
         this.updateBtn = findViewById(R.id.create_updateBtn);
-
-        this.photoBtn = findViewById(R.id.photoBtn);
-
         this.add_imgBtn = findViewById(R.id.add_imbBtn);
         this.recipeimg = (ImageView) findViewById(R.id.recipeIv);
-
 
         switch(type) {
             case "CREATE": updateBtn.setVisibility(View.GONE); break;
@@ -147,5 +146,55 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
 
         cuisine.setOnItemSelectedListener(this);
         size.setOnItemSelectedListener(this);
+    }
+
+    // NAVBAR FUNCTIONS
+    public void ClickMenu(View view) {
+        openDrawer(navbar);
+    }
+
+    public static void openDrawer (DrawerLayout drawer) {
+        drawer.openDrawer(GravityCompat.START);
+    }
+
+    public static void closeDrawer(DrawerLayout drawer) {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+    }
+
+    public void ClickProfile (View view){
+        startActivity(new Intent(CreateRecipe.this, profile.class));
+    }
+
+    public void ClickRecipebook (View view){
+        startActivity(new Intent(CreateRecipe.this, RecipeBook.class));
+    }
+
+    public void ClickMyRecipes (View view){
+        Intent type = new Intent(CreateRecipe.this, results.class);
+        type.putExtra("TYPE", "MY_RECIPES");
+        startActivity(type);
+    }
+
+    public void ClickLogout(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Logout");
+        builder.setMessage("Are you sure you want to logout?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Logout user form firebase in this function and redirect to MainActivity
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
     }
 }
