@@ -48,8 +48,7 @@ public class CreateSteps extends AppCompatActivity {
         //gets the reference of recipe
         DatabaseReference DBRecipe = DB.child("Recipes").child(recipeKey);
         String stepsKey = DBRecipe.push().getKey();
-        counter =0;
-
+        ArrayList<Steps> steps = new ArrayList<>();
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 50, 0, 50);
         Steps step = new Steps();
@@ -63,11 +62,11 @@ public class CreateSteps extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         step.setStepnum(stepnum);
                         step.setStep_desc(stepsdesc.getText().toString());
-                        Log.d("setdesc",step.getStep_desc());
                         steps.add(step);
-                        Log.d("step in addBtn", step.getStep_desc());
-                        Log.d("stepsSize in addBtn", steps.size()+"");
                         stepnum++;
+
+                        Log.d("stepsArraySize",steps.size()+"");
+                        DBRecipe.child("Steps").setValue(steps);
 
                         LinearLayout ll = new LinearLayout(CreateSteps.this);
                         ll.setLayoutParams(params);
@@ -99,15 +98,7 @@ public class CreateSteps extends AppCompatActivity {
                 DBRecipe.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        step.setStepnum(stepnum);
-                        step.setStep_desc(stepsdesc.getText().toString());
-                        steps.add(step);
-                        Log.d("step in postBtn", step.getStep_desc());
-                        Log.d("stepsSize in postBtn", steps.size()+"");
-                        stepnum++;
 
-                        Log.d("stepsArraySize",steps.size()+"");
-                        DBRecipe.child("Steps").setValue(steps);
                         startActivity(new Intent(CreateSteps.this,results.class));
                     }
 
