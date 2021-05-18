@@ -33,7 +33,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:maxImageSize="35dp"
-            app:src="@drawable/ic_favorite"
+            android:src="@drawable/ic_favorite"
             app:tint="@android:color/white" />
 
         <androidx.core.widget.NestedScrollView

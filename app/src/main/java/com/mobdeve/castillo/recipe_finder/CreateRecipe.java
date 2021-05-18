@@ -66,7 +66,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     DrawerLayout navbar;
-    String recipeKey;
+    String recipeKey, stepsKey;
 
     private FirebaseUser user;
     private DatabaseReference reference;
@@ -98,6 +98,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         this.recipeKey =Objects.requireNonNull(DB.push().getKey());
 
+
         //CAMERA BUTTON
         this.add_imgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +121,6 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                         recipe.setPreptime(preptime.getText().toString());
                         recipe.setCookingtime(cooktime.getText().toString());
                         recipe.setDesc(desc.getText().toString());
-
                         User userProfile = snapshot.getValue(User.class);
                         DB.child("Recipes").child(recipeKey).setValue(recipe);
                     }
@@ -131,7 +131,9 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
 
                     }
                 });
-                startActivity(new Intent(CreateRecipe.this, CreateSteps.class));
+                Intent toSteps = new Intent(CreateRecipe.this, CreateSteps.class);
+                toSteps.putExtra("RecipeKey",recipeKey);
+                startActivity(toSteps);
             }
         });
 
@@ -182,13 +184,12 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         String t = task.getResult().toString();
-
 //                        DatabaseReference newPost= FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
 //                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Recipes").child(recipeKey).push();
 
                         recipe.setImgUri(t);
-                      Log.d("add uri",t);
-//                        newPost.child("image").setValue(task.getResult().toString());
+                        Log.d("add uri",t);
+//                      newPost.child("image").setValue(task.getResult().toString());
 
                     }
                 });
