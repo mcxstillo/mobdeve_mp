@@ -28,7 +28,7 @@
     <string name="_5_0">5.0 ()</string>
 
     // Create recipe strings
-    <string name="addstep">Add a Step</string>
+    <string name="addstep">Add Step</string>
     <string name="deletestep">Swipe to delete steps</string>
     <string name="create">Create Recipe</string>
     <string name="create_name">Recipe Name</string>
