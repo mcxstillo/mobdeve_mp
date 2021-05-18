@@ -72,12 +72,15 @@ public class results extends AppCompatActivity {
         DB.child("Recipes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                recipes.clear();
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    //a recipe within a snapshot
                     Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
-
-                    dataSnapshot.getValue(Recipe.class);
-
                     recipes.add(recipeItem);
+
+                    Log.d("recipeItem",recipeItem.getName()+"");
+                    Log.d("recipesize",recipes.size()+"");
+
                 }
                 adapter.notifyDataSetChanged();
             }

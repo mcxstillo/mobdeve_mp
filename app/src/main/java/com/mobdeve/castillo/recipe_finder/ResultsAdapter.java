@@ -55,6 +55,9 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
         public void setPreptime(String preptime) {
             this.preptime.setText(preptime);
         }
+        public void setRecipeImg(String img){
+            this.recipeImg.setImageURI(Uri.parse(img));
+        }
 
 
     }
