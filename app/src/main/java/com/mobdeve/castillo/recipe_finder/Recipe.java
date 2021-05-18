@@ -11,7 +11,9 @@ public class Recipe {
     public String preptime;
     public String cookingtime;
     public String desc;
-    public Uri imgUri;
+    public String imgUri;
+
+
 
     public Recipe(){
 
@@ -90,15 +92,12 @@ public class Recipe {
         this.desc = desc;
     }
 
-    public Uri getImgUri(){
+    public String getImgUri() {
         return imgUri;
     }
 
-    public void setImgUri(Uri imgUri){
+    public void setImgUri(String imgUri) {
         this.imgUri = imgUri;
     }
-
-
-
 
 }

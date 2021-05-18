@@ -25,12 +25,12 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView name, rating, difficulty, preptime;
-        public ImageView recipeImg;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            this.recipeImg = itemView.findViewById(R.id.recipe_img);
+
             this.name = itemView.findViewById(R.id.recipe_nameTv);
             this.rating = itemView.findViewById(R.id.ratingTv);
             this.difficulty = itemView.findViewById(R.id.difficultyTv);
@@ -53,10 +53,6 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
             this.preptime.setText(preptime);
         }
 
-        public void setRecipeImg(Uri imgUri) {
-            this.recipeImg.setImageURI(imgUri);
-        }
-
 
     }
 
@@ -65,14 +61,12 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
     public ResultsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_layout, parent, false);
         ViewHolder vh = new ViewHolder(view);
-
         return vh;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        holder.setRecipeImg(this.recipes.get(position).getImgUri());
         holder.setName(this.recipes.get(position).getName());
         holder.setRating(this.recipes.get(position).getRating());
         holder.setDifficulty(this.recipes.get(position).getDifficulty());
@@ -81,7 +75,6 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-//        Log.d("itemCOuntResultsAd",""+recipes.size());
         return this.recipes.size();
     }
 }

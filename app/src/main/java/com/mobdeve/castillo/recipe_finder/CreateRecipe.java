@@ -36,8 +36,10 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -79,6 +81,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     Recipe recipe = new Recipe();
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,16 +90,15 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         Intent intent_type = getIntent();
         type = intent_type.getStringExtra("TYPE");
 
-
         init();
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
         userID = user.getUid();
-
-        DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         this.recipeKey =Objects.requireNonNull(DB.push().getKey());
+
+
 
         this.nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +113,6 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                         recipe.setPreptime(preptime.getText().toString());
                         recipe.setCookingtime(cooktime.getText().toString());
                         recipe.setDesc(desc.getText().toString());
-
                         User userProfile = snapshot.getValue(User.class);
                         DB.child("Recipes").child(recipeKey).setValue(recipe);
                     }
@@ -142,6 +143,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
             public void onClick(View v) {
                 Log.d("clicked ","img btn");
                 dispatchTakePictureIntent();
+
             }
         });
     }
@@ -157,13 +159,14 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                 File f = new File(currentPhotoPath);
                 //setting the IMAGE to the imageview
                 recipeimg.setImageURI(Uri.fromFile(f));
-                recipe.setImgUri(Uri.fromFile(f));
                 Log.d("URI","Absolute URI of image is "+Uri.fromFile(f));
 
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 Uri contentUri = Uri.fromFile(f);
                 mediaScanIntent.setData(contentUri);
                 this.sendBroadcast(mediaScanIntent);
+
+//                recipe.setImgUri("testing before upload");
 
                 uploadImageToFirebase(f.getName(),contentUri);
                 Log.d("filename",f.getName()+"");
@@ -174,17 +177,33 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
 
     private void uploadImageToFirebase(String name, Uri contentUri) {
         final StorageReference imageRef = storageReference.child("pictures/"+name);
-//        imageRef.putFile(contentUri);
-//        Log.d("IMAGEREF","DID IT WORK??");
         imageRef.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+
+                Task<Uri> downloadUrl=taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
-                    public void onSuccess(Uri uri) {
-                        Log.d("success","very nice");
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        String t = task.getResult().toString();
+
+//                        DatabaseReference newPost= FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
+//                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Recipes").child(recipeKey).push();
+
+                        recipe.setImgUri(t);
+                      Log.d("add uri",t);
+//                        newPost.child("image").setValue(task.getResult().toString());
+
                     }
                 });
+
+
+//                imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                    @Override
+//                    public void onSuccess(Uri uri) {
+//                        Log.d("success","very nice");
+//
+//                    }
+//                });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
