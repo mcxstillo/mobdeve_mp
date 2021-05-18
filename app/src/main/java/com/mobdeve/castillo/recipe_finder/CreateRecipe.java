@@ -64,6 +64,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     DrawerLayout navbar;
+    String recipeKey;
 
     private FirebaseUser user;
     private DatabaseReference reference;
@@ -74,8 +75,8 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     ArrayAdapter<CharSequence> cuisine_adapter, size_adapter;
     private String selected_cuisine, selected_size; // hi cams use this string to get values ng cuisine and size since dito ko inassign yung values for dropdown
     private Button nextBtn, updateBtn, add_imgBtn;
-
     public String type;
+    Recipe recipe = new Recipe();
 
 
     @Override
@@ -86,13 +87,16 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         Intent intent_type = getIntent();
         type = intent_type.getStringExtra("TYPE");
 
+
         init();
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
         userID = user.getUid();
-        Recipe recipe = new Recipe();
 
+        DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        this.recipeKey =Objects.requireNonNull(DB.push().getKey());
 
         this.nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,20 +104,21 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                 reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
-                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
                         recipe.setName(name.getText().toString());
                         recipe.setCuisine(selected_cuisine);
                         recipe.setServing_size(selected_size);
                         recipe.setPreptime(preptime.getText().toString());
                         recipe.setCookingtime(cooktime.getText().toString());
                         recipe.setDesc(desc.getText().toString());
+
                         User userProfile = snapshot.getValue(User.class);
-                        DB.child("Recipes").child(Objects.requireNonNull(DB.push().getKey())).setValue(recipe);
+                        DB.child("Recipes").child(recipeKey).setValue(recipe);
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         Log.d("Sad", "User Profile Cannot be Displayed");
+
 
                     }
                 });
@@ -139,25 +144,20 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                 dispatchTakePictureIntent();
             }
         });
-
-
     }
 
-//    private void openCamera(){
-//        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        startActivityForResult(camera, CAMERA_REQUEST_CODE);
-//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         //if camera button is chosen
         if (requestCode == CAMERA_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
 
                 File f = new File(currentPhotoPath);
+                //setting the IMAGE to the imageview
                 recipeimg.setImageURI(Uri.fromFile(f));
+                recipe.setImgUri(Uri.fromFile(f));
                 Log.d("URI","Absolute URI of image is "+Uri.fromFile(f));
 
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -170,13 +170,12 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
             }
 
         }
-
     }
 
     private void uploadImageToFirebase(String name, Uri contentUri) {
-        StorageReference imageRef = storageReference.child("images/"+name);
+        final StorageReference imageRef = storageReference.child("pictures/"+name);
 //        imageRef.putFile(contentUri);
-        Log.d("IMAGEREF","DID IT WORK??");
+//        Log.d("IMAGEREF","DID IT WORK??");
         imageRef.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -201,6 +200,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         //saved in local phone gallery

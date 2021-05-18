@@ -1,5 +1,7 @@
 package com.mobdeve.castillo.recipe_finder;
 
+import android.net.Uri;
+
 public class Recipe {
     public String name;
     public String cuisine;
@@ -9,6 +11,7 @@ public class Recipe {
     public String preptime;
     public String cookingtime;
     public String desc;
+    public Uri imgUri;
 
     public Recipe(){
 
@@ -86,6 +89,15 @@ public class Recipe {
     public void setDesc(String desc) {
         this.desc = desc;
     }
+
+    public Uri getImgUri(){
+        return imgUri;
+    }
+
+    public void setImgUri(Uri imgUri){
+        this.imgUri = imgUri;
+    }
+
 
 
 

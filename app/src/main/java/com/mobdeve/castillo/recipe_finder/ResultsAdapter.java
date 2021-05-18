@@ -1,9 +1,11 @@
 package com.mobdeve.castillo.recipe_finder;
 
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,10 +25,12 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView name, rating, difficulty, preptime;
+        public ImageView recipeImg;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            this.recipeImg = itemView.findViewById(R.id.recipe_img);
             this.name = itemView.findViewById(R.id.recipe_nameTv);
             this.rating = itemView.findViewById(R.id.ratingTv);
             this.difficulty = itemView.findViewById(R.id.difficultyTv);
@@ -36,15 +40,24 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
         public void setName(String name) {
             this.name.setText(name);
         }
+
         public void setRating(Float rating) {
             this.rating.setText(String.valueOf(rating));
         }
+
         public void setDifficulty(String difficulty) {
             this.difficulty.setText(difficulty);
         }
+
         public void setPreptime(String preptime) {
             this.preptime.setText(preptime);
         }
+
+        public void setRecipeImg(Uri imgUri) {
+            this.recipeImg.setImageURI(imgUri);
+        }
+
+
     }
 
     @NonNull
@@ -59,6 +72,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
+        holder.setRecipeImg(this.recipes.get(position).getImgUri());
         holder.setName(this.recipes.get(position).getName());
         holder.setRating(this.recipes.get(position).getRating());
         holder.setDifficulty(this.recipes.get(position).getDifficulty());
