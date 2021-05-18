@@ -57,31 +57,11 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
                         android:layout_weight="1"
-                        android:text="@string/addstep"
-                        app:backgroundTint="#FF8227"
-                        app:icon="@drawable/ic_add" />
+                        android:background="#FF5722"
+                        android:text="@string/addstep" />
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/stepsInputLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/stepsEt"
-                        android:layout_width="280dp"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:gravity="start|top"
-                        android:hint="Enter instructions"
-                        android:inputType="textMultiLine" />
-
-                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 
@@ -100,11 +80,11 @@
             app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
         <Button
-            android:id="@+id/postBtn"
+            android:id="@+id/testBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="POST"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="8dp"
+            android:text="Button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView19" />

@@ -127,8 +127,6 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         Log.d("Sad", "User Profile Cannot be Displayed");
-
-
                     }
                 });
                 Intent toSteps = new Intent(CreateRecipe.this, CreateSteps.class);

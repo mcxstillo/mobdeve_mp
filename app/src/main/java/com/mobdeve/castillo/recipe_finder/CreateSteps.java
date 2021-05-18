@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,10 +27,9 @@ import java.util.Objects;
 public class CreateSteps extends AppCompatActivity {
 
     private ArrayList<Steps> steps;
-    int counter;
+    private ArrayList<EditText> textFields;
     private LinearLayout mainLayout;
     private Button addBtn, postBtn;
-    private TextView stepsdesc;
     private int stepnum = 1;
     String recipeKey,stepsKey;
 
@@ -48,23 +48,19 @@ public class CreateSteps extends AppCompatActivity {
         //gets the reference of recipe
         DatabaseReference DBRecipe = DB.child("Recipes").child(recipeKey);
         String stepsKey = DBRecipe.push().getKey();
-        counter =0;
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 50, 0, 50);
         Steps step = new Steps();
 
         addBtn.setOnClickListener(new View.OnClickListener() {
-            String descnum;
+
             @Override
             public void onClick(View v) {
                 DBRecipe.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        step.setStepnum(stepnum);
-                        step.setStep_desc(stepsdesc.getText().toString());
-                        Log.d("setdesc",step.getStep_desc());
-                        steps.add(step);
+
                         Log.d("step in addBtn", step.getStep_desc());
                         Log.d("stepsSize in addBtn", steps.size()+"");
                         stepnum++;
@@ -73,12 +69,12 @@ public class CreateSteps extends AppCompatActivity {
                         ll.setLayoutParams(params);
                         ll.setGravity(17);
 
-                        EditText step = new EditText(CreateSteps.this);
-                        step.setWidth(760);
-                        step.setHint("Enter instructions");
-                        step.setId(stepnum);
+                EditText step = new EditText(CreateSteps.this);
+                step.setWidth(760);
+                step.setHint("Enter instructions");
+                textFields.add(step);
 
-                        Log.d("STEP", "CREATED STEP NUMBER " + step.getId());
+                Log.d("STEP", "CREATED STEP NUMBER " + step.getId());
 
                         ll.addView(step);
                         mainLayout.addView(ll);
@@ -96,17 +92,9 @@ public class CreateSteps extends AppCompatActivity {
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBRecipe.addListenerForSingleValueEvent(new ValueEventListener() {
+                    DBRecipe.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        step.setStepnum(stepnum);
-                        step.setStep_desc(stepsdesc.getText().toString());
-                        steps.add(step);
-                        Log.d("step in postBtn", step.getStep_desc());
-                        Log.d("stepsSize in postBtn", steps.size()+"");
-                        stepnum++;
-
-                        Log.d("stepsArraySize",steps.size()+"");
                         DBRecipe.child("Steps").setValue(steps);
                         startActivity(new Intent(CreateSteps.this,results.class));
                     }
@@ -116,20 +104,21 @@ public class CreateSteps extends AppCompatActivity {
 
                     }
                 });
+
+                for (int i = 0; i < textFields.size(); i++) {
+                    steps.add(new Steps(i+1, textFields.get(i).getText().toString()));
+                    Log.d("ARRAY CONTENT", "" + steps.get(i).getStep_desc());
+                }
             }
         });
     }
 
     private void init() {
         this.steps = new ArrayList<Steps>();
+        this.textFields = new ArrayList<EditText>();
+        this.postBtn = findViewById(R.id.testBtn);
         this.mainLayout = findViewById(R.id.stepsMainLayout);
         this.addBtn = findViewById(R.id.addStepBtn);
-        this.postBtn = findViewById(R.id.postBtn);
-        this.stepsdesc = findViewById(R.id.stepsEt);
-
-        stepsdesc.setId(stepnum);
-/*        this.stepdesc = findViewById(R.id.stepsEt);
-        this.delBtn = findViewById(R.id.delStepBtn);*/
     }
 }
 
