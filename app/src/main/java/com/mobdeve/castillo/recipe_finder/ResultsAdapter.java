@@ -69,7 +69,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        
+
         String imgUri=this.recipes.get(position).getImgUri();
         Picasso.get().load(imgUri).into(holder.recipeImg);
 

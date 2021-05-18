@@ -44,12 +44,11 @@ public class editprofile extends AppCompatActivity {
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
         userID = user.getUid();
 
-        //get current data and display
+        //get current data and display on fields.
         reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User userProfile = snapshot.getValue(User.class);
-
                 profile_nameEt.setText(userProfile.name);
                 descEt.setText(userProfile.desc);
 
@@ -61,6 +60,7 @@ public class editprofile extends AppCompatActivity {
 
             }
         });
+
         //when user presses update button
         this.updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,9 +68,13 @@ public class editprofile extends AppCompatActivity {
 
                 //error here, updates entire user model, not just specific fields
 //                userEdited = new User(user.getEmail(),profile_nameEt.getText().toString(),descEt.getText().toString());
-                userEdited.setName(profile_nameEt.getText().toString());
-                userEdited.setDesc(descEt.getText().toString());
-                reference.child(userID).setValue(userEdited);
+
+                reference.child(userID).child("name").setValue(profile_nameEt.getText().toString());
+                reference.child(userID).child("desc").setValue(descEt.getText().toString());
+
+//                        setName(profile_nameEt.getText().toString());
+//                userEdited.setDesc(descEt.getText().toString());
+//                reference.child(userID).setValue(userEdited);
                 startActivity(new Intent(editprofile.this,profile.class));
             }
         });
