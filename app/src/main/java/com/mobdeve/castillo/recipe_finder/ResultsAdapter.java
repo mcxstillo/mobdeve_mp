@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -25,12 +27,13 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView name, rating, difficulty, preptime;
+        public ImageView recipeImg;
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-
+            this.recipeImg = itemView.findViewById(R.id.recipe_img);
             this.name = itemView.findViewById(R.id.recipe_nameTv);
             this.rating = itemView.findViewById(R.id.ratingTv);
             this.difficulty = itemView.findViewById(R.id.difficultyTv);
@@ -66,6 +69,9 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        
+        String imgUri=this.recipes.get(position).getImgUri();
+        Picasso.get().load(imgUri).into(holder.recipeImg);
 
         holder.setName(this.recipes.get(position).getName());
         holder.setRating(this.recipes.get(position).getRating());

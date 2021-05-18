@@ -49,8 +49,10 @@ public class editprofile extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User userProfile = snapshot.getValue(User.class);
+
                 profile_nameEt.setText(userProfile.name);
                 descEt.setText(userProfile.desc);
+
             }
 
             @Override
@@ -59,11 +61,15 @@ public class editprofile extends AppCompatActivity {
 
             }
         });
-
+        //when user presses update button
         this.updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userEdited = new User(user.getEmail(),profile_nameEt.getText().toString(),descEt.getText().toString());
+
+                //error here, updates entire user model, not just specific fields
+//                userEdited = new User(user.getEmail(),profile_nameEt.getText().toString(),descEt.getText().toString());
+                userEdited.setName(profile_nameEt.getText().toString());
+                userEdited.setDesc(descEt.getText().toString());
                 reference.child(userID).setValue(userEdited);
                 startActivity(new Intent(editprofile.this,profile.class));
             }
