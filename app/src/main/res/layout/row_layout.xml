@@ -8,7 +8,7 @@
     android:paddingBottom="10dp">
 
     <ImageView
-        android:id="@+id/recipe_img"
+        android:id="@+id/thumbnailIv"
         android:layout_width="119dp"
         android:layout_height="113dp"
         android:layout_marginStart="16dp"
@@ -17,45 +17,82 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/recipe_nameTv"
+        android:id="@+id/nameTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="4dp"
+        android:fontFamily="@font/open_sans_semibold"
         android:text="@string/recipe_name"
         android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/recipe_img"
+        app:layout_constraintStart_toEndOf="@+id/thumbnailIv"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/difficultyTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:fontFamily="@font/open_sans_semibold"
         android:text="@string/difficulty"
-        app:layout_constraintStart_toEndOf="@+id/recipe_img"
+        app:layout_constraintStart_toEndOf="@+id/textView14"
         app:layout_constraintTop_toBottomOf="@+id/ratingTv" />
 
     <TextView
         android:id="@+id/timeTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:fontFamily="@font/open_sans_semibold"
         android:text="@string/total_time"
-        app:layout_constraintStart_toEndOf="@+id/recipe_img"
+        app:layout_constraintStart_toEndOf="@+id/textView18"
         app:layout_constraintTop_toBottomOf="@+id/difficultyTv" />
 
     <TextView
         android:id="@+id/ratingTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/open_sans_semibold"
+        android:text="@string/_5_0"
+        app:layout_constraintStart_toEndOf="@+id/textView16"
+        app:layout_constraintTop_toBottomOf="@+id/nameTv" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
-        android:text="@string/_5_0"
-        app:layout_constraintStart_toEndOf="@+id/recipe_img"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_nameTv" />
+        android:fontFamily="@font/open_sans_semibold"
+        android:text="@string/difficulty"
+        app:layout_constraintStart_toEndOf="@+id/thumbnailIv"
+        app:layout_constraintTop_toBottomOf="@+id/ratingTv" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/open_sans_semibold"
+        android:text="Rating:"
+        app:layout_constraintStart_toEndOf="@+id/thumbnailIv"
+        app:layout_constraintTop_toBottomOf="@+id/nameTv" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/open_sans_semibold"
+        android:text="@string/total_time"
+        app:layout_constraintStart_toEndOf="@+id/thumbnailIv"
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
 </androidx.constraintlayout.widget.ConstraintLayout>

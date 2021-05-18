@@ -28,6 +28,8 @@
     <string name="_5_0">5.0 ()</string>
 
     // Create recipe strings
+    <string name="addstep">Add a Step</string>
+    <string name="deletestep">Swipe to delete steps</string>
     <string name="create">Create Recipe</string>
     <string name="create_name">Recipe Name</string>
     <string name="create_cuisine">Cuisine</string>
@@ -37,6 +39,30 @@
     <string name="create_desc">Description</string>
     <string name="create_new">Next</string>
     <string name="create_update">Update</string>
+
+    // Recipe Page Placeholders
+    <string name="cuisine">cuisine</string>
+    <string name="servingsize">serving size</string>
+    <string name="preptime">prep time</string>
+    <string name="cooktime">cook time</string>
+    <string name="recipe_owner">by Nancy Mercado</string>
+    <string name="recipe_rating">4.3</string>
+    <string name="recipe_cuisine">MEDITERRANEAN</string>
+    <string name="recipe_size">5 SERVINGS</string>
+    <string name="recipe_prep">20 MINUTES</string>
+    <string name="recipe_cook">10 MINTUES</string>
+    <string name="recipe_desc">This is a sample description for a recipe to see how long it can fit and to see gaano kahaba ba yung kaya nito just cause</string>
+    <string name="createsteps">Recipe Steps</string>
+    <string name="stepnum">1</string>
+    <string name="stepdesc">In a medium bowl, add milk, baking powder, vanilla, mayonnaise and egg yolks. Sift in cake flour using a flour sifter or fine mesh strainer. Mix with a whisk until batter is smooth and the mixture is a pale yellow.</string>
+
+    // Profile strings
+    <string name="sample_name">User Name</string>
+    <string name="sample_email">User email</string>
+    <string name="update">Update</string>
+    <string name="notice">You do not have any saved recipes.</string>
+    <string name="recipes_notice">You have not posted any recipes.</string>
+    <string name="sample_about">User description</string>
 
     // Create recipe string arrays
     <string-array name="cuisine_array">
@@ -70,14 +96,4 @@
         <item>10</item>
         <item>10+</item>
     </string-array>
-
-    // Profile strings
-    <string name="sample_name">Julia Moskin</string>
-    <string name="sample_email">juliamoskin@gmail.com</string>
-    <string name="update">Update</string>
-    <string name="notice">You do not have any saved recipes.</string>
-    <string name="recipes_notice">You have not posted any recipes.</string>
-    <string name="sample_about">
-        Julia Moskin, a lifelong New Yorker, has been a Food staff reporter since 2004. She was part of a New York Times team that earned the 2018 Pulitzer Prize for public service, for her reporting on sexual harassment in the restaurant industry. Her beat covers everything food-related: news, trends, creators and recipes. In 2020, her investigation of the Court of Master Sommeliers exposed sexual abuse at the highest levels of the wine world.-->
-    </string>
 </resources>

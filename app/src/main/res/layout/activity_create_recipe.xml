@@ -1,212 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateRecipe">
+    android:id="@+id/navdrawer"
+    tools:context=".RecipeBook">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="0dp"
-        android:layout_height="79dp"
-        android:background="#FEA841"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".CreateRecipe">
 
-        <ImageView
-            android:id="@+id/sidebarIv"
-            android:layout_width="40dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+        <include
+            android:id="@+id/action_bar"
+            layout="@layout/main_toolbar"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/hamburger" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/results_logo"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/chef" />
+            app:layout_constraintTop_toBottomOf="@+id/action_bar"
+            app:layout_constraintVertical_bias="1.0">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingBottom="50dp">
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/copse"
+                    android:text="@string/create"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="34sp" />
+
+                <ImageView
+                    android:id="@+id/recipeIv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="20dp"
+                    tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+                <Button
+                    android:id="@+id/add_imbBtn"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Add Image"
+                    app:backgroundTint="#FF8227" />
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="@string/create_name"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/create_nameEt"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="8dp"
+                    android:ems="10"
+                    android:inputType="textPersonName" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="25dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="@string/create_cuisine"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/create_cuisineEt"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="8dp" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="25dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="@string/create_size"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/create_sizeEt"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="8dp" />
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="25dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="@string/create_preptime"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/create_prepEt"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="8dp"
+                    android:ems="10"
+                    android:inputType="number" />
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="25dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="@string/create_cooktime"
+                    android:textColor="#000000" />
+
+                <EditText
+                    android:id="@+id/create_cookEt"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number" />
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="25dp"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:text="@string/create_desc"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/create_descEt"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="8dp"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:inputType="textMultiLine" />
+
+                <Button
+                    android:id="@+id/create_nextBtn"
+                    android:layout_width="135dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:text="@string/create_new"
+                    app:backgroundTint="#FF8227" />
+
+                <Button
+                    android:id="@+id/create_updateBtn"
+                    android:layout_width="135dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:text="@string/create_update"
+                    android:visibility="gone"
+                    app:backgroundTint="#FF8227" />
+
+            </LinearLayout>
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@android:color/white">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingBottom="50dp">
+        <include
+            layout="@layout/nav_drawer"/>
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/create"
-                android:textAlignment="center"
-                android:textColor="#000000"
-                android:textSize="40sp" />
-
-            <ImageView
-                android:id="@+id/recipeIv"
-                android:layout_width="wrap_content"
-                android:layout_height="200dp"
-                android:layout_marginTop="20dp"
-                tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-            <Button
-                android:id="@+id/add_imbBtn"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Add Image" />
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="@string/create_name"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/create_nameEt"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="8dp"
-                android:ems="10"
-                android:inputType="textPersonName" />
-
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="25dp"
-                android:text="@string/create_cuisine"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <Spinner
-                android:id="@+id/create_cuisineEt"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="8dp" />
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="25dp"
-                android:text="@string/create_size"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <Spinner
-                android:id="@+id/create_sizeEt"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="8dp" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="25dp"
-                android:text="@string/create_preptime"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/create_prepEt"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="8dp"
-                android:ems="10"
-                android:inputType="number" />
-
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="25dp"
-                android:text="@string/create_cooktime"
-                android:textColor="#000000" />
-
-            <EditText
-                android:id="@+id/create_cookEt"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="number" />
-
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="25dp"
-                android:text="@string/create_desc"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/create_descEt"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="8dp"
-                android:ems="10"
-                android:gravity="start|top"
-                android:inputType="textMultiLine" />
-
-            <Button
-                android:id="@+id/create_nextBtn"
-                android:layout_width="135dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:text="@string/create_new"
-                app:backgroundTint="#FF8227" />
-
-            <Button
-                android:id="@+id/create_updateBtn"
-                android:layout_width="135dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:text="@string/create_update"
-                android:visibility="gone"
-                app:backgroundTint="#FF8227" />
-
-            <Button
-                android:id="@+id/photoBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="add photo" />
-
-        </LinearLayout>
-    </ScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>

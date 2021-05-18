@@ -3,16 +3,18 @@
     package="com.mobdeve.castillo.recipe_finder">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <application
 
+    <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Recipe_finder">
-        <activity android:name=".RecipeBook"></activity>
+        <activity android:name=".RecipePage" />
+        <activity android:name=".RecipeBook" />
         <activity android:name=".CreateRecipe" />
+        <activity android:name=".CreateSteps" />
         <activity android:name=".editprofile" />
         <activity android:name=".profile" />
         <activity android:name=".results" />
@@ -33,9 +35,12 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
 
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

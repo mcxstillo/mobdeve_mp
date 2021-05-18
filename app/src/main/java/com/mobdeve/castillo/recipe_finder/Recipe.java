@@ -2,6 +2,8 @@ package com.mobdeve.castillo.recipe_finder;
 
 import android.net.Uri;
 
+import java.util.ArrayList;
+
 public class Recipe {
     public String name;
     public String cuisine;
@@ -12,21 +14,29 @@ public class Recipe {
     public String cookingtime;
     public String desc;
     public String imgUri;
-
-
+    public ArrayList<Steps> steps;
 
     public Recipe(){
-
+        this.name = "";
+        this.cuisine = "";
+        this.serving_size = "0";
+        this.rating = 0;
+        this.difficulty = "";
+        this.preptime = "";
+        this.cookingtime = "";
+        this.desc = "";
     }
 
-//    public Recipe(String name,String cuisine,String serving_size,float rating,String difficulty,String preptime){
-//        this.name = name;
-//        this.cuisine = cuisine;
-//        this.serving_size = serving_size;
-//        this.rating = rating;
-//        this.difficulty = difficulty;
-//        this.preptime = preptime;
-//    }
+    public Recipe(String name, String cuisine, String serving_size, float rating, String difficulty, String preptime, String cookingtime, String desc) {
+        this.name = name;
+        this.cuisine = cuisine;
+        this.serving_size = serving_size;
+        this.rating = rating;
+        this.difficulty = difficulty;
+        this.preptime = preptime;
+        this.cookingtime = cookingtime;
+        this.desc = desc;
+    }
 
     public String getName() {
         return name;
@@ -100,4 +110,7 @@ public class Recipe {
         this.imgUri = imgUri;
     }
 
+    public void setSteps(ArrayList<Steps> steps) {
+        this.steps = steps;
+    }
 }

@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHolder>{
@@ -33,8 +32,9 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            this.recipeImg = itemView.findViewById(R.id.recipe_img);
+            this.recipeImg = (ImageView) itemView.findViewById(R.id.thumbnailIv);
             this.name = itemView.findViewById(R.id.recipe_nameTv);
+            this.name = itemView.findViewById(R.id.nameTv);
             this.rating = itemView.findViewById(R.id.ratingTv);
             this.difficulty = itemView.findViewById(R.id.difficultyTv);
             this.preptime = itemView.findViewById(R.id.timeTv);

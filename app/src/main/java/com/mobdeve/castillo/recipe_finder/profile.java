@@ -2,9 +2,14 @@ package com.mobdeve.castillo.recipe_finder;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,6 +31,7 @@ import java.util.ArrayList;
 
 public class profile extends AppCompatActivity {
 
+    DrawerLayout navbar;
     private FirebaseUser user;
     private DatabaseReference reference;
     private String userID;
@@ -94,17 +101,6 @@ public class profile extends AppCompatActivity {
         });
     }
 
-    private void init() {
-        this.imgProfile = findViewById(R.id.imgProfile);
-        this.emailProfile = findViewById(R.id.emailProfile);
-        this.nameProfile = findViewById(R.id.nameProfile);
-        this.descProfile = findViewById(R.id.descProfile);
-        this.editBtn = findViewById(R.id.editBtn);
-        this.recipes = new ArrayList<Recipe>();
-
-        this.recipesRv = (RecyclerView) findViewById(R.id.user_recipesRv);
-    }
-
     private void initFirebase() {
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
@@ -131,5 +127,68 @@ public class profile extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void init() {
+        this.navbar = findViewById(R.id.navdrawer);
+        this.imgProfile = findViewById(R.id.imgProfile);
+        this.emailProfile = findViewById(R.id.emailProfile);
+        this.nameProfile = findViewById(R.id.nameProfile);
+        this.descProfile = findViewById(R.id.descProfile);
+        this.editBtn = findViewById(R.id.editBtn);
+        this.recipes = new ArrayList<Recipe>();
+
+        this.recipesRv = (RecyclerView) findViewById(R.id.user_recipesRv);
+    }
+
+    // NAVBAR FUNCTIONS
+    public void ClickMenu(View view) {
+        openDrawer(navbar);
+    }
+
+    public static void openDrawer (DrawerLayout drawer) {
+        drawer.openDrawer(GravityCompat.START);
+    }
+
+    public static void closeDrawer(DrawerLayout drawer) {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+    }
+
+    public void ClickProfile (View view){
+        Toast error = Toast.makeText(getApplicationContext(), "You are currently here.", Toast.LENGTH_SHORT);
+        error.show();
+    }
+
+    public void ClickRecipebook (View view){
+        startActivity(new Intent(profile.this, RecipeBook.class));
+    }
+
+    public void ClickMyRecipes (View view){
+        Intent type = new Intent(profile.this, results.class);
+        type.putExtra("TYPE", "MY_RECIPES");
+        startActivity(type);
+    }
+
+    public void ClickLogout(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Logout");
+        builder.setMessage("Are you sure you want to logout?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Logout user form firebase in this function and redirect to MainActivity
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
     }
 }

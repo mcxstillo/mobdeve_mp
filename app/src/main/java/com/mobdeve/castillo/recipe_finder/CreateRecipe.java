@@ -81,7 +81,6 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     Recipe recipe = new Recipe();
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +88,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
 
         Intent intent_type = getIntent();
         type = intent_type.getStringExtra("TYPE");
+
 
         init();
 
@@ -98,7 +98,14 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         this.recipeKey =Objects.requireNonNull(DB.push().getKey());
 
-
+        //CAMERA BUTTON
+        this.add_imgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("clicked ","img btn");
+                dispatchTakePictureIntent();
+            }
+        });
 
         this.nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +120,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                         recipe.setPreptime(preptime.getText().toString());
                         recipe.setCookingtime(cooktime.getText().toString());
                         recipe.setDesc(desc.getText().toString());
+
                         User userProfile = snapshot.getValue(User.class);
                         DB.child("Recipes").child(recipeKey).setValue(recipe);
                     }
@@ -123,7 +131,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
 
                     }
                 });
-                startActivity(new Intent(CreateRecipe.this, results.class));
+                startActivity(new Intent(CreateRecipe.this, CreateSteps.class));
             }
         });
 
@@ -135,17 +143,6 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
-
-
-        //CAMERA BUTTON
-        this.add_imgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("clicked ","img btn");
-                dispatchTakePictureIntent();
-
-            }
-        });
     }
 
 

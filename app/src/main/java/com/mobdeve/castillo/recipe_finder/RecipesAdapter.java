@@ -25,7 +25,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            this.name = itemView.findViewById(R.id.recipe_nameTv);
+            this.name = itemView.findViewById(R.id.nameTv);
             this.rating = itemView.findViewById(R.id.ratingTv);
             this.difficulty = itemView.findViewById(R.id.difficultyTv);
             this.preptime = itemView.findViewById(R.id.timeTv);

@@ -46,7 +46,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:20.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
-    implementation 'com.squareup.picasso:picasso:2.71828' // library for image
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
