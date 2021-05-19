@@ -114,13 +114,20 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                 reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        User userName = snapshot.getValue(User.class);
 
                         recipe.setName(name.getText().toString());
+                        Log.d("user",userName.getName());
+                        recipe.setCreator(userName.getName());
                         recipe.setCuisine(selected_cuisine);
                         recipe.setServing_size(selected_size);
                         recipe.setPreptime(preptime.getText().toString());
                         recipe.setCookingtime(cooktime.getText().toString());
                         recipe.setDesc(desc.getText().toString());
+                        //fix
+
+                        Log.d("recipekey?",recipeKey);
+                        recipe.setRecipeID(recipeKey);
                         User userProfile = snapshot.getValue(User.class);
                         DB.child("Recipes").child(recipeKey).setValue(recipe);
                     }
@@ -130,6 +137,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                     }
                 });
                 Intent toSteps = new Intent(CreateRecipe.this, CreateSteps.class);
+                Log.d("recipekeycreaterecipe",recipeKey);
                 toSteps.putExtra("RecipeKey",recipeKey);
                 startActivity(toSteps);
             }

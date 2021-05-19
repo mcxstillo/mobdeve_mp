@@ -31,7 +31,7 @@ public class CreateSteps extends AppCompatActivity {
     private LinearLayout mainLayout;
     private Button addBtn, postBtn;
     private int stepnum = 1;
-    String recipeKey,stepsKey;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +59,6 @@ public class CreateSteps extends AppCompatActivity {
                 DBRecipe.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-
 
                         Log.d("stepsArraySize",steps.size()+"");
                         DBRecipe.child("Steps").setValue(steps);
@@ -94,10 +93,10 @@ public class CreateSteps extends AppCompatActivity {
                     DBRecipe.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                         DBRecipe.child("Steps").setValue(steps);
-
-                        startActivity(new Intent(CreateSteps.this,results.class));
+                        Intent toResults = new Intent(CreateSteps.this,results.class);
+//                        toResults.putExtra("recipeKey",DBRecipe.getKey());
+                        startActivity(toResults);
                     }
 
                     @Override

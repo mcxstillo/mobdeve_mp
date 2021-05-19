@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class Recipe {
     public String name;
+    public String creator;
     public String cuisine;
     public String serving_size;
     public float rating;
@@ -15,10 +16,12 @@ public class Recipe {
     public String desc;
     public String imgUri;
     public ArrayList<Steps> steps;
+    public String recipeID;
 
     public Recipe(){
         this.name = "";
         this.cuisine = "";
+        this.creator = "";
         this.serving_size = "0";
         this.rating = 0;
         this.difficulty = "";
@@ -27,8 +30,10 @@ public class Recipe {
         this.desc = "";
     }
 
-    public Recipe(String name, String cuisine, String serving_size, float rating, String difficulty, String preptime, String cookingtime, String desc) {
+    public Recipe(String name, String creator,String cuisine, String serving_size, float rating, String difficulty, String preptime, String cookingtime, String desc) {
+
         this.name = name;
+        this.creator = creator;
         this.cuisine = cuisine;
         this.serving_size = serving_size;
         this.rating = rating;
@@ -44,6 +49,14 @@ public class Recipe {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
     public String getCuisine() {
@@ -112,5 +125,14 @@ public class Recipe {
 
     public void setSteps(ArrayList<Steps> steps) {
         this.steps = steps;
+    }
+
+    public void setRecipeID(String recipeID) {
+        this.recipeID = recipeID;
+    }
+
+
+    public String getRecipeID(){
+        return recipeID;
     }
 }

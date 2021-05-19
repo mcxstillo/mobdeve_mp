@@ -39,6 +39,7 @@ public class results extends AppCompatActivity {
     private ResultsAdapter.RecyclerViewClickListener listener;
     private TextView noticeTv;
     ArrayList<Recipe> recipes;
+    DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,28 @@ public class results extends AppCompatActivity {
         setContentView(R.layout.activity_results);
 
         init();
+
+        //gets all the recipes to display
+        DB.child("Recipes").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
+
+                    dataSnapshot.getValue(Recipe.class);
+
+                    recipes.add(recipeItem);
+
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
         this.createBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,31 +90,7 @@ public class results extends AppCompatActivity {
             resultsRv.setAdapter(adapter);
         }
 
-        DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        DB.child("Recipes").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                recipes.clear();
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    //a recipe within a snapshot
-                    Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
-                    recipes.add(recipeItem);
-
-                    Log.d("recipeItem",recipeItem.getName()+"");
-                    Log.d("recipesize",recipes.size()+"");
-
-                }
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
-        });
 
         }
 
@@ -109,9 +108,12 @@ public class results extends AppCompatActivity {
             @Override
             public void onClick(View v, int position) {
                 Intent viewRecipe = new Intent(results.this, RecipePage.class);
-                /*
-                    HELLO CAMS AM RIGHT HERE PUT DB CODE HERE HEHE
-                */
+                /*HELLO CAMS AM RIGHT HERE PUT DB CODE HERE HEHE */
+                //put extra recipe ID
+                String recipeID = recipes.get(position).getRecipeID();
+                Log.d("RecipeID",recipeID);
+                viewRecipe.putExtra("recipeID",recipeID);
+//                viewRecipe.putExtra("position",position);
                 startActivity(viewRecipe);
             }
         };
