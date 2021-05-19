@@ -32,6 +32,7 @@ public class RecipePage extends AppCompatActivity {
     DrawerLayout navbar;
     private ImageView photo;
     private TextView nameTv, creatorTv, cuisineTv, servingsTv, preptimeTv, cooktimeTv, descTv;
+    private TextView navUsernameTv;
     private RecyclerView stepsRv;
     private StepsAdapter adapter;
     private FloatingActionButton faveBtn;
@@ -62,21 +63,19 @@ public class RecipePage extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Recipe recipeItem = snapshot.getValue(Recipe.class);
+                    FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(recipeItem.getCreator()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            User userID = snapshot.getValue(User.class);
+                            creatorTv.setText(userID.name);
+                            navUsernameTv.setText(userID.name);
+                        }
 
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(recipeItem.getCreator()).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        User userID = snapshot.getValue(User.class);
-                        creatorTv.setText(userID.name);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
+                        }
+                    });
 
                 //gets UserID
                 String imgUri=recipeItem.getImgUri();
@@ -119,6 +118,7 @@ public class RecipePage extends AppCompatActivity {
         this.descTv = findViewById(R.id.recipe_descTv);
         this.stepsRv = (RecyclerView) findViewById(R.id.stepsRv);
         this.faveBtn = findViewById(R.id.faveBtn);
+        this.navUsernameTv = findViewById(R.id.navUsernameTv);
         this.steps = new ArrayList<Steps>();
     }
 

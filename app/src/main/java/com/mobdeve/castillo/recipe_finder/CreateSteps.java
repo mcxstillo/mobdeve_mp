@@ -31,6 +31,7 @@ public class CreateSteps extends AppCompatActivity {
     private LinearLayout mainLayout;
     private Button addBtn, postBtn;
     private int stepnum = 1;
+    private TextView navUsernameTv;
 
 
     @Override
@@ -51,6 +52,22 @@ public class CreateSteps extends AppCompatActivity {
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 50, 0, 50);
+
+        DB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User userID = snapshot.getValue(User.class);
+                navUsernameTv.setText(userID.name);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
 
         addBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -119,6 +136,7 @@ public class CreateSteps extends AppCompatActivity {
         this.postBtn = findViewById(R.id.testBtn);
         this.mainLayout = findViewById(R.id.stepsMainLayout);
         this.addBtn = findViewById(R.id.addStepBtn);
+        this.navUsernameTv = findViewById(R.id.navUsernameTv);
     }
 }
 

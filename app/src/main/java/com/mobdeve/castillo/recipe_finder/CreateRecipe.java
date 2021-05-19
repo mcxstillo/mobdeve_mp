@@ -34,6 +34,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -72,6 +73,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     private DatabaseReference reference;
     private String userID;
     private ImageView recipeimg;
+    private TextView navUsernameTv;
     private EditText name, preptime, cooktime, desc;
     private Spinner cuisine, size;
     ArrayAdapter<CharSequence> cuisine_adapter, size_adapter;
@@ -97,7 +99,18 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         userID = user.getUid();
         DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         this.recipeKey =Objects.requireNonNull(DB.push().getKey());
+        reference.child(userID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User userID = snapshot.getValue(User.class);
+                navUsernameTv.setText(userID.name);
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         //CAMERA BUTTON
         this.add_imgBtn.setOnClickListener(new View.OnClickListener() {
@@ -203,14 +216,6 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                     }
                 });
 
-
-//                imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                    @Override
-//                    public void onSuccess(Uri uri) {
-//                        Log.d("success","very nice");
-//
-//                    }
-//                });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -294,7 +299,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         this.updateBtn = findViewById(R.id.create_updateBtn);
         this.add_imgBtn = findViewById(R.id.add_imbBtn);
         this.storageReference =  FirebaseStorage.getInstance("gs://mobdeve-b369a.appspot.com/").getReference();
-
+        this.navUsernameTv = findViewById(R.id.navUsernameTv);
         this.recipeimg = (ImageView) findViewById(R.id.recipeIv);
 
         switch(type) {

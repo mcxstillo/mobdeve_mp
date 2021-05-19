@@ -36,7 +36,7 @@ public class profile extends AppCompatActivity {
     private DatabaseReference reference;
     private String userID;
     private ImageView imgProfile;
-    private TextView emailProfile, nameProfile, descProfile;
+    private TextView emailProfile, nameProfile, descProfile,navUsernameTv;
     private Button editBtn;
     private RecyclerView recipesRv;
     private ResultsAdapter adapter;
@@ -55,6 +55,8 @@ public class profile extends AppCompatActivity {
         init();
         initFirebase();
 
+
+
         LinearLayoutManager lm = new LinearLayoutManager(profile.this);
         recipesRv.setLayoutManager(lm);
         adapter = new ResultsAdapter(recipes, listener);
@@ -65,6 +67,20 @@ public class profile extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
         userID = user.getUid();
+
+        reference.child(userID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User userID = snapshot.getValue(User.class);
+                navUsernameTv.setText(userID.name);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
         Log.d("INPROFILE","HELLO");
         reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -137,6 +153,7 @@ public class profile extends AppCompatActivity {
         this.nameProfile = findViewById(R.id.nameProfile);
         this.descProfile = findViewById(R.id.descProfile);
         this.editBtn = findViewById(R.id.editBtn);
+        this.navUsernameTv = findViewById(R.id.navUsernameTv);
         this.recipes = new ArrayList<Recipe>();
 
         this.recipesRv = (RecyclerView) findViewById(R.id.user_recipesRv);
