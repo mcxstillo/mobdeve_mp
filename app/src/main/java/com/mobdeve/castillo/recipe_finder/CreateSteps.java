@@ -60,6 +60,10 @@ public class CreateSteps extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+
+                        Log.d("stepsArraySize",steps.size()+"");
+                        DBRecipe.child("Steps").setValue(steps);
+
                         LinearLayout ll = new LinearLayout(CreateSteps.this);
                         ll.setLayoutParams(params);
                         ll.setGravity(17);
