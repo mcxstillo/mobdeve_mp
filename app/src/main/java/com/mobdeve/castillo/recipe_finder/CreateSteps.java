@@ -45,7 +45,7 @@ public class CreateSteps extends AppCompatActivity {
         DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         //GETS RECIPEID
         String recipeKey = fromCreate.getStringExtra("RecipeKey");
-        //gets the reference of recipe
+        //gets the reference of recipes posted
         DatabaseReference DBRecipe = DB.child("Recipes").child(recipeKey);
         String stepsKey = DBRecipe.push().getKey();
 
@@ -94,7 +94,9 @@ public class CreateSteps extends AppCompatActivity {
                     DBRecipe.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                         DBRecipe.child("Steps").setValue(steps);
+
                         startActivity(new Intent(CreateSteps.this,results.class));
                     }
 
