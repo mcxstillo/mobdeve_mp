@@ -102,6 +102,20 @@ public class RecipePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(RecipePage.this, "Saved to Recipe Book", Toast.LENGTH_SHORT).show();
+
+                DB.child("Recipes").child(recipeKey).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        //set value of the recipe key?????
+                        Recipe likedRecipe = snapshot.getValue(Recipe.class);
+                        DB.child("Liked").child(likedRecipe.recipeID).setValue(likedRecipe);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         });
     }

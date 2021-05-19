@@ -131,16 +131,12 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
 
                         recipe.setName(name.getText().toString());
                         Log.d("user",userName.getName());
-//                        recipe.setCreator(userName.getName());
-
-                        //set the id tas call na lang sa view recipe
                         recipe.setCreator(userID);
                         recipe.setCuisine(selected_cuisine);
                         recipe.setServing_size(selected_size);
                         recipe.setPreptime(preptime.getText().toString());
                         recipe.setCookingtime(cooktime.getText().toString());
                         recipe.setDesc(desc.getText().toString());
-                        //fix
 
                         Log.d("recipekey?",recipeKey);
                         recipe.setRecipeID(recipeKey);
