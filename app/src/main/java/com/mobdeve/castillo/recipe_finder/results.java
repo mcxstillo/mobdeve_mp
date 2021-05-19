@@ -29,7 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class results extends AppCompatActivity {
+public class results extends AppCompatActivity{
 
     //POSTED RECIPES/SEARCH RESULTS
     DrawerLayout navbar;
@@ -39,6 +39,8 @@ public class results extends AppCompatActivity {
     private ResultsAdapter.RecyclerViewClickListener listener;
     private TextView noticeTv;
     ArrayList<Recipe> recipes;
+    private TextView navUsernameTv;
+
     DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
     @Override
@@ -47,18 +49,26 @@ public class results extends AppCompatActivity {
         setContentView(R.layout.activity_results);
 
         init();
+        DB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User userID = snapshot.getValue(User.class);
+                navUsernameTv.setText(userID.name);
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         //gets all the recipes to display
         DB.child("Recipes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
-
                     dataSnapshot.getValue(Recipe.class);
-
                     recipes.add(recipeItem);
-
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -90,8 +100,6 @@ public class results extends AppCompatActivity {
             resultsRv.setAdapter(adapter);
         }
 
-
-
         }
 
     private void init() {
@@ -100,6 +108,7 @@ public class results extends AppCompatActivity {
         this.recipes = new ArrayList<Recipe>();
         this.createBtn = findViewById(R.id.createBtn);
         this.noticeTv = findViewById(R.id.recipes_noticeTv);
+        this.navUsernameTv = findViewById(R.id.navUsernameTv);
         setOnClickListener();
     }
 
@@ -108,8 +117,7 @@ public class results extends AppCompatActivity {
             @Override
             public void onClick(View v, int position) {
                 Intent viewRecipe = new Intent(results.this, RecipePage.class);
-                /*HELLO CAMS AM RIGHT HERE PUT DB CODE HERE HEHE */
-                //put extra recipe ID
+
                 String recipeID = recipes.get(position).getRecipeID();
                 Log.d("RecipeID",recipeID);
                 viewRecipe.putExtra("recipeID",recipeID);
@@ -167,4 +175,6 @@ public class results extends AppCompatActivity {
 
         builder.show();
     }
+
+
 }

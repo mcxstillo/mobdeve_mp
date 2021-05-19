@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,6 +33,7 @@ public class editprofile extends AppCompatActivity {
     public EditText profile_nameEt, descEt, oldpass, newpass, confirmpass;
     public Button updateBtn;
     User userEdited = new User();
+    private TextView navUsernameTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class editprofile extends AppCompatActivity {
                 User userProfile = snapshot.getValue(User.class);
                 profile_nameEt.setText(userProfile.name);
                 descEt.setText(userProfile.desc);
+                navUsernameTv.setText(userProfile.name);
 
             }
 
@@ -88,6 +91,7 @@ public class editprofile extends AppCompatActivity {
         this.oldpass = findViewById(R.id.edit_oldpassEt);
         this.newpass = findViewById(R.id.edit_newpassEt);
         this.confirmpass = findViewById(R.id.edit_confpassEt);
+        this.navUsernameTv = findViewById(R.id.navUsernameTv);
     }
 
     // NAVBAR FUNCTIONS
