@@ -45,17 +45,14 @@ public class CreateSteps extends AppCompatActivity {
         DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         //GETS RECIPEID
         String recipeKey = fromCreate.getStringExtra("RecipeKey");
-        //gets the reference of recipe
+        //gets the reference of recipes posted
         DatabaseReference DBRecipe = DB.child("Recipes").child(recipeKey);
         String stepsKey = DBRecipe.push().getKey();
 
         ArrayList<Steps> steps = new ArrayList<>();
 
-
-
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 50, 0, 50);
-        Steps step = new Steps();
 
         addBtn.setOnClickListener(new View.OnClickListener() {
 

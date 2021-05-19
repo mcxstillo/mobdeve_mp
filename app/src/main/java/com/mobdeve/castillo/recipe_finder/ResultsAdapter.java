@@ -23,7 +23,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
         this.recipes = recipes;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView name, rating, difficulty, preptime;
         public ImageView recipeImg;
@@ -38,6 +38,8 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
             this.rating = itemView.findViewById(R.id.ratingTv);
             this.difficulty = itemView.findViewById(R.id.difficultyTv);
             this.preptime = itemView.findViewById(R.id.timeTv);
+
+
         }
 
         public void setName(String name) {
