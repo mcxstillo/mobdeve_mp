@@ -57,16 +57,32 @@ public class RecipePage extends AppCompatActivity {
         DatabaseReference DBRecipe = DB.child(recipeKey);
 
 
+
         DB.child("Recipes").child(recipeKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Recipe recipeItem = snapshot.getValue(Recipe.class);
 
+
+                FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(recipeItem.getCreator()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        User userID = snapshot.getValue(User.class);
+                        creatorTv.setText(userID.name);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+                //gets UserID
                 String imgUri=recipeItem.getImgUri();
                 Picasso.get().load(imgUri).into(photo);
-
                 nameTv.setText(recipeItem.getName());
-                creatorTv.setText(recipeItem.getCreator());
+
                 cuisineTv.setText(recipeItem.getCuisine());
                 servingsTv.setText(recipeItem.getServing_size());
                 preptimeTv.setText(recipeItem.getPreptime());
