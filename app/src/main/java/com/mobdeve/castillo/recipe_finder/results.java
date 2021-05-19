@@ -29,7 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class results extends AppCompatActivity {
+public class results extends AppCompatActivity{
 
     //POSTED RECIPES/SEARCH RESULTS
     DrawerLayout navbar;
@@ -67,11 +67,8 @@ public class results extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
-
                     dataSnapshot.getValue(Recipe.class);
-
                     recipes.add(recipeItem);
-
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -102,8 +99,6 @@ public class results extends AppCompatActivity {
             adapter = new ResultsAdapter(recipes, listener);
             resultsRv.setAdapter(adapter);
         }
-
-
 
         }
 
@@ -180,4 +175,6 @@ public class results extends AppCompatActivity {
 
         builder.show();
     }
+
+
 }

@@ -155,8 +155,23 @@ public class profile extends AppCompatActivity {
         this.editBtn = findViewById(R.id.editBtn);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
         this.recipes = new ArrayList<Recipe>();
-
+        setOnClickListener();
         this.recipesRv = (RecyclerView) findViewById(R.id.user_recipesRv);
+    }
+
+    private void setOnClickListener() {
+        this.listener = new ResultsAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent viewRecipe = new Intent(profile.this, RecipePage.class);
+
+                String recipeID = recipes.get(position).getRecipeID();
+                Log.d("RecipeID",recipeID);
+                viewRecipe.putExtra("recipeID",recipeID);
+//                viewRecipe.putExtra("position",position);
+                startActivity(viewRecipe);
+            }
+        };
     }
 
     // NAVBAR FUNCTIONS

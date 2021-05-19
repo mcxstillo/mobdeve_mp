@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -52,6 +53,29 @@ public class RecipeBook extends AppCompatActivity {
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         init();
+
+
+        reference.child("Liked").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+
+                    Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
+                    Log.d("recipeboookitem",recipeItem.recipeID);
+                    dataSnapshot.getValue(Recipe.class);
+                    recipes.add(recipeItem);
+
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
+
+            }
+        });
+
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -80,11 +104,30 @@ public class RecipeBook extends AppCompatActivity {
 
     private void init() {
         this.navbar = findViewById(R.id.navdrawer);
+        this.recipes = new ArrayList<Recipe>();
         this.recipesRv = (RecyclerView) findViewById(R.id.recipesRv);
         this.createBtn = findViewById(R.id.createBtn);
         this.notice = findViewById(R.id.noticeTv);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
+        setOnClickListener();
     }
+
+    private void setOnClickListener() {
+        this.listener = new ResultsAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent viewRecipe = new Intent(RecipeBook.this, RecipePage.class);
+
+                String recipeID = recipes.get(position).getRecipeID();
+                Log.d("RecipeID",recipeID);
+                viewRecipe.putExtra("recipeID",recipeID);
+//                viewRecipe.putExtra("position",position);
+                startActivity(viewRecipe);
+            }
+        };
+    }
+
+
 
     // NAVBAR FUNCTIONS
     public void ClickMenu(View view) {

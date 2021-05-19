@@ -65,4 +65,8 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
     public int getItemCount() {
         return 0;
     }
+
+    public interface RecipesAdapterClickListener {
+        void onClick(View v, int position);
+    }
 }
