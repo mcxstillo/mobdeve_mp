@@ -15,7 +15,7 @@
 
     // Login strings
     <string name="welcome_back">Welcome Back!</string>
-    <string name="e_mail_login">E-mail Address</string>
+    <string name="email_login">E-mail Address</string>
     <string name="don_t_have_an_account">Don’t have an account?</string>
     <string name="sign_up_here">Sign up here</string>
     <string name="chooking">Chooking</string>

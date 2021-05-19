@@ -100,8 +100,6 @@ public class RecipeBook extends AppCompatActivity {
         }
     }
 
-
-
     private void init() {
         this.navbar = findViewById(R.id.navdrawer);
         this.recipes = new ArrayList<Recipe>();

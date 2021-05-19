@@ -118,6 +118,22 @@ public class profile extends AppCompatActivity {
         });
     }
 
+    private void setOnClickListener() {
+        this.listener = new ResultsAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent viewRecipe = new Intent(profile.this, RecipePage.class);
+                /*HELLO CAMS AM RIGHT HERE PUT DB CODE HERE HEHE */
+                //put extra recipe ID
+                String recipeID = recipes.get(position).getRecipeID();
+                Log.d("RecipeID",recipeID);
+                viewRecipe.putExtra("recipeID",recipeID);
+//                viewRecipe.putExtra("position",position);
+                startActivity(viewRecipe);
+            }
+        };
+    }
+
     private void initFirebase() {
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
