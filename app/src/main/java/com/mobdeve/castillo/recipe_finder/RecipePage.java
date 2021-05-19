@@ -22,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -37,6 +38,7 @@ public class RecipePage extends AppCompatActivity {
     private StepsAdapter adapter;
     private FloatingActionButton faveBtn;
     private ArrayList<Steps> steps;
+//    private Steps steps;
     DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
             .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
@@ -87,6 +89,35 @@ public class RecipePage extends AppCompatActivity {
                 preptimeTv.setText(recipeItem.getPreptime());
                 cooktimeTv.setText(recipeItem.getCookingtime());
                 descTv.setText(recipeItem.getDesc());
+
+
+                DB.child("Recipes").child(recipeKey).child("Steps").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Log.d("sscountBFR",snapshot.getChildrenCount()+"");
+                            for(int i =0;i<snapshot.getChildrenCount();i++){
+
+                                DB.child("Recipes").child(recipeKey).child("Steps").child(String.valueOf(i)).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        Steps stepItem = snapshot.getValue(Steps.class);
+                                        Log.d("stepItem",stepItem.step_desc);
+                                        steps.add(stepItem);
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+                        }
+//                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
 //                adapter.notifyDataSetChanged();
             }

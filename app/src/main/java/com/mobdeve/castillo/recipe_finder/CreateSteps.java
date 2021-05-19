@@ -67,8 +67,6 @@ public class CreateSteps extends AppCompatActivity {
         });
 
 
-
-
         addBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -78,6 +76,7 @@ public class CreateSteps extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                         Log.d("stepsArraySize",steps.size()+"");
+
                         DBRecipe.child("Steps").setValue(steps);
 
                         LinearLayout ll = new LinearLayout(CreateSteps.this);
@@ -124,6 +123,7 @@ public class CreateSteps extends AppCompatActivity {
 
                 for (int i = 0; i < textFields.size(); i++) {
                     steps.add(new Steps(i+1, textFields.get(i).getText().toString()));
+
                     Log.d("ARRAY CONTENT", "" + steps.get(i).getStep_desc());
                 }
             }

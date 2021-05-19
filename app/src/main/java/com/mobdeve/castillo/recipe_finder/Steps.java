@@ -4,6 +4,9 @@ public class Steps {
     public int stepnum;
     public String step_desc;
 
+    public Steps(){
+
+    }
     public Steps(int stepnum, String step_desc) {
         this.stepnum = stepnum;
         this.step_desc = step_desc;
