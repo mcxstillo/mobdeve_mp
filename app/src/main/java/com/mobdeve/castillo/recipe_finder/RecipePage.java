@@ -81,12 +81,14 @@ public class RecipePage extends AppCompatActivity {
                 //gets UserID
                 String imgUri=recipeItem.getImgUri();
                 Picasso.get().load(imgUri).into(photo);
+
                 nameTv.setText(recipeItem.getName());
+                creatorTv.setText("by " + recipeItem.getCreator());
 
                 cuisineTv.setText(recipeItem.getCuisine());
-                servingsTv.setText(recipeItem.getServing_size());
-                preptimeTv.setText(recipeItem.getPreptime());
-                cooktimeTv.setText(recipeItem.getCookingtime());
+                servingsTv.setText(recipeItem.getServing_size() + " SERVINGS");
+                preptimeTv.setText(recipeItem.getPreptime() + " MINUTES");
+                cooktimeTv.setText(recipeItem.getCookingtime() + " MINUTES");
                 descTv.setText(recipeItem.getDesc());
 
 //                adapter.notifyDataSetChanged();

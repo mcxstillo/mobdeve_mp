@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -55,6 +56,22 @@ public class RecipeBook extends AppCompatActivity {
         this.recipesRv = (RecyclerView) findViewById(R.id.recipesRv);
         this.createBtn = findViewById(R.id.createBtn);
         this.notice = findViewById(R.id.noticeTv);
+    }
+
+    private void setOnClickListener() {
+        this.listener = new ResultsAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent viewRecipe = new Intent(RecipeBook.this, RecipePage.class);
+                /*HELLO CAMS AM RIGHT HERE PUT DB CODE HERE HEHE */
+                //put extra recipe ID
+                String recipeID = recipes.get(position).getRecipeID();
+                Log.d("RecipeID",recipeID);
+                viewRecipe.putExtra("recipeID",recipeID);
+//                viewRecipe.putExtra("position",position);
+                startActivity(viewRecipe);
+            }
+        };
     }
 
     // NAVBAR FUNCTIONS

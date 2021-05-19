@@ -60,7 +60,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recipesRv"
                     android:layout_width="391dp"
-                    android:layout_height="0dp"
+                    android:layout_height="match_parent"
                     android:textAlignment="center">
 
                 </androidx.recyclerview.widget.RecyclerView>

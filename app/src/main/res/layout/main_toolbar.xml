@@ -20,8 +20,8 @@
         android:layout_weight="1"
         android:src="@drawable/chef"/>
 
-    <ImageView
+    <SearchView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_search"/>
+        android:layout_height="match_parent" />
+
 </LinearLayout>

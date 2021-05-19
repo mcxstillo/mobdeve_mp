@@ -4,30 +4,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -35,7 +28,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -76,7 +68,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     private Spinner cuisine, size;
     ArrayAdapter<CharSequence> cuisine_adapter, size_adapter;
     private String selected_cuisine, selected_size; // hi cams use this string to get values ng cuisine and size since dito ko inassign yung values for dropdown
-    private Button nextBtn, updateBtn, add_imgBtn;
+    private Button nextBtn, updateBtn, img_cameraBtn, img_galleryBtn;
     public String type;
     Recipe recipe = new Recipe();
 
@@ -100,10 +92,18 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
 
 
         //CAMERA BUTTON
-        this.add_imgBtn.setOnClickListener(new View.OnClickListener() {
+        this.img_cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("clicked ","img btn");
+                Log.d("clicked ","camera btn");
+                dispatchTakePictureIntent();
+            }
+        });
+
+        this.img_galleryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("clicked ","gallery btn");
                 dispatchTakePictureIntent();
             }
         });
@@ -292,10 +292,12 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         this.desc = findViewById(R.id.create_descEt);
         this.nextBtn = findViewById(R.id.create_nextBtn);
         this.updateBtn = findViewById(R.id.create_updateBtn);
-        this.add_imgBtn = findViewById(R.id.add_imbBtn);
+        this.img_cameraBtn = findViewById(R.id.img_cameraBtn);
+        this.img_galleryBtn = findViewById(R.id.img_galleryBtn);
         this.storageReference =  FirebaseStorage.getInstance("gs://mobdeve-b369a.appspot.com/").getReference();
 
         this.recipeimg = (ImageView) findViewById(R.id.recipeIv);
+        recipeimg.setImageResource(R.drawable.default_img);
 
         switch(type) {
             case "CREATE": updateBtn.setVisibility(View.GONE); break;
