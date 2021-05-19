@@ -40,6 +40,7 @@ public class profile extends AppCompatActivity {
     private Button editBtn;
     private RecyclerView recipesRv;
     private ResultsAdapter adapter;
+    private ResultsAdapter.RecyclerViewClickListener listener;
     private ArrayList<Recipe> recipes;
 
     @Override
@@ -56,7 +57,7 @@ public class profile extends AppCompatActivity {
 
         LinearLayoutManager lm = new LinearLayoutManager(profile.this);
         recipesRv.setLayoutManager(lm);
-        adapter = new ResultsAdapter(recipes);
+        adapter = new ResultsAdapter(recipes, listener);
         recipesRv.setAdapter(adapter);
 
         //if account is theirs, logout

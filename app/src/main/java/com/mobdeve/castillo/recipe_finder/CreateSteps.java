@@ -51,7 +51,6 @@ public class CreateSteps extends AppCompatActivity {
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 50, 0, 50);
-        Steps step = new Steps();
 
         addBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -61,20 +60,16 @@ public class CreateSteps extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        Log.d("step in addBtn", step.getStep_desc());
-                        Log.d("stepsSize in addBtn", steps.size()+"");
-                        stepnum++;
-
                         LinearLayout ll = new LinearLayout(CreateSteps.this);
                         ll.setLayoutParams(params);
                         ll.setGravity(17);
 
-                EditText step = new EditText(CreateSteps.this);
-                step.setWidth(760);
-                step.setHint("Enter instructions");
-                textFields.add(step);
+                        EditText step = new EditText(CreateSteps.this);
+                        step.setWidth(760);
+                        step.setHint("Enter instructions");
+                        textFields.add(step);
 
-                Log.d("STEP", "CREATED STEP NUMBER " + step.getId());
+                        Log.d("STEP", "CREATED STEP NUMBER " + step.getId());
 
                         ll.addView(step);
                         mainLayout.addView(ll);

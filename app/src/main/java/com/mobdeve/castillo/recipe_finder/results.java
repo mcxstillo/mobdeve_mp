@@ -36,6 +36,7 @@ public class results extends AppCompatActivity {
     private RecyclerView resultsRv;
     private ResultsAdapter adapter;
     private FloatingActionButton createBtn;
+    private ResultsAdapter.RecyclerViewClickListener listener;
     private TextView noticeTv;
     ArrayList<Recipe> recipes;
 
@@ -62,7 +63,7 @@ public class results extends AppCompatActivity {
             noticeTv.setVisibility(View.GONE);
             LinearLayoutManager lm = new LinearLayoutManager(results.this);
             resultsRv.setLayoutManager(lm);
-            adapter = new ResultsAdapter(recipes);
+            adapter = new ResultsAdapter(recipes, listener);
             resultsRv.setAdapter(adapter);
         }
 
@@ -100,6 +101,20 @@ public class results extends AppCompatActivity {
         this.recipes = new ArrayList<Recipe>();
         this.createBtn = findViewById(R.id.createBtn);
         this.noticeTv = findViewById(R.id.recipes_noticeTv);
+        setOnClickListener();
+    }
+
+    private void setOnClickListener() {
+        this.listener = new ResultsAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent viewRecipe = new Intent(results.this, RecipePage.class);
+                /*
+                    HELLO CAMS AM RIGHT HERE PUT DB CODE HERE HEHE
+                */
+                startActivity(viewRecipe);
+            }
+        };
     }
 
     // NAVBAR FUNCTIONS

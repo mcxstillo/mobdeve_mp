@@ -29,6 +29,7 @@ public class RecipeBook extends AppCompatActivity {
     private RecyclerView recipesRv;
     private ResultsAdapter adapter;
     private FloatingActionButton createBtn;
+    private ResultsAdapter.RecyclerViewClickListener listener;
     private TextView notice;
 
     @Override
@@ -44,7 +45,7 @@ public class RecipeBook extends AppCompatActivity {
         } else {
             LinearLayoutManager lm = new LinearLayoutManager(RecipeBook.this);
             this.recipesRv.setLayoutManager(lm);
-            this.adapter = new ResultsAdapter(this.recipes);
+            this.adapter = new ResultsAdapter(this.recipes, listener);
             this.recipesRv.setAdapter(this.adapter);
         }
     }
