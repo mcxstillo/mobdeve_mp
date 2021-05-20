@@ -57,9 +57,8 @@ public class RecipeBook extends AppCompatActivity {
 
         reference.child("Liked").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-
                     Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
                     Log.d("recipeboookitem",recipeItem.recipeID);
                     dataSnapshot.getValue(Recipe.class);
@@ -115,7 +114,6 @@ public class RecipeBook extends AppCompatActivity {
             @Override
             public void onClick(View v, int position) {
                 Intent viewRecipe = new Intent(RecipeBook.this, RecipePage.class);
-
                 String recipeID = recipes.get(position).getRecipeID();
                 Log.d("RecipeID",recipeID);
                 viewRecipe.putExtra("recipeID",recipeID);

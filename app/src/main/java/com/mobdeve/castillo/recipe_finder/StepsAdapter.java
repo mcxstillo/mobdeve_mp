@@ -1,5 +1,6 @@
 package com.mobdeve.castillo.recipe_finder;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,10 +52,13 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull  StepsAdapter.ViewHolder holder, int position) {
         holder.setStepnum(this.steps.get(position).getStepnum());
         holder.setStepdesc(this.steps.get(position).getStep_desc());
+//        holder.setStepdesc("THE DESC SHOULD BE HERE");
     }
 
     @Override
     public int getItemCount() {
-        return steps.size();
+        Log.d("stepsSizeinAdapterSteps",steps.size()+"");
+//        Log.d("stepsfirst",steps.get(0)+"");
+        return this.steps.size();
     }
 }

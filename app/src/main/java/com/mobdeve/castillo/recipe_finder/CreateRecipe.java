@@ -12,6 +12,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,6 +23,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -56,6 +59,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     StorageReference storageReference;
     String currentPhotoPath;
     public static final int CAMERA_REQUEST_CODE = 102;
+    public static final int GALLERY_REQUEST_CODE = 101;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     DrawerLayout navbar;
@@ -113,11 +117,14 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
+
+        //do this
         this.img_galleryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("clicked ","gallery btn");
-                dispatchTakePictureIntent();
+                Intent gallery = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(gallery,GALLERY_REQUEST_CODE);
             }
         });
 
@@ -183,13 +190,36 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                 mediaScanIntent.setData(contentUri);
                 this.sendBroadcast(mediaScanIntent);
 
-//                recipe.setImgUri("testing before upload");
-
                 uploadImageToFirebase(f.getName(),contentUri);
                 Log.d("filename",f.getName()+"");
             }
 
         }
+
+        //not sure if adding to db
+        if (requestCode == GALLERY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri contentUri = data.getData();
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String imageFileName = "JPEG_" + timeStamp + "." + getFileExt(contentUri);
+                Log.d("TAG","onActivityResult: Gallery Image Uri: "+imageFileName);
+                recipeimg.setImageURI(contentUri);
+                File f = new File(currentPhotoPath);
+                Log.d("URI","Absolute URI [from gallery] of image is "+Uri.fromFile(f));
+                Log.d("currentPhotoPath","currentPhotoPath [from gallery] of image is "+currentPhotoPath);
+                Log.d("FILE","currentPhotoPath [from gallery] of image is "+f);
+                uploadImageToFirebase(f.getName(),contentUri);
+            }
+
+        }
+
+
+    }
+
+    private String getFileExt(Uri contentUri) {
+        ContentResolver c = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(c.getType(contentUri));
     }
 
     private void uploadImageToFirebase(String name, Uri contentUri) {

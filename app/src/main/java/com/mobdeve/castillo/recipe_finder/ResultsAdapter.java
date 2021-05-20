@@ -47,6 +47,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
         public void onClick(View v) {
 //            listener.onClick(v, getAdapterPosition());
             listener.onClick(v, getBindingAdapterPosition());
+
         }
 
         public void setName(String name) {
