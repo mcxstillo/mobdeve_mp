@@ -71,9 +71,9 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     private ImageView recipeimg;
     private TextView navUsernameTv;
     private EditText name, preptime, cooktime, desc;
-    private Spinner cuisine, size;
-    ArrayAdapter<CharSequence> cuisine_adapter, size_adapter;
-    private String selected_cuisine, selected_size; // hi cams use this string to get values ng cuisine and size since dito ko inassign yung values for dropdown
+    private Spinner cuisine, size, difficulty;
+    ArrayAdapter<CharSequence> cuisine_adapter, size_adapter, difficulty_adapter;
+    private String selected_cuisine, selected_size, selected_diff; // hi cams use this string to get values ng cuisine and size since dito ko inassign yung values for dropdown
     private Button nextBtn, updateBtn, img_cameraBtn, img_galleryBtn;
     public String type;
     Recipe recipe = new Recipe();
@@ -140,6 +140,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                         recipe.setCreator(userID);
                         recipe.setCuisine(selected_cuisine);
                         recipe.setServing_size(selected_size);
+                        recipe.setDifficulty(selected_diff);
                         recipe.setPreptime(preptime.getText().toString());
                         recipe.setCookingtime(cooktime.getText().toString());
                         recipe.setDesc(desc.getText().toString());
@@ -228,7 +229,6 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                         String t = task.getResult().toString();
                         recipe.setImgUri(t);
                         Log.d("add uri",t);
-
                     }
                 });
 
@@ -293,6 +293,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         switch (parent.getId()) {
             case R.id.create_cuisineEt: this.selected_cuisine = selected; break;
             case R.id.create_sizeEt: this.selected_size = selected; break;
+            case R.id.create_difficultyEt:Et: this.selected_diff = selected; break;
         }
     }
 
@@ -306,6 +307,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         this.name = findViewById(R.id.create_nameEt);
         this.cuisine = (Spinner) findViewById(R.id.create_cuisineEt);
         this.size = (Spinner) findViewById(R.id.create_sizeEt);
+        this.difficulty = (Spinner) findViewById(R.id.create_difficultyEt);
         this.preptime = findViewById(R.id.create_prepEt);
         this.cooktime = findViewById(R.id.create_cookEt);
         this.desc = findViewById(R.id.create_descEt);
@@ -326,14 +328,17 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
 
         cuisine_adapter = ArrayAdapter.createFromResource(this,R.array.cuisine_array,R.layout.support_simple_spinner_dropdown_item);
         size_adapter = ArrayAdapter.createFromResource(this, R.array.size_array,R.layout.support_simple_spinner_dropdown_item);
+        difficulty_adapter = ArrayAdapter.createFromResource(this, R.array.difficulty,R.layout.support_simple_spinner_dropdown_item);
         cuisine_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         size_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         cuisine.setAdapter(cuisine_adapter);
         size.setAdapter(size_adapter);
+        difficulty.setAdapter(difficulty_adapter);
 
         cuisine.setOnItemSelectedListener(this);
         size.setOnItemSelectedListener(this);
+        difficulty.setOnItemSelectedListener(this);
     }
 
     // NAVBAR FUNCTIONS

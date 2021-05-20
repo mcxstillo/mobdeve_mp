@@ -55,8 +55,6 @@ public class profile extends AppCompatActivity {
         init();
         initFirebase();
 
-
-
         LinearLayoutManager lm = new LinearLayoutManager(profile.this);
         recipesRv.setLayoutManager(lm);
         adapter = new ResultsAdapter(recipes, listener);

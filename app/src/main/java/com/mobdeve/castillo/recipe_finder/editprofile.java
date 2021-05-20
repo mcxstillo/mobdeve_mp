@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 public class editprofile extends AppCompatActivity {
 
     DrawerLayout navbar;
+    private ImageView photo;
     private FirebaseUser user;
     private DatabaseReference reference;
     private String userID;
@@ -90,6 +92,8 @@ public class editprofile extends AppCompatActivity {
         this.descEt = findViewById(R.id.edit_descEt);
         this.updateBtn = findViewById(R.id.profile_updateBtn);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
+        this.photo = (ImageView) findViewById(R.id.profilephoto);
+        photo.setImageResource(R.drawable.ic_profilephoto);
     }
 
     // NAVBAR FUNCTIONS

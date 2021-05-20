@@ -29,16 +29,29 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/imageView4"
+                    android:id="@+id/profilephoto"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="56dp"
+                    android:clickable="true"
+                    tools:srcCompat="@drawable/ic_profilephoto" />
+
+                <Button
+                    android:id="@+id/cameraBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="56dp"
-                    tools:srcCompat="@drawable/ic_profilephoto" />
+                    android:text="camera" />
+
+                <Button
+                    android:id="@+id/gallerBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="gallery" />
 
                 <TextView
                     android:id="@+id/change_imgTv"
@@ -48,24 +61,35 @@
                     android:text="Change profile photo"
                     android:textColor="#000000" />
 
-                <EditText
-                    android:id="@+id/edit_nameEt"
-                    android:layout_width="255dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="40dp"
-                    android:ems="10"
-                    android:hint="Name"
-                    android:inputType="textPersonName" />
-
-                <EditText
-                    android:id="@+id/edit_descEt"
-                    android:layout_width="255dp"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:ems="10"
-                    android:gravity="start|top"
-                    android:hint="Description"
-                    android:inputType="textMultiLine" />
+                    android:layout_marginTop="40dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_nameEt"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/name"
+                        android:inputType="textPersonName" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLayout1"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_descEt"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/create_desc"
+                        android:inputType="textMultiLine" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/profile_updateBtn"
