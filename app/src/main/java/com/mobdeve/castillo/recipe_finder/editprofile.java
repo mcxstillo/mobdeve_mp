@@ -131,6 +131,8 @@ public class editprofile extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Logout user form firebase in this function and redirect to MainActivity
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(editprofile.this,MainActivity.class));
             }
         });
 

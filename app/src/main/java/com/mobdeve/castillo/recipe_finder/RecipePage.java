@@ -139,9 +139,21 @@ public class RecipePage extends AppCompatActivity {
                 DB.child("Recipes").child(recipeKey).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        //set value of the recipe key?????
                         Recipe likedRecipe = snapshot.getValue(Recipe.class);
-                        //add create steps here
+                        DB.child("Recipes").child(recipeKey).child("Steps").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                DB.child("Liked").child(likedRecipe.recipeID).child("Steps").setValue(steps);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+
+
                         DB.child("Liked").child(likedRecipe.recipeID).setValue(likedRecipe);
                     }
 
@@ -207,6 +219,8 @@ public class RecipePage extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Logout user form firebase in this function and redirect to MainActivity
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(RecipePage.this,MainActivity.class));
             }
         });
 

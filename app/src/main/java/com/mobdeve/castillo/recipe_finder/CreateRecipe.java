@@ -355,6 +355,8 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Logout user form firebase in this function and redirect to MainActivity
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(CreateRecipe.this,MainActivity.class));
             }
         });
 

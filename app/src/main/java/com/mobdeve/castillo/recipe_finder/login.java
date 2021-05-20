@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,6 +48,7 @@ public class login extends AppCompatActivity {
         this.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //orig version
                 mAuth.signInWithEmailAndPassword(email.getText().toString().trim(),password.getText().toString().trim())
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
@@ -60,6 +62,7 @@ public class login extends AppCompatActivity {
                                 }
                             }
                         });
+
             }
         });
     }
