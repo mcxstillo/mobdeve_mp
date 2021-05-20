@@ -50,31 +50,67 @@ public class RecipeBook extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_book);
-        reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         init();
+        Log.d("recipebeforecondi",""+recipes.size());
+//        if (recipes == null || recipes.isEmpty()) {
+//            recipesRv.setVisibility(View.GONE);
+////            recipesRv.setVisibility(View.VISIBLE);
+//            notice.setVisibility(View.VISIBLE);
+//            Log.d("firstIF","hi");
+//
+//        } else {
+//            LinearLayoutManager lm = new LinearLayoutManager(RecipeBook.this);
+//            recipesRv.setLayoutManager(lm);
+//            adapter = new ResultsAdapter(recipes, listener);
+//            recipesRv.setAdapter(adapter);
+//            Log.d("firstELSE","hi");
+//
+//        }
+
+
+        reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         reference.child("Liked").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
-                    Log.d("recipeboookitem",recipeItem.recipeID);
-                    dataSnapshot.getValue(Recipe.class);
-                    recipes.add(recipeItem);
+                Log.d("snapshotcount",snapshot.getChildrenCount()+"");
+//                if(snapshot.getChildrenCount()!=0){
+                    for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                        Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
+                        Log.d("recipeboookitem",recipeItem.recipeID);
+                        dataSnapshot.getValue(Recipe.class);
+                        recipes.add(recipeItem);
+                        Log.d("afteradding",""+recipes.size());
 
+
+                    }
+                if (recipes == null || recipes.isEmpty()) {
+                    recipesRv.setVisibility(View.GONE);
+                    notice.setVisibility(View.VISIBLE);
+                    Log.d("secondIF","hi");
                 }
-                if (!(recipes.isEmpty())) {
+                else {
+                    LinearLayoutManager lm = new LinearLayoutManager(RecipeBook.this);
+                    recipesRv.setLayoutManager(lm);
+                    adapter = new ResultsAdapter(recipes, listener);
+                    recipesRv.setVisibility(View.VISIBLE);
+                    notice.setVisibility(View.GONE);
+                    recipesRv.setAdapter(adapter);
+                    Log.d("secondELSE","hi");
+
+                    
+                    Log.d("adaptercount",adapter.getItemCount()+"");
                     adapter.notifyDataSetChanged();
                 }
-            }
+
+                }
 
             @Override
             public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
 
             }
         });
-
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -89,20 +125,10 @@ public class RecipeBook extends AppCompatActivity {
             }
         });
 
-        if (recipes == null || recipes.isEmpty()) {
-            recipesRv.setVisibility(View.GONE);
-            notice.setVisibility(View.VISIBLE);
-        } else {
-            LinearLayoutManager lm = new LinearLayoutManager(RecipeBook.this);
-            this.recipesRv.setLayoutManager(lm);
-            this.adapter = new ResultsAdapter(this.recipes, listener);
-            this.recipesRv.setAdapter(this.adapter);
-        }
     }
-
     private void init() {
         this.navbar = findViewById(R.id.navdrawer);
-        this.recipes = new ArrayList<Recipe>();
+        this.recipes = new ArrayList<>();
         this.recipesRv = (RecyclerView) findViewById(R.id.recipesRv);
         this.createBtn = findViewById(R.id.createBtn);
         this.notice = findViewById(R.id.noticeTv);

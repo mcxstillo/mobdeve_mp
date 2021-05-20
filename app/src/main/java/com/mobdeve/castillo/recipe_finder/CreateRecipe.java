@@ -135,7 +135,6 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         User userName = snapshot.getValue(User.class);
-
                         recipe.setName(name.getText().toString());
                         Log.d("user",userName.getName());
                         recipe.setCreator(userID);
@@ -204,11 +203,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                 String imageFileName = "JPEG_" + timeStamp + "." + getFileExt(contentUri);
                 Log.d("TAG","onActivityResult: Gallery Image Uri: "+imageFileName);
                 recipeimg.setImageURI(contentUri);
-                File f = new File(currentPhotoPath);
-                Log.d("URI","Absolute URI [from gallery] of image is "+Uri.fromFile(f));
-                Log.d("currentPhotoPath","currentPhotoPath [from gallery] of image is "+currentPhotoPath);
-                Log.d("FILE","currentPhotoPath [from gallery] of image is "+f);
-                uploadImageToFirebase(f.getName(),contentUri);
+                uploadImageToFirebase(imageFileName,contentUri);
             }
 
         }
@@ -227,17 +222,12 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         imageRef.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
                 Task<Uri> downloadUrl=taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         String t = task.getResult().toString();
-//                        DatabaseReference newPost= FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
-//                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Recipes").child(recipeKey).push();
-
                         recipe.setImgUri(t);
                         Log.d("add uri",t);
-//                      newPost.child("image").setValue(task.getResult().toString());
 
                     }
                 });
@@ -260,8 +250,6 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
 
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        //saved in local phone gallery
-//        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
