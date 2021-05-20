@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
         init();
 
+
         this.toLogin.setOnClickListener(v -> {
             Intent login = new Intent(MainActivity.this, login.class);
             startActivity(login);

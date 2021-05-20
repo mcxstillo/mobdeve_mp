@@ -118,6 +118,7 @@ public class profile extends AppCompatActivity {
         });
     }
 
+
     private void initFirebase() {
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
@@ -213,6 +214,8 @@ public class profile extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Logout user form firebase in this function and redirect to MainActivity
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(profile.this,login.class));
             }
         });
 
