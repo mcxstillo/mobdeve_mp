@@ -1,22 +1,34 @@
 package com.mobdeve.castillo.recipe_finder;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,16 +36,29 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class editprofile extends AppCompatActivity {
 
+    public static final int CAMERA_REQUEST_CODE = 102;
+    public static final int GALLERY_REQUEST_CODE = 101;
+    StorageReference storageReference;
+    String currentPhotoPath;
     DrawerLayout navbar;
     private ImageView photo;
     private FirebaseUser user;
     private DatabaseReference reference;
     private String userID;
     public EditText profile_nameEt, descEt;
-    public Button updateBtn;
+    public Button updateBtn, camBtn, gallBtn;
     User userEdited = new User();
     private TextView navUsernameTv;
 
@@ -84,7 +109,156 @@ public class editprofile extends AppCompatActivity {
                 startActivity(new Intent(editprofile.this,profile.class));
             }
         });
+
+
+
+        //CAMERA BUTTON
+        this.camBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("clicked ","camera btn");
+                dispatchTakePictureIntent();
+            }
+        });
+
+
+        //GALLERY BUTTON
+        this.gallBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("clicked ","gallery btn");
+                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(gallery,GALLERY_REQUEST_CODE);
+            }
+        });
+
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //if camera button is chosen
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+
+                File f = new File(currentPhotoPath);
+                //setting the IMAGE to the imageview
+                photo.setImageURI(Uri.fromFile(f));
+                Log.d("URI","Absolute URI of image is "+Uri.fromFile(f));
+
+                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                Uri contentUri = Uri.fromFile(f);
+                mediaScanIntent.setData(contentUri);
+                this.sendBroadcast(mediaScanIntent);
+
+                uploadImageToFirebase(f.getName(),contentUri);
+                Log.d("filename",f.getName()+"");
+            }
+
+        }
+
+        //not sure if adding to db
+        if (requestCode == GALLERY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri contentUri = data.getData();
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String imageFileName = "JPEG_" + timeStamp + "." + getFileExt(contentUri);
+                Log.d("TAG","onActivityResult: Gallery Image Uri: "+imageFileName);
+                Log.d("TAG","onActivityResult: contentUri: "+contentUri);
+                Log.d("TAG","onActivityResult: imageFileName: "+imageFileName);
+
+                Picasso.get().load(contentUri).into(photo);
+
+                //this is causing the error
+                uploadImageToFirebase(imageFileName,contentUri);
+            }
+
+        }
+
+
+    }
+
+    private String getFileExt(Uri contentUri) {
+        ContentResolver c = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(c.getType(contentUri));
+    }
+
+    private void uploadImageToFirebase(String name, Uri contentUri) {
+        Log.d("uploadtofb",name);
+        final StorageReference imageRef = storageReference.child("profilepics/"+name);
+        Log.d("imageRef",imageRef.toString());
+        imageRef.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Task<Uri> downloadUrl=taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        String t = task.getResult().toString();
+                        Log.d("profpicID",t);
+                        userEdited.setProfPicID(t);
+                        Log.d("add uri",t);
+                    }
+                });
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("upload failed","very sad");
+            }
+        });
+
+
+    }
+
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        Log.d("image",image+"");
+        Log.d("storageDir",storageDir+"");
+        Log.d("image.getAbsolutePath()",image.getAbsolutePath());
+        currentPhotoPath = image.getAbsolutePath();
+        Log.d("currentPhotoPath",currentPhotoPath);
+
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (getApplicationContext().getPackageManager().hasSystemFeature(
+                PackageManager.FEATURE_CAMERA)) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(editprofile.this, "com.example.android.fileprovider", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+            }
+        }
+        else{
+            Log.d("camera","does not exist here");
+        }
+    }
+
 
     private void init() {
         this.navbar = findViewById(R.id.navdrawer);
@@ -93,6 +267,9 @@ public class editprofile extends AppCompatActivity {
         this.updateBtn = findViewById(R.id.profile_updateBtn);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
         this.photo = (ImageView) findViewById(R.id.profilephoto);
+        this.camBtn = findViewById(R.id.cameraBtn);
+        this.gallBtn = findViewById(R.id.gallerBtn);
+        this.storageReference =  FirebaseStorage.getInstance("gs://mobdeve-b369a.appspot.com/").getReference();
         photo.setImageResource(R.drawable.ic_profilephoto);
     }
 
