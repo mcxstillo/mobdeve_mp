@@ -36,10 +36,12 @@ public class RecipePage extends AppCompatActivity {
     private ImageView photo;
     private TextView nameTv, creatorTv, cuisineTv, servingsTv, preptimeTv, cooktimeTv, descTv;
     private TextView navUsernameTv;
-    private RecyclerView stepsRv;
+    private RecyclerView stepsRv, ingredientsRv;
     private StepsAdapter adapter;
+    private IngredientsAdapter ingrAdapter;
     private FloatingActionButton faveBtn;
     private ArrayList<Steps> steps;
+    private ArrayList<String> ingredients;
     private ResultsAdapter.RecyclerViewClickListener listener;
     DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
             .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -80,6 +82,17 @@ public class RecipePage extends AppCompatActivity {
 
                         }
                     });
+
+                nameTv.setText(recipeItem.getName());
+                creatorTv.setText("by " + recipeItem.getCreator());
+
+                cuisineTv.setText(recipeItem.getCuisine().toUpperCase());
+                servingsTv.setText(recipeItem.getServing_size() + " SERVINGS");
+                preptimeTv.setText(recipeItem.getPreptime() + " MINUTES");
+                cooktimeTv.setText(recipeItem.getCookingtime() + " MINUTES");
+                descTv.setText(recipeItem.getDesc());
+
+
                 DB.child("Recipes").child(recipeKey).child("Steps").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -108,6 +121,7 @@ public class RecipePage extends AppCompatActivity {
 
                     }
                 });
+
                 //gets UserID
                 String imgUri=recipeItem.getImgUri();
                 Picasso.get().load(imgUri).into(photo);
@@ -119,6 +133,35 @@ public class RecipePage extends AppCompatActivity {
                 cooktimeTv.setText(recipeItem.getCookingtime() + " MINUTES");
                 descTv.setText(recipeItem.getDesc());
 
+                DB.child("Recipes").child(recipeKey).child("Ingredients").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Log.d("sscountBFR",snapshot.getChildrenCount()+"");
+                        for(int i =0;i<snapshot.getChildrenCount();i++){
+
+                            DB.child("Recipes").child(recipeKey).child("Ingredients").child(String.valueOf(i)).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    String item = snapshot.getValue(String.class);
+                                    Log.d("ingrItem", item);
+                                    ingredients.add(item);
+                                    ingrAdapter.notifyDataSetChanged();
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+//                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -132,13 +175,10 @@ public class RecipePage extends AppCompatActivity {
         this.adapter = new StepsAdapter(steps);
         this.stepsRv.setAdapter(this.adapter);
 
-
-        //first theory KDSFJAK
-            //sa first instance lang gumagana?
-
-
-//        loops through the steps and add to array
-
+        LinearLayoutManager ingrlm = new LinearLayoutManager(RecipePage.this);
+        this.ingredientsRv.setLayoutManager(ingrlm);
+        this.ingrAdapter = new IngredientsAdapter(ingredients);
+        this.ingredientsRv.setAdapter(this.ingrAdapter);
 
         //when FAVE button is clicked
         faveBtn.setOnClickListener(new View.OnClickListener() {
@@ -194,9 +234,11 @@ public class RecipePage extends AppCompatActivity {
         this.cooktimeTv = findViewById(R.id.recipe_cookTv);
         this.descTv = findViewById(R.id.recipe_descTv);
         this.stepsRv = (RecyclerView) findViewById(R.id.stepsRv);
+        this.ingredientsRv = (RecyclerView) findViewById(R.id.ingredientsRv);
         this.faveBtn = findViewById(R.id.faveBtn);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
-        steps = new ArrayList<Steps>();
+        this.steps = new ArrayList<Steps>();
+        this.ingredients = new ArrayList<String>();
     }
 
     // NAVBAR FUNCTIONS

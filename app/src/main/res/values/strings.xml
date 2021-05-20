@@ -29,6 +29,7 @@
 
     // Create recipe strings
     <string name="ingredients">Ingredients</string>
+    <string name="steps">Steps</string>
     <string name="add">Add</string>
     <string name="deletestep">Swipe to delete steps</string>
     <string name="create">Create Recipe</string>

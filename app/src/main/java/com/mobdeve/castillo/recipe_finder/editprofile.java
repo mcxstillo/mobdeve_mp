@@ -30,7 +30,7 @@ public class editprofile extends AppCompatActivity {
     private FirebaseUser user;
     private DatabaseReference reference;
     private String userID;
-    public EditText profile_nameEt, descEt, oldpass, newpass, confirmpass;
+    public EditText profile_nameEt, descEt;
     public Button updateBtn;
     User userEdited = new User();
     private TextView navUsernameTv;
@@ -88,9 +88,6 @@ public class editprofile extends AppCompatActivity {
         this.profile_nameEt = findViewById(R.id.edit_nameEt);
         this.descEt = findViewById(R.id.edit_descEt);
         this.updateBtn = findViewById(R.id.profile_updateBtn);
-        this.oldpass = findViewById(R.id.edit_oldpassEt);
-        this.newpass = findViewById(R.id.edit_newpassEt);
-        this.confirmpass = findViewById(R.id.edit_confpassEt);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
     }
 

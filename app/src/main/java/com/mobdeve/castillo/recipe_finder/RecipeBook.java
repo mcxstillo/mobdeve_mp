@@ -54,7 +54,6 @@ public class RecipeBook extends AppCompatActivity {
 
         init();
 
-
         reference.child("Liked").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -65,7 +64,9 @@ public class RecipeBook extends AppCompatActivity {
                     recipes.add(recipeItem);
 
                 }
-                adapter.notifyDataSetChanged();
+                if (!(recipes.isEmpty())) {
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -88,7 +89,7 @@ public class RecipeBook extends AppCompatActivity {
             }
         });
 
-        if (recipes == null) {
+        if (recipes == null || recipes.isEmpty()) {
             recipesRv.setVisibility(View.GONE);
             notice.setVisibility(View.VISIBLE);
         } else {

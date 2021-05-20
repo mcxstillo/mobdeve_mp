@@ -30,6 +30,7 @@
             app:layout_constraintTop_toBottomOf="@+id/action_bar">
 
             <LinearLayout
+                android:id="@+id/ingrMainLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -52,25 +53,30 @@
 
                 </LinearLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="20dp" />
-
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/addIngredientsBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="96dp"
             android:layout_marginTop="28dp"
             android:text="@string/add"
             app:icon="@drawable/ic_add"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nestedScrollView2" />
+
+        <Button
+            android:id="@+id/ingrNextBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/create_new"
+            app:icon="@drawable/ic_next"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.21"
+            app:layout_constraintStart_toEndOf="@+id/addIngredientsBtn"
             app:layout_constraintTop_toBottomOf="@+id/nestedScrollView2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

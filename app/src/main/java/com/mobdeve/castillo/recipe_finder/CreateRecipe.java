@@ -155,10 +155,10 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                         Log.d("Sad", "User Profile Cannot be Displayed");
                     }
                 });
-                Intent toSteps = new Intent(CreateRecipe.this, CreateSteps.class);
+                Intent toIngr = new Intent(CreateRecipe.this, CreateIngredients.class);
                 Log.d("recipekeycreaterecipe",recipeKey);
-                toSteps.putExtra("RecipeKey",recipeKey);
-                startActivity(toSteps);
+                toIngr.putExtra("RecipeKey",recipeKey);
+                startActivity(toIngr);
             }
         });
 

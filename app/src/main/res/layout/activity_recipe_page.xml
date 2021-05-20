@@ -39,9 +39,11 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:fillViewport="true"
+            android:fillViewport="false"
+            android:isScrollContainer="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/action_bar">
 
             <LinearLayout
@@ -195,6 +197,35 @@
                     android:textColor="#686868"
                     android:textSize="16sp" />
 
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:fontFamily="@font/copse"
+                    android:text="@string/ingredients"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/ingredientsRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:fontFamily="@font/copse"
+                    android:text="@string/steps"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/stepsRv"
                     android:layout_width="match_parent"
@@ -203,7 +234,6 @@
                     android:paddingEnd="10dp">
 
                 </androidx.recyclerview.widget.RecyclerView>
-
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
