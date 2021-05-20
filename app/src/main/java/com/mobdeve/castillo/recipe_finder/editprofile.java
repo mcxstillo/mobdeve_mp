@@ -52,6 +52,7 @@ public class editprofile extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User userProfile = snapshot.getValue(User.class);
                 profile_nameEt.setText(userProfile.name);
+
                 descEt.setText(userProfile.desc);
                 navUsernameTv.setText(userProfile.name);
 

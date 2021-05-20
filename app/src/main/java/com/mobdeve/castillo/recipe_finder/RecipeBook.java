@@ -15,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ public class RecipeBook extends AppCompatActivity {
     DrawerLayout navbar;
     private FirebaseUser user;
     private DatabaseReference reference;
+    private DatabaseReference DBSearch;
     private String userID;
     private ArrayList<Recipe> recipes;
     private RecyclerView recipesRv;
@@ -44,6 +47,10 @@ public class RecipeBook extends AppCompatActivity {
     private ResultsAdapter.RecyclerViewClickListener listener;
     private TextView notice;
     private TextView navUsernameTv;
+    private SearchView searchBtn;
+    private ArrayList<User> usersList;
+    private ArrayList<Recipe> recipesList;
+    private ArrayList<Recipe> searchRecipes;
 
 
     @Override
@@ -70,6 +77,80 @@ public class RecipeBook extends AppCompatActivity {
 
 
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DBSearch = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
+
+
+        //makes arraylist of users
+        DBSearch.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                Log.d("snapshotusercount",snapshot.getChildrenCount()+"");
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    User userID = dataSnapshot.getValue(User.class);
+                    Log.d("userIDdapat",userID.getUserID()+"");
+                    usersList.add(userID);
+                }
+                for(int i=0;i<usersList.size();i++){
+                    Log.d("userSize",""+usersList.size());
+                    DBSearch.child(usersList.get(i).userID).child("Recipes").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                Recipe recipeID = dataSnapshot.getValue(Recipe.class);
+
+                                Log.d("recipeIDdapat",recipeID.recipeID+"");
+                                recipesList.add(recipeID);
+                                Log.d("recipesListSize",recipesList.size()+"");
+                            }
+
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+        //makes arraylist of all recipes created (recipeID)
+
+
+        searchBtn.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+//                Log.d("recipesListSize",recipesList.size()+"");
+//                Log.d("searchRecipesSize",searchRecipes.size()+"");
+                Log.d("onQueryTextSubmit", query);
+                searchRecipes.clear();
+                for(Recipe object : recipesList){
+                    Log.d("objectname",object.name);
+                    if(object.name.toLowerCase().contains(query.toLowerCase())){
+                        Log.d("objectname",object.name);
+                        searchRecipes.add(object);
+                    }
+                }
+
+                //MAKE INTENT TO PASS ARRAY TO DISPLAY SEARCH RESULTS
+                ResultsAdapter searchResultsAdapter = new ResultsAdapter(searchRecipes,listener);
+                recipesRv.setAdapter(searchResultsAdapter);
+
+                adapter.notifyDataSetChanged();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d("onQueryTextChange", newText);
+                return false;
+            }
+        });
+
+
 
         reference.child("Liked").addValueEventListener(new ValueEventListener() {
             @Override
@@ -81,6 +162,11 @@ public class RecipeBook extends AppCompatActivity {
                         Log.d("recipeboookitem",recipeItem.recipeID);
                         dataSnapshot.getValue(Recipe.class);
                         recipes.add(recipeItem);
+
+
+
+
+
                         Log.d("afteradding",""+recipes.size());
 
 
@@ -99,7 +185,7 @@ public class RecipeBook extends AppCompatActivity {
                     recipesRv.setAdapter(adapter);
                     Log.d("secondELSE","hi");
 
-                    
+
                     Log.d("adaptercount",adapter.getItemCount()+"");
                     adapter.notifyDataSetChanged();
                 }
@@ -126,13 +212,32 @@ public class RecipeBook extends AppCompatActivity {
         });
 
     }
+
+    //search DONT DELETE
+//    private void search(String str){
+//        ArrayList<Recipe> searchRecipes = new ArrayList<>();
+//        for(Recipe object : recipesList){
+//            if(object.getDesc().toLowerCase().contains(str.toLowerCase())){
+//                searchRecipes.add(object);
+//            }
+//        }
+//
+//        ResultsAdapter searchResultsAdapter = new ResultsAdapter(searchRecipes);
+//        recipesRv.setAdapter(searchResultsAdapter);
+//
+//    }
+
     private void init() {
         this.navbar = findViewById(R.id.navdrawer);
         this.recipes = new ArrayList<>();
+        this.usersList = new ArrayList<>();
+        this.recipesList = new ArrayList<>();
         this.recipesRv = (RecyclerView) findViewById(R.id.recipesRv);
         this.createBtn = findViewById(R.id.createBtn);
         this.notice = findViewById(R.id.noticeTv);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
+        this.searchBtn = findViewById(R.id.searchBtn);
+        this.searchRecipes = new ArrayList<>();
         setOnClickListener();
     }
 

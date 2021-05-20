@@ -54,7 +54,7 @@ public class register extends AppCompatActivity {
                                 Log.d("TAG", "createUserWithEmail:success");
 
 //                                  FirebaseUser user = mAuth.getCurrentUser();
-                                User user = new User(reg_emailEt.getText().toString().trim(),reg_usernameEt.getText().toString().trim(),null);
+                                User user = new User(reg_emailEt.getText().toString().trim(),reg_usernameEt.getText().toString().trim(),null, FirebaseAuth.getInstance().getCurrentUser().getUid());
 //                                updateUI(user);
 
                                 FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")

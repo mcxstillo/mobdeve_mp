@@ -25,6 +25,12 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
         this.listener = listener;
     }
 
+    public ResultsAdapter (ArrayList<Recipe> recipes) {
+        this.recipes = recipes;
+    }
+
+
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView name, rating, difficulty, preptime;

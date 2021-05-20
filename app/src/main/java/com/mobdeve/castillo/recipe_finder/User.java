@@ -2,7 +2,7 @@ package com.mobdeve.castillo.recipe_finder;
 
 public class User {
 
-    public String name, email,desc;
+    public String name, email,desc,userID;
 
 
     public User(){
@@ -14,6 +14,16 @@ public class User {
         this.desc = desc;
 
     }
+
+    public User(String email,String name,String desc, String userID){
+        this.email = email;
+        this.name = name;
+        this.desc = desc;
+        this.userID = userID;
+
+    }
+
+
 
     public User(String name,String desc){
         this.name = name;
@@ -36,6 +46,10 @@ public class User {
         return this.desc;
     }
 
+    public String getUserID(){
+        return this.userID;
+    }
+
 
     //setters
     public void setName(String newName){
@@ -50,7 +64,8 @@ public class User {
         this.desc = newDesc;
     }
 
-
-
+    public void setUserID(String userID){
+        this.userID = userID;
+    }
 
 }
