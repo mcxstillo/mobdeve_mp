@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
@@ -38,6 +39,7 @@ public class RecipePage extends AppCompatActivity {
     private StepsAdapter adapter;
     private FloatingActionButton faveBtn;
     private ArrayList<Steps> steps;
+    private ResultsAdapter.RecyclerViewClickListener listener;
 //    private Steps steps;
     DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
             .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -58,7 +60,6 @@ public class RecipePage extends AppCompatActivity {
         Log.d("fromResultsKey",recipeKey);
         DatabaseReference DBName = DB.child("name");
         DatabaseReference DBRecipe = DB.child(recipeKey);
-
 
 
         DB.child("Recipes").child(recipeKey).addValueEventListener(new ValueEventListener() {
@@ -130,6 +131,10 @@ public class RecipePage extends AppCompatActivity {
             }
         });
 
+        LinearLayoutManager lm = new LinearLayoutManager(RecipePage.this);
+        this.stepsRv.setLayoutManager(lm);
+        this.adapter = new StepsAdapter(this.steps);
+        this.stepsRv.setAdapter(this.adapter);
 
         faveBtn.setOnClickListener(new View.OnClickListener() {
             @Override

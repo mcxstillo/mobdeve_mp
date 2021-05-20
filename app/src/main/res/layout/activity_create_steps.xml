@@ -38,6 +38,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
                     <TextView
@@ -50,15 +51,6 @@
                         android:textColor="#000000"
                         android:textSize="24sp"
                         android:textStyle="bold" />
-
-                    <Button
-                        android:id="@+id/addStepBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:layout_weight="1"
-                        android:background="#FF5722"
-                        android:text="@string/addstep" />
 
                 </LinearLayout>
 
@@ -80,12 +72,28 @@
             app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
         <Button
+            android:id="@+id/addStepBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/add"
+            app:icon="@drawable/ic_add"
+            app:layout_constraintEnd_toStartOf="@+id/testBtn"
+            app:layout_constraintHorizontal_bias="0.892"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+        <Button
             android:id="@+id/testBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Button"
+            android:layout_marginTop="20dp"
+            android:text="@string/create_new"
+            app:icon="@drawable/ic_next"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.701"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView19" />
 

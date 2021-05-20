@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Recipe_finder">
+        <activity android:name=".CreateIngredients"></activity>
         <activity android:name=".RecipePage" />
         <activity android:name=".RecipeBook" />
         <activity android:name=".CreateRecipe" />
