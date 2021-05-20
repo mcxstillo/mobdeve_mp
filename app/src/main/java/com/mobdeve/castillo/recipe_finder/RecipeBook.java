@@ -53,21 +53,6 @@ public class RecipeBook extends AppCompatActivity {
 
         init();
         Log.d("recipebeforecondi",""+recipes.size());
-//        if (recipes == null || recipes.isEmpty()) {
-//            recipesRv.setVisibility(View.GONE);
-////            recipesRv.setVisibility(View.VISIBLE);
-//            notice.setVisibility(View.VISIBLE);
-//            Log.d("firstIF","hi");
-//
-//        } else {
-//            LinearLayoutManager lm = new LinearLayoutManager(RecipeBook.this);
-//            recipesRv.setLayoutManager(lm);
-//            adapter = new ResultsAdapter(recipes, listener);
-//            recipesRv.setAdapter(adapter);
-//            Log.d("firstELSE","hi");
-//
-//        }
-
 
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
@@ -99,7 +84,7 @@ public class RecipeBook extends AppCompatActivity {
                     recipesRv.setAdapter(adapter);
                     Log.d("secondELSE","hi");
 
-                    
+
                     Log.d("adaptercount",adapter.getItemCount()+"");
                     adapter.notifyDataSetChanged();
                 }
@@ -126,9 +111,10 @@ public class RecipeBook extends AppCompatActivity {
         });
 
     }
+
     private void init() {
         this.navbar = findViewById(R.id.navdrawer);
-        this.recipes = new ArrayList<>();
+        this.recipes = new ArrayList<Recipe>();
         this.recipesRv = (RecyclerView) findViewById(R.id.recipesRv);
         this.createBtn = findViewById(R.id.createBtn);
         this.notice = findViewById(R.id.noticeTv);

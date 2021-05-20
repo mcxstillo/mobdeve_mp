@@ -88,7 +88,8 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
             int total_time;
             total_time = Integer.parseInt(recipes.get(position).getPreptime()) + Integer.parseInt(this.recipes.get(position).getCookingtime());
             holder.setPreptime(String.valueOf(total_time) + " minutes");
-        }
+        } else
+            holder.setPreptime("not specified");
 
 
         String imgUri=recipes.get(position).getImgUri();
@@ -97,7 +98,6 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
         holder.setName(recipes.get(position).getName());
         holder.setRating(recipes.get(position).getRating());
         holder.setDifficulty(recipes.get(position).getDifficulty());
-        holder.setPreptime("not specified");
     }
 
     @Override

@@ -31,11 +31,14 @@
     <string name="ingredients">Ingredients</string>
     <string name="steps">Steps</string>
     <string name="add">Add</string>
+    <string name="addingr">Add Ingredients</string>
+    <string name="addsteps">Add Steps</string>
     <string name="deletestep">Swipe to delete steps</string>
     <string name="create">Create Recipe</string>
     <string name="create_name">Recipe Name</string>
     <string name="create_cuisine">Cuisine</string>
     <string name="create_size">Serving Size</string>
+    <string name="create_difficulty">Difficulty</string>
     <string name="create_preptime">Prep Time</string>
     <string name="create_cooktime">Cooking Time</string>
     <string name="create_desc">Description</string>
@@ -97,5 +100,10 @@
         <item>9</item>
         <item>10</item>
         <item>10+</item>
+    </string-array>
+    <string-array name="difficulty">
+        <item>Easy</item>
+        <item>Moderate</item>
+        <item>Difficult</item>
     </string-array>
 </resources>

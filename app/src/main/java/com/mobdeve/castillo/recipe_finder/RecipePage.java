@@ -73,7 +73,7 @@ public class RecipePage extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             User userID = snapshot.getValue(User.class);
-                            creatorTv.setText("by: "+ userID.name);
+                            creatorTv.setText("by "+ userID.name);
                             navUsernameTv.setText(userID.name);
                         }
 
@@ -125,13 +125,6 @@ public class RecipePage extends AppCompatActivity {
                 //gets UserID
                 String imgUri=recipeItem.getImgUri();
                 Picasso.get().load(imgUri).into(photo);
-                nameTv.setText(recipeItem.getName());
-//                creatorTv.setText("by " + recipeItem.getCreator());
-                cuisineTv.setText(recipeItem.getCuisine());
-                servingsTv.setText(recipeItem.getServing_size() + " SERVINGS");
-                preptimeTv.setText(recipeItem.getPreptime() + " MINUTES");
-                cooktimeTv.setText(recipeItem.getCookingtime() + " MINUTES");
-                descTv.setText(recipeItem.getDesc());
 
                 DB.child("Recipes").child(recipeKey).child("Ingredients").addValueEventListener(new ValueEventListener() {
                     @Override
@@ -143,7 +136,6 @@ public class RecipePage extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     String item = snapshot.getValue(String.class);
-                                    Log.d("ingrItem", item);
                                     ingredients.add(item);
                                     ingrAdapter.notifyDataSetChanged();
                                 }
@@ -196,10 +188,7 @@ public class RecipePage extends AppCompatActivity {
                             DB.child("Recipes").child(recipeKey).child("Steps").addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                   // [2]
-                                    Log.d("stepsizeinDBPASSING",steps.size()+"");
                                     DB.child("Liked").child(likedRecipe.recipeID).child("Steps").setValue(steps);
-//
                                 }
 
                                 @Override
@@ -210,7 +199,6 @@ public class RecipePage extends AppCompatActivity {
 
                         // [1]
                         DB.child("Liked").child(likedRecipe.recipeID).setValue(likedRecipe);
-
                     }
 
                     @Override

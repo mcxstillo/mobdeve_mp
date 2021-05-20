@@ -19,83 +19,88 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ScrollView
-            android:id="@+id/scrollView2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toBottomOf="@+id/include">
 
             <LinearLayout
-                android:id="@+id/stepsMainLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <ScrollView
+                    android:id="@+id/scrollView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:isScrollContainer="true"
+                    android:overScrollMode="always">
+
+                    <LinearLayout
+                        android:id="@+id/stepsMainLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:isScrollContainer="false"
+                        android:orientation="vertical"
+                        android:overScrollMode="ifContentScrolls"
+                        android:paddingStart="20dp"
+                        android:paddingTop="20dp"
+                        android:paddingEnd="20dp">
+
+                        <TextView
+                            android:id="@+id/textView6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="20dp"
+                            android:fontFamily="@font/copse"
+                            android:text="@string/addsteps"
+                            android:textColor="#000000"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/firstStepEt"
+                            android:layout_width="290dp"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="Enter instructions"
+                            android:inputType="textPersonName" />
+
+                    </LinearLayout>
+
+                </ScrollView>
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/textView6"
+                    <Button
+                        android:id="@+id/addStepBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:fontFamily="@font/copse"
-                        android:text="@string/createsteps"
-                        android:textColor="#000000"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:layout_marginStart="28dp"
+                        android:text="@string/add"
+                        app:icon="@drawable/ic_add" />
 
+                    <Button
+                        android:id="@+id/testBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:text="@string/create_new"
+                        app:icon="@drawable/ic_next" />
                 </LinearLayout>
 
             </LinearLayout>
-        </ScrollView>
-
-        <TextView
-            android:id="@+id/textView19"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:fontFamily="@font/open_sans_semibold"
-            android:text="@string/deletestep"
-            android:textColor="#C05100"
-            android:textSize="14sp"
-            android:textStyle="italic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
-
-        <Button
-            android:id="@+id/addStepBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/add"
-            app:icon="@drawable/ic_add"
-            app:layout_constraintEnd_toStartOf="@+id/testBtn"
-            app:layout_constraintHorizontal_bias="0.892"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView19" />
-
-        <Button
-            android:id="@+id/testBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/create_new"
-            app:icon="@drawable/ic_next"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.701"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView19" />
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

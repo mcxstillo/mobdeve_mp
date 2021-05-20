@@ -29,6 +29,7 @@ public class CreateSteps extends AppCompatActivity {
     private ArrayList<Steps> steps;
     private ArrayList<EditText> textFields;
     private LinearLayout mainLayout;
+    private EditText firstStep;
     private Button addBtn, postBtn;
     private int stepnum = 1;
     private TextView navUsernameTv;
@@ -75,8 +76,6 @@ public class CreateSteps extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        Log.d("stepsArraySize",steps.size()+"");
-
                         DBRecipe.child("Steps").setValue(steps);
 
                         LinearLayout ll = new LinearLayout(CreateSteps.this);
@@ -87,8 +86,6 @@ public class CreateSteps extends AppCompatActivity {
                         step.setWidth(760);
                         step.setHint("Enter instructions");
                         textFields.add(step);
-
-                        Log.d("STEP", "CREATED STEP NUMBER " + step.getId());
 
                         ll.addView(step);
                         mainLayout.addView(ll);
@@ -121,11 +118,8 @@ public class CreateSteps extends AppCompatActivity {
                     }
                 });
 
-                for (int i = 0; i < textFields.size(); i++) {
+                for (int i = 0; i < textFields.size(); i++)
                     steps.add(new Steps(i+1, textFields.get(i).getText().toString()));
-
-                    Log.d("ARRAY CONTENT", "" + steps.get(i).getStep_desc());
-                }
             }
         });
     }
@@ -133,10 +127,13 @@ public class CreateSteps extends AppCompatActivity {
     private void init() {
         this.steps = new ArrayList<Steps>();
         this.textFields = new ArrayList<EditText>();
+        this.firstStep = findViewById(R.id.firstStepEt);
         this.postBtn = findViewById(R.id.testBtn);
         this.mainLayout = findViewById(R.id.stepsMainLayout);
         this.addBtn = findViewById(R.id.addStepBtn);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
+
+        textFields.add(firstStep);
     }
 }
 

@@ -26,6 +26,7 @@ public class CreateIngredients extends AppCompatActivity {
     private ArrayList<String> ingredients;
     private ArrayList<EditText> textFields;
     private LinearLayout mainLayout;
+    private EditText firstIngr;
     private Button addBtn, nextBtn;
     private int ingrcount = 1;
  //   private TextView navUsernameTv;
@@ -38,7 +39,6 @@ public class CreateIngredients extends AppCompatActivity {
         init();
 
         Intent fromCreate = getIntent();
-        //this activity reads the database to get the key of the recipe
         //GETS USERID
         DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         //GETS RECIPEID
@@ -71,8 +71,6 @@ public class CreateIngredients extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        Log.d("ingrArraySize",ingredients.size()+"");
-
                         DBRecipe.child("Ingredients").setValue(ingredients);
 
                         LinearLayout ll = new LinearLayout(CreateIngredients.this);
@@ -81,10 +79,8 @@ public class CreateIngredients extends AppCompatActivity {
 
                         EditText step = new EditText(CreateIngredients.this);
                         step.setWidth(760);
-                        step.setHint("Enter ingredient");
+                        step.setHint("Add ingredient");
                         textFields.add(step);
-
-                        Log.d("STEP", "CREATED STEP NUMBER " + step.getId());
 
                         ll.addView(step);
                         mainLayout.addView(ll);
@@ -117,11 +113,8 @@ public class CreateIngredients extends AppCompatActivity {
                     }
                 });
 
-                for (int i = 0; i < textFields.size(); i++) {
+                for (int i = 0; i < textFields.size(); i++)
                     ingredients.add(textFields.get(i).getText().toString());
-
-                    Log.d("ARRAY CONTENT", "" + ingredients.get(i).toString());
-                }
             }
         });
     }
@@ -129,8 +122,11 @@ public class CreateIngredients extends AppCompatActivity {
     private void init() {
         this.ingredients = new ArrayList<String>();
         this.textFields = new ArrayList<EditText>();
+        this.firstIngr = findViewById(R.id.firstIngrEt);
         this.mainLayout = findViewById(R.id.ingrMainLayout);
         this.addBtn = findViewById(R.id.addIngredientsBtn);
         this.nextBtn = findViewById(R.id.ingrNextBtn);
+
+        textFields.add(firstIngr);
     }
 }
