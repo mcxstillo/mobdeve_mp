@@ -41,6 +41,18 @@
                     android:clickable="true"
                     tools:srcCompat="@drawable/ic_profilephoto" />
 
+                <Button
+                    android:id="@+id/cameraBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="camera" />
+
+                <Button
+                    android:id="@+id/gallerBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="gallery" />
+
                 <TextView
                     android:id="@+id/change_imgTv"
                     android:layout_width="wrap_content"
