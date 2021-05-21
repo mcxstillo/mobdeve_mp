@@ -41,10 +41,12 @@ public class RecipePage extends AppCompatActivity {
     private IngredientsAdapter ingrAdapter;
     private FloatingActionButton faveBtn;
     private ArrayList<Steps> steps;
+    private ArrayList<User> usersList;
     private ArrayList<String> ingredients;
     private ResultsAdapter.RecyclerViewClickListener listener;
     DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
             .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+    DatabaseReference DBOthers = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
 
     //database reference for the recipe's ID
 
@@ -55,26 +57,112 @@ public class RecipePage extends AppCompatActivity {
 
         init();
         //get recipe ID first
-        Intent fromResults = getIntent();
-        String recipeKey = fromResults.getStringExtra("recipeID");
+        Intent fromOthers = getIntent();
+        String recipeKey = fromOthers.getStringExtra("recipeID");
         // insert db read here yey
 
-        Log.d("fromResultsKey",recipeKey);
+        Log.d("ChosenRecipeKey",recipeKey);
 
-
-
-
-        //displays the live creator
-        DB.child("Recipes").child(recipeKey).addValueEventListener(new ValueEventListener() {
+        //create arraylist of all recipes
+        DBOthers.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Recipe recipeItem = snapshot.getValue(Recipe.class);
-                    FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(recipeItem.getCreator()).addValueEventListener(new ValueEventListener() {
+            public void onDataChange(@android.support.annotation.NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    User userID = dataSnapshot.getValue(User.class);
+                    Log.d("userIDdapat",userID.getUserID()+"");
+                    usersList.add(userID);
+                }
+
+
+                for(int i =0;i<usersList.size();i++){
+                    Log.d("usersList","userID is"+usersList.get(i).userID);
+                    int finalI = i;
+                    DBOthers.child(usersList.get(i).userID).child("Recipes").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            User userID = snapshot.getValue(User.class);
-                            creatorTv.setText("by "+ userID.name);
-                            navUsernameTv.setText(userID.name);
+                            String username = usersList.get(finalI).getName();
+                            for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
+
+                                Log.d("this is a snapshot",snapshot.toString());
+
+                                if(snapshot.hasChild(recipeKey)){
+
+                                    Log.d("recipeITEMID",recipeItem.name);
+                                    String imgUri=recipeItem.getImgUri();
+                                    Picasso.get().load(imgUri).into(photo);
+
+                                    nameTv.setText(recipeItem.getName());
+                                    creatorTv.setText("by "+ username);
+                                    cuisineTv.setText(recipeItem.getCuisine().toUpperCase());
+                                    servingsTv.setText(recipeItem.getServing_size() + " SERVINGS");
+                                    preptimeTv.setText(recipeItem.getPreptime() + " MINUTES");
+                                    cooktimeTv.setText(recipeItem.getCookingtime() + " MINUTES");
+                                    descTv.setText(recipeItem.getDesc());
+
+
+                                    DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Steps").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            Log.d("sscountBFR",snapshot.getChildrenCount()+"");
+                                            steps.clear();
+                                            for(int i =0;i<snapshot.getChildrenCount();i++){
+                                                DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Steps").child(String.valueOf(i)).addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                        Log.d("fromResultsKey","insidesteps"+recipeKey);
+                                                        Steps stepItem = snapshot.getValue(Steps.class);
+                                                        Log.d("stepItem", Objects.requireNonNull(stepItem).step_desc);
+                                                        //steps get added in the array here
+                                                        steps.add(stepItem);
+                                                        adapter.notifyDataSetChanged();
+                                                    }
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                    }
+                                                });
+                                            }
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+
+
+
+
+                                    DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Ingredients").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            Log.d("sscountBFR",snapshot.getChildrenCount()+"");
+                                            ingredients.clear();
+                                            for(int i =0;i<snapshot.getChildrenCount();i++){
+                                                DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Ingredients").child(String.valueOf(i)).addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                        String item = snapshot.getValue(String.class);
+                                                        ingredients.add(item);
+                                                        ingrAdapter.notifyDataSetChanged();
+                                                    }
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                    }
+                                                });
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+
+                                }
+
+                            }
                         }
 
                         @Override
@@ -82,15 +170,57 @@ public class RecipePage extends AppCompatActivity {
 
                         }
                     });
+                }
+            }
+            @Override
+            public void onCancelled(@android.support.annotation.NonNull DatabaseError error) {
 
-                nameTv.setText(recipeItem.getName());
-                creatorTv.setText("by " + recipeItem.getCreator());
+            }
+        });
 
-                cuisineTv.setText(recipeItem.getCuisine().toUpperCase());
-                servingsTv.setText(recipeItem.getServing_size() + " SERVINGS");
-                preptimeTv.setText(recipeItem.getPreptime() + " MINUTES");
-                cooktimeTv.setText(recipeItem.getCookingtime() + " MINUTES");
-                descTv.setText(recipeItem.getDesc());
+
+        //ONLY WORKS FOR CURRENT USER AND THEIR RECIPES
+        DB.child("Recipes").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Log.d("datasnapshot count",dataSnapshot.getChildrenCount()+"");
+
+                    Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
+                    Log.d("recipeID",recipeItem.recipeID);
+                    Log.d("creator",recipeItem.creator);
+
+                    if(recipeItem.recipeID.equals(recipeKey)){
+
+                        Log.d("recipe creator",recipeItem.creator);
+                        FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(recipeItem.creator).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                User userID = snapshot.getValue(User.class);
+                                creatorTv.setText("by "+ userID.name);
+                                navUsernameTv.setText(userID.name);
+
+                                //gets UserID
+                                String imgUri=recipeItem.getImgUri();
+                                Picasso.get().load(imgUri).into(photo);
+                                nameTv.setText(recipeItem.getName());
+                                cuisineTv.setText(recipeItem.getCuisine().toUpperCase());
+                                servingsTv.setText(recipeItem.getServing_size() + " SERVINGS");
+                                preptimeTv.setText(recipeItem.getPreptime() + " MINUTES");
+                                cooktimeTv.setText(recipeItem.getCookingtime() + " MINUTES");
+                                descTv.setText(recipeItem.getDesc());
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+                    }
+                }
 
 
                 DB.child("Recipes").child(recipeKey).child("Steps").addValueEventListener(new ValueEventListener() {
@@ -122,14 +252,12 @@ public class RecipePage extends AppCompatActivity {
                     }
                 });
 
-                //gets UserID
-                String imgUri=recipeItem.getImgUri();
-                Picasso.get().load(imgUri).into(photo);
 
                 DB.child("Recipes").child(recipeKey).child("Ingredients").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Log.d("sscountBFR",snapshot.getChildrenCount()+"");
+                        ingredients.clear();
                         for(int i =0;i<snapshot.getChildrenCount();i++){
 
                             DB.child("Recipes").child(recipeKey).child("Ingredients").child(String.valueOf(i)).addValueEventListener(new ValueEventListener() {
@@ -215,6 +343,8 @@ public class RecipePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent toProfile = new Intent(RecipePage.this, profile.class);
+
+                //fix get user's id
                 toProfile.putExtra("userID",FirebaseAuth.getInstance().getCurrentUser().getUid());
                 startActivity(toProfile);
             }
@@ -237,6 +367,7 @@ public class RecipePage extends AppCompatActivity {
         this.faveBtn = findViewById(R.id.faveBtn);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
         this.steps = new ArrayList<Steps>();
+        this.usersList = new ArrayList<User>();
         this.ingredients = new ArrayList<String>();
     }
 

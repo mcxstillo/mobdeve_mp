@@ -65,6 +65,16 @@
                     android:textAlignment="center">
 
                 </androidx.recyclerview.widget.RecyclerView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/searchRv"
+                    android:layout_width="391dp"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 

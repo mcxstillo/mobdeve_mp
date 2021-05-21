@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -42,9 +43,12 @@ public class RecipeBook extends AppCompatActivity {
     private String userID;
     private ArrayList<Recipe> recipes;
     private RecyclerView recipesRv;
+    private RecyclerView searchRv;
     private ResultsAdapter adapter;
+    private SearchAdapter searchResultsAdapter;
     private FloatingActionButton createBtn;
     private ResultsAdapter.RecyclerViewClickListener listener;
+    private SearchAdapter.RecyclerViewClickListener searchListener;
     private TextView notice;
     private TextView navUsernameTv;
     private SearchView searchBtn;
@@ -75,6 +79,7 @@ public class RecipeBook extends AppCompatActivity {
                     Log.d("userIDdapat",userID.getUserID()+"");
                     usersList.add(userID);
                 }
+                //makes arraylist of all recipes created (recipeID)
                 for(int i=0;i<usersList.size();i++){
                     Log.d("userSize",""+usersList.size());
                     DBSearch.child(usersList.get(i).userID).child("Recipes").addValueEventListener(new ValueEventListener() {
@@ -102,7 +107,11 @@ public class RecipeBook extends AppCompatActivity {
         });
 
 
-        //makes arraylist of all recipes created (recipeID)
+
+
+
+
+
 
 
         searchBtn.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -121,10 +130,27 @@ public class RecipeBook extends AppCompatActivity {
                 }
 
                 //MAKE INTENT TO PASS ARRAY TO DISPLAY SEARCH RESULTS
-                ResultsAdapter searchResultsAdapter = new ResultsAdapter(searchRecipes,listener);
-                recipesRv.setAdapter(searchResultsAdapter);
+//                searchResultsAdapter = new ResultsAdapter(searchRecipes,listener);
+                if (searchRecipes == null || searchRecipes.isEmpty()) {
+                    searchRv.setVisibility(View.GONE);
+                    recipesRv.setVisibility(View.VISIBLE);
+                    notice.setVisibility(View.VISIBLE);
+                    Log.d("secondIF","hi");
+                }
+                else {
+                    LinearLayoutManager llm = new LinearLayoutManager(RecipeBook.this);
+                    searchRv.setLayoutManager(llm);
+                    searchResultsAdapter = new SearchAdapter(searchRecipes, searchListener);
+                    recipesRv.setVisibility(View.GONE);
+                    searchRv.setVisibility(View.VISIBLE);
+                    notice.setVisibility(View.GONE);
+                    searchRv.setAdapter(searchResultsAdapter);
+                    Log.d("secondELSE","hi");
+                    Log.d("searchResultsAdapter",searchResultsAdapter.getItemCount()+"");
+                    searchResultsAdapter.notifyDataSetChanged();
 
-                adapter.notifyDataSetChanged();
+
+                }
                 return false;
             }
 
@@ -137,43 +163,40 @@ public class RecipeBook extends AppCompatActivity {
 
 
 
+        //loading recyclerview and array
         reference.child("Liked").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Log.d("snapshotcount",snapshot.getChildrenCount()+"");
-//                if(snapshot.getChildrenCount()!=0){
+
+                recipes.clear();
+                Log.d("beforeadding",""+recipes.size());
                     for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                         Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
                         Log.d("recipeboookitem",recipeItem.recipeID);
                         dataSnapshot.getValue(Recipe.class);
                         recipes.add(recipeItem);
-
-
-
-
-
                         Log.d("afteradding",""+recipes.size());
 
-
                     }
-                if (recipes == null || recipes.isEmpty()) {
-                    recipesRv.setVisibility(View.GONE);
-                    notice.setVisibility(View.VISIBLE);
-                    Log.d("secondIF","hi");
-                }
-                else {
-                    LinearLayoutManager lm = new LinearLayoutManager(RecipeBook.this);
-                    recipesRv.setLayoutManager(lm);
-                    adapter = new ResultsAdapter(recipes, listener);
-                    recipesRv.setVisibility(View.VISIBLE);
-                    notice.setVisibility(View.GONE);
-                    recipesRv.setAdapter(adapter);
-                    Log.d("secondELSE","hi");
 
-
-                    Log.d("adaptercount",adapter.getItemCount()+"");
-                    adapter.notifyDataSetChanged();
-                }
+                    if (recipes == null || recipes.isEmpty()) {
+                        recipesRv.setVisibility(View.GONE);
+                        notice.setVisibility(View.VISIBLE);
+                        Log.d("secondIF","hi");
+                    }
+                    else {
+                        LinearLayoutManager lm = new LinearLayoutManager(RecipeBook.this);
+                        recipesRv.setLayoutManager(lm);
+                        adapter = new ResultsAdapter(recipes, listener);
+                        searchRv.setVisibility(View.GONE);
+                        recipesRv.setVisibility(View.VISIBLE);
+                        notice.setVisibility(View.GONE);
+                        recipesRv.setAdapter(adapter);
+                        Log.d("secondELSE","hi");
+                        Log.d("adaptercount",adapter.getItemCount()+"");
+                        adapter.notifyDataSetChanged();
+                    }
 
                 }
 
@@ -198,33 +221,21 @@ public class RecipeBook extends AppCompatActivity {
 
     }
 
-    //search DONT DELETE
-//    private void search(String str){
-//        ArrayList<Recipe> searchRecipes = new ArrayList<>();
-//        for(Recipe object : recipesList){
-//            if(object.getDesc().toLowerCase().contains(str.toLowerCase())){
-//                searchRecipes.add(object);
-//            }
-//        }
-//
-//        ResultsAdapter searchResultsAdapter = new ResultsAdapter(searchRecipes);
-//        recipesRv.setAdapter(searchResultsAdapter);
-//
-//    }
 
     private void init() {
         this.navbar = findViewById(R.id.navdrawer);
         this.recipes = new ArrayList<>();
         this.usersList = new ArrayList<>();
         this.recipesList = new ArrayList<>();
-
         this.recipesRv = (RecyclerView) findViewById(R.id.recipesRv);
+        this.searchRv = (RecyclerView) findViewById(R.id.searchRv);
         this.createBtn = findViewById(R.id.createBtn);
         this.notice = findViewById(R.id.noticeTv);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
         this.searchBtn = findViewById(R.id.searchBtn);
         this.searchRecipes = new ArrayList<>();
         setOnClickListener();
+        SearchsetOnClickListener();
     }
 
     private void setOnClickListener() {
@@ -240,6 +251,24 @@ public class RecipeBook extends AppCompatActivity {
             }
         };
     }
+
+        private void SearchsetOnClickListener() {
+        this.searchListener = new SearchAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent viewRecipe = new Intent(RecipeBook.this, RecipePage.class);
+
+                String recipeID = searchRecipes.get(position).getRecipeID();
+                Log.d("RecipeID",recipeID);
+                viewRecipe.putExtra("recipeID",recipeID);
+                //in going to recipebook, pass arraylist of recipes, loop that in the thing to see if nag match ba sa clinick nung user, then display the details
+//                viewRecipe.putExtra("position",position);
+                startActivity(viewRecipe);
+            }
+        };
+    }
+
+
 
 
 
