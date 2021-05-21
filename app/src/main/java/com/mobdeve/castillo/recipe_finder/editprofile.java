@@ -119,6 +119,7 @@ public class editprofile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("clicked ","camera btn");
+                dispatchTakePictureIntent();
             }
         });
 

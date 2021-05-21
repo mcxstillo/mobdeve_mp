@@ -73,8 +73,9 @@ public class profile extends AppCompatActivity {
         //if other user checking other people's profile
         Intent fromRecipePage = getIntent();
 
+
         //if user doesnt own the recipe
-        if(fromRecipePage!=null){
+        if(fromRecipePage.getStringExtra("userID")!=null){
             //pass user's ID
             userID =fromRecipePage.getStringExtra("userID");
             editBtn.setVisibility(View.GONE);
@@ -82,6 +83,7 @@ public class profile extends AppCompatActivity {
             userID = user.getUid();
         }
 
+        Log.d("userID",userID);
         reference.child(userID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
