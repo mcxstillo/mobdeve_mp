@@ -65,7 +65,22 @@ public class profile extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
-        userID = user.getUid();
+
+
+        //check if user's profile or others
+
+
+        //if other user checking other people's profile
+        Intent fromRecipePage = getIntent();
+
+        //if user doesnt own the recipe
+        if(fromRecipePage!=null){
+            //pass user's ID
+            userID =fromRecipePage.getStringExtra("userID");
+            editBtn.setVisibility(View.GONE);
+        }else{
+            userID = user.getUid();
+        }
 
         reference.child(userID).addValueEventListener(new ValueEventListener() {
             @Override

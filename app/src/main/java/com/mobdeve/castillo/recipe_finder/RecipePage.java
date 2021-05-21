@@ -208,6 +208,17 @@ public class RecipePage extends AppCompatActivity {
                 });
             }
         });
+
+
+        //redirect to user profile
+        this.creatorTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toProfile = new Intent(RecipePage.this, profile.class);
+                toProfile.putExtra("userID",FirebaseAuth.getInstance().getCurrentUser().getUid());
+                startActivity(toProfile);
+            }
+        });
     }
 
 
