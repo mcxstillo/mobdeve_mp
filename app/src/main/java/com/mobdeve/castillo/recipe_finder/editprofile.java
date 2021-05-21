@@ -185,6 +185,7 @@ public class editprofile extends AppCompatActivity {
         final StorageReference imageRef = storageReference.child("profilepics/"+name);
         Log.d("imageRef",imageRef.toString());
         Log.d("imageRefputFile",imageRef.putFile(contentUri).toString());
+
         imageRef.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -197,8 +198,8 @@ public class editprofile extends AppCompatActivity {
                         Toast.makeText(editprofile.this,"Image Uploaded to Firebase", Toast.LENGTH_LONG).show();
                         String t = task.getResult().toString();
 
-
-//                        reference.child(userID).child("profPicID").setValue(t);
+                        Toast.makeText(editprofile.this,reference.toString(), Toast.LENGTH_LONG).show();
+                        reference.child(userID).child("profPicID").setValue(t);
                         userEdited.setProfPicID("kura");
 
                         Log.d("add uri",t);
