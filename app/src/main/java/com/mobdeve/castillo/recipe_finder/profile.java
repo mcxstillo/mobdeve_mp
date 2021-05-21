@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -95,6 +96,8 @@ public class profile extends AppCompatActivity {
                     nameProfile.setText(name);
                     descProfile.setText(desc);
 
+                    Picasso.get().load(userProfile.profPicID).into(imgProfile);
+
                     Log.d("email",email +"");
                     Log.d("name",name +"");
 
@@ -115,6 +118,8 @@ public class profile extends AppCompatActivity {
             }
         });
     }
+
+
 
 
     private void initFirebase() {

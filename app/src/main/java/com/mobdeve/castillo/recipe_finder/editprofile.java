@@ -24,7 +24,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -59,7 +61,7 @@ public class editprofile extends AppCompatActivity {
     private String userID;
     public EditText profile_nameEt, descEt;
     public Button updateBtn, camBtn, gallBtn;
-    User userEdited = new User();
+    User userEdited;
     private TextView navUsernameTv;
 
     @Override
@@ -68,7 +70,6 @@ public class editprofile extends AppCompatActivity {
         setContentView(R.layout.activity_editprofile);
 
         init();
-
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
         userID = user.getUid();
@@ -103,6 +104,7 @@ public class editprofile extends AppCompatActivity {
                 reference.child(userID).child("name").setValue(profile_nameEt.getText().toString());
                 reference.child(userID).child("desc").setValue(descEt.getText().toString());
 
+
 //                        setName(profile_nameEt.getText().toString());
 //                userEdited.setDesc(descEt.getText().toString());
 //                reference.child(userID).setValue(userEdited);
@@ -117,7 +119,6 @@ public class editprofile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("clicked ","camera btn");
-                dispatchTakePictureIntent();
             }
         });
 
@@ -127,13 +128,12 @@ public class editprofile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("clicked ","gallery btn");
-                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(gallery,GALLERY_REQUEST_CODE);
+                Intent openGallery = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(openGallery,GALLERY_REQUEST_CODE);
             }
         });
 
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -165,12 +165,7 @@ public class editprofile extends AppCompatActivity {
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                 String imageFileName = "JPEG_" + timeStamp + "." + getFileExt(contentUri);
                 Log.d("TAG","onActivityResult: Gallery Image Uri: "+imageFileName);
-                Log.d("TAG","onActivityResult: contentUri: "+contentUri);
-                Log.d("TAG","onActivityResult: imageFileName: "+imageFileName);
-
-                Picasso.get().load(contentUri).into(photo);
-
-                //this is causing the error
+                photo.setImageURI(contentUri);
                 uploadImageToFirebase(imageFileName,contentUri);
             }
 
@@ -189,15 +184,23 @@ public class editprofile extends AppCompatActivity {
         Log.d("uploadtofb",name);
         final StorageReference imageRef = storageReference.child("profilepics/"+name);
         Log.d("imageRef",imageRef.toString());
+        Log.d("imageRefputFile",imageRef.putFile(contentUri).toString());
         imageRef.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                Log.d("onSuccess","im in");
                 Task<Uri> downloadUrl=taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
+                        Log.d("onComplete","im in");
+                        Toast.makeText(editprofile.this,"Image Uploaded to Firebase", Toast.LENGTH_LONG).show();
                         String t = task.getResult().toString();
-                        Log.d("profpicID",t);
-                        userEdited.setProfPicID(t);
+
+
+//                        reference.child(userID).child("profPicID").setValue(t);
+                        userEdited.setProfPicID("kura");
+
                         Log.d("add uri",t);
                     }
                 });
@@ -207,6 +210,7 @@ public class editprofile extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d("upload failed","very sad");
+                userEdited.setProfPicID("cry for me");
             }
         });
 
@@ -227,12 +231,7 @@ public class editprofile extends AppCompatActivity {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        Log.d("image",image+"");
-        Log.d("storageDir",storageDir+"");
-        Log.d("image.getAbsolutePath()",image.getAbsolutePath());
         currentPhotoPath = image.getAbsolutePath();
-        Log.d("currentPhotoPath",currentPhotoPath);
-
         return image;
     }
 
@@ -241,6 +240,8 @@ public class editprofile extends AppCompatActivity {
         // Ensure that there's a camera activity to handle the intent
         if (getApplicationContext().getPackageManager().hasSystemFeature(
                 PackageManager.FEATURE_CAMERA)) {
+//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
             File photoFile = null;
             try {
                 photoFile = createImageFile();
@@ -259,7 +260,6 @@ public class editprofile extends AppCompatActivity {
         }
     }
 
-
     private void init() {
         this.navbar = findViewById(R.id.navdrawer);
         this.profile_nameEt = findViewById(R.id.edit_nameEt);
@@ -269,6 +269,7 @@ public class editprofile extends AppCompatActivity {
         this.photo = (ImageView) findViewById(R.id.profilephoto);
         this.camBtn = findViewById(R.id.cameraBtn);
         this.gallBtn = findViewById(R.id.gallerBtn);
+        userEdited = new User();
         this.storageReference =  FirebaseStorage.getInstance("gs://mobdeve-b369a.appspot.com/").getReference();
         photo.setImageResource(R.drawable.ic_profilephoto);
     }

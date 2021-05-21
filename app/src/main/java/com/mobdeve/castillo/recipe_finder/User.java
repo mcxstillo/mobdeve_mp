@@ -1,5 +1,7 @@
 package com.mobdeve.castillo.recipe_finder;
 
+import android.net.Uri;
+
 public class User {
 
     public String name, email,desc,userID,profPicID;
@@ -77,8 +79,9 @@ public class User {
     public void setUserID(String userID){
         this.userID = userID;
     }
+
     public void setProfPicID(String profPicID){
-        this.profPicID = profPicID;
+        this.profPicID = Uri.parse(profPicID).toString();
     }
 
 

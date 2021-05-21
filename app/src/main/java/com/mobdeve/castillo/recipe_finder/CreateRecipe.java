@@ -31,6 +31,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -219,14 +220,22 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void uploadImageToFirebase(String name, Uri contentUri) {
+        Log.d("uploadtofb",name);
         final StorageReference imageRef = storageReference.child("pictures/"+name);
+        Log.d("imageRef",imageRef.toString());
+        Log.d("imageRefputFile",imageRef.putFile(contentUri).toString());
         imageRef.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                Log.d("onSuccess","im in");
                 Task<Uri> downloadUrl=taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
+                        Log.d("onComplete","im in");
+                        Toast.makeText(CreateRecipe.this,"Image Uploaded to Firebase", Toast.LENGTH_LONG).show();
                         String t = task.getResult().toString();
+
                         recipe.setImgUri(t);
                         Log.d("add uri",t);
                     }
