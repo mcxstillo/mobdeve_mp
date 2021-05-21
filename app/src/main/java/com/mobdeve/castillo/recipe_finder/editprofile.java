@@ -197,11 +197,11 @@ public class editprofile extends AppCompatActivity {
                         Toast.makeText(editprofile.this,"Image Uploaded to Firebase", Toast.LENGTH_LONG).show();
                         String t = task.getResult().toString();
 
-
-//                        reference.child(userID).child("profPicID").setValue(t);
+                        Toast.makeText(editprofile.this,reference.toString(), Toast.LENGTH_LONG).show();
+                        reference.child(userID).child("profPicID").setValue(t);
                         userEdited.setProfPicID("kura");
 
-                        Log.d("add uri",t);
+                        Log.d("profpicID",t);
                     }
                 });
 

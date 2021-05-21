@@ -95,6 +95,7 @@ public class profile extends AppCompatActivity {
                     emailProfile.setText(email);
                     nameProfile.setText(name);
                     descProfile.setText(desc);
+                    Picasso.get().load(userProfile.profPicID).into(imgProfile);
 
                     Picasso.get().load(userProfile.profPicID).into(imgProfile);
 
