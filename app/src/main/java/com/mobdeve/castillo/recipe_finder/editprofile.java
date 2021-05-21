@@ -185,6 +185,7 @@ public class editprofile extends AppCompatActivity {
         final StorageReference imageRef = storageReference.child("profilepics/"+name);
         Log.d("imageRef",imageRef.toString());
         Log.d("imageRefputFile",imageRef.putFile(contentUri).toString());
+
         imageRef.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
