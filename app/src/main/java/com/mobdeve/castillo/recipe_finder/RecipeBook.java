@@ -69,6 +69,8 @@ public class RecipeBook extends AppCompatActivity {
         DBSearch = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
 
 
+
+        //SEARCH FUNCTION---
         //makes arraylist of users
         DBSearch.addValueEventListener(new ValueEventListener() {
             @Override
@@ -105,12 +107,6 @@ public class RecipeBook extends AppCompatActivity {
 
             }
         });
-
-
-
-
-
-
 
 
 
@@ -160,6 +156,9 @@ public class RecipeBook extends AppCompatActivity {
                 return false;
             }
         });
+
+
+        //SEARCH FUNCTION---
 
 
 
