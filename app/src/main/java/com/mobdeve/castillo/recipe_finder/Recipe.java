@@ -9,7 +9,8 @@ public class Recipe {
     public String creator;
     public String cuisine;
     public String serving_size;
-    public float rating;
+    public int likes;
+    public int dislikes;
     public String difficulty;
     public String preptime;
     public String cookingtime;
@@ -23,20 +24,21 @@ public class Recipe {
         this.cuisine = "";
         this.creator = "";
         this.serving_size = "0";
-        this.rating = 0;
+        this.likes = 0;
+        this.dislikes = 0;
         this.difficulty = "";
         this.preptime = "";
         this.cookingtime = "";
         this.desc = "";
     }
 
-    public Recipe(String name, String creator,String cuisine, String serving_size, float rating, String difficulty, String preptime, String cookingtime, String desc) {
-
+    public Recipe(String name, String creator,String cuisine, String serving_size, String difficulty, String preptime, String cookingtime, String desc) {
         this.name = name;
         this.creator = creator;
         this.cuisine = cuisine;
         this.serving_size = serving_size;
-        this.rating = rating;
+        this.likes = 0;
+        this.dislikes = 0;
         this.difficulty = difficulty;
         this.preptime = preptime;
         this.cookingtime = cookingtime;
@@ -75,12 +77,24 @@ public class Recipe {
         this.serving_size = serving_size;
     }
 
-    public float getRating() {
-        return rating;
+    public int getLikes() {
+        return likes;
     }
 
-    public void setRating(float rating) {
-        this.rating = rating;
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public int getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(int dislikes) {
+        this.dislikes = dislikes;
+    }
+
+    public ArrayList<Steps> getSteps() {
+        return steps;
     }
 
     public String getDifficulty() {

@@ -60,8 +60,8 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
             this.name.setText(name);
         }
 
-        public void setRating(Float rating) {
-            this.rating.setText(String.valueOf(rating));
+        public void setRating(String rating) {
+            this.rating.setText(rating);
         }
 
         public void setDifficulty(String difficulty) {
@@ -101,8 +101,14 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
         String imgUri=recipes.get(position).getImgUri();
         Picasso.get().load(imgUri).into(holder.recipeImg);
 
+        if (recipes.get(position).getLikes() > 0) {
+            float rating = 0;
+            rating = (recipes.get(position).getLikes() / (recipes.get(position).getLikes() + recipes.get(position).getDislikes())) * 5;
+            holder.setRating(String.format("%.2f", rating));
+        } else
+            holder.setRating(String.valueOf(0));
+
         holder.setName(recipes.get(position).getName());
-        holder.setRating(recipes.get(position).getRating());
         holder.setDifficulty(recipes.get(position).getDifficulty());
     }
 

@@ -33,8 +33,8 @@ import java.util.Objects;
 public class RecipePage extends AppCompatActivity {
 
     DrawerLayout navbar;
-    private ImageView photo;
-    private TextView nameTv, creatorTv, cuisineTv, servingsTv, preptimeTv, cooktimeTv, descTv;
+    private ImageView photo, like, dislike;
+    private TextView nameTv, creatorTv, cuisineTv, servingsTv, preptimeTv, cooktimeTv, descTv, comments;
     private TextView navUsernameTv;
     private RecyclerView stepsRv, ingredientsRv;
     private StepsAdapter adapter;
@@ -337,6 +337,19 @@ public class RecipePage extends AppCompatActivity {
             }
         });
 
+        like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        dislike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         //redirect to user profile
         this.creatorTv.setOnClickListener(new View.OnClickListener() {
@@ -355,12 +368,15 @@ public class RecipePage extends AppCompatActivity {
     private void init() {
         this.navbar = findViewById(R.id.navdrawer);
         this.photo = (ImageView) findViewById(R.id.recipe_img);
+        this.like = (ImageView) findViewById(R.id.likeBtn);
+        this.dislike = (ImageView) findViewById(R.id.dislikeBtn);
         this.nameTv = findViewById(R.id.recipe_nameTv);
         this.creatorTv = findViewById(R.id.recipe_opTv);
         this.cuisineTv = findViewById(R.id.recipe_cuisineTv);
         this.servingsTv = findViewById(R.id.recipe_servingTv);
         this.preptimeTv = findViewById(R.id.recipe_prepTv);
         this.cooktimeTv = findViewById(R.id.recipe_cookTv);
+        this.comments = findViewById(R.id.commentsTv);
         this.descTv = findViewById(R.id.recipe_descTv);
         this.stepsRv = (RecyclerView) findViewById(R.id.stepsRv);
         this.ingredientsRv = (RecyclerView) findViewById(R.id.ingredientsRv);

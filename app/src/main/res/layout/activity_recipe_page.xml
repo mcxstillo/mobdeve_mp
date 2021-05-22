@@ -50,7 +50,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="20dp">
 
                 <ImageView
                     android:id="@+id/recipe_img"
@@ -204,7 +205,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:fontFamily="@font/copse"
                     android:text="@string/ingredients"
@@ -227,7 +228,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp"
                     android:fontFamily="@font/copse"
                     android:text="@string/steps"
@@ -244,6 +245,46 @@
                     android:paddingBottom="80dp">
 
                 </androidx.recyclerview.widget.RecyclerView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:orientation="horizontal"
+                    android:paddingStart="25dp"
+                    android:paddingEnd="25dp">
+
+                    <ImageView
+                        android:id="@+id/dislikeBtn"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="15dp"
+                        android:clickable="true"
+                        app:srcCompat="@drawable/ic_thumbsdown" />
+
+                    <ImageView
+                        android:id="@+id/likeBtn"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:clickable="true"
+                        app:srcCompat="@drawable/ic_thumbsup" />
+
+                    <TextView
+                        android:id="@+id/commentsTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:clickable="true"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:text="@string/comments"
+                        android:textColor="#C05100"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 

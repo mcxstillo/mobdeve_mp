@@ -47,9 +47,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:fontFamily="@font/copse"
                     android:text="@string/sample_name"
                     android:textColor="#000000"
-                    android:textSize="20sp"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -57,6 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:fontFamily="@font/open_sans"
                     android:text="@string/sample_email"
                     android:textSize="16sp" />
 
@@ -65,6 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
+                    android:fontFamily="@font/open_sans"
                     android:hint="Add a description"
                     android:text="@string/sample_about"
                     android:textAlignment="center"
@@ -73,16 +76,28 @@
 
                 <Button
                     android:id="@+id/editBtn"
-                    android:layout_width="200dp"
+                    android:layout_width="137dp"
                     android:layout_height="wrap_content"
                     android:text="Edit Profile"
+                    android:visibility="visible"
                     app:backgroundTint="#FF8227" />
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="15dp"
+                    android:fontFamily="@font/copse"
+                    android:text="@string/recipes_created"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/user_recipesRv"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="20dp" />
+                    android:layout_height="match_parent" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

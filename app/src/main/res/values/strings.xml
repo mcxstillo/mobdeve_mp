@@ -59,11 +59,13 @@
     <string name="recipe_desc">This is a sample description for a recipe to see how long it can fit and to see gaano kahaba ba yung kaya nito just cause</string>
     <string name="createsteps">Recipe Steps</string>
     <string name="stepnum">1</string>
+    <string name="comments">COMMENTS ></string>
     <string name="stepdesc">In a medium bowl, add milk, baking powder, vanilla, mayonnaise and egg yolks. Sift in cake flour using a flour sifter or fine mesh strainer. Mix with a whisk until batter is smooth and the mixture is a pale yellow.</string>
 
     // Profile strings
     <string name="sample_name">User Name</string>
     <string name="sample_email">User email</string>
+    <string name="recipes_created">Recipes Created</string>
     <string name="update">Update</string>
     <string name="notice">You do not have any saved recipes.</string>
     <string name="recipes_notice">You have not posted any recipes.</string>

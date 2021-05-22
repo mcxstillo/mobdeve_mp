@@ -145,6 +145,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                         recipe.setPreptime(preptime.getText().toString());
                         recipe.setCookingtime(cooktime.getText().toString());
                         recipe.setDesc(desc.getText().toString());
+                        recipe.setLikes(0);
 
                         Log.d("recipekey?",recipeKey);
                         recipe.setRecipeID(recipeKey);
