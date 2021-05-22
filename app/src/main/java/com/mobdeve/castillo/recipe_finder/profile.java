@@ -43,12 +43,14 @@ public class profile extends AppCompatActivity {
     private ResultsAdapter adapter;
     private ResultsAdapter.RecyclerViewClickListener listener;
     private ArrayList<Recipe> recipes;
+    private String currentUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        currentUserID =FirebaseAuth.getInstance().getCurrentUser().getUid();
         this.emailProfile = findViewById(R.id.emailProfile);
         this.nameProfile = findViewById(R.id.nameProfile);
         // this.viewBtn = findViewById(R.id.viewBtn);
@@ -75,12 +77,13 @@ public class profile extends AppCompatActivity {
 
 
         //if user doesnt own the recipe
-        if(fromRecipePage.getStringExtra("userID")!=null){
+        if(fromRecipePage.getStringExtra("userID").equals(currentUserID)){
             //pass user's ID
+
+            userID = user.getUid();
+        }else{
             userID =fromRecipePage.getStringExtra("userID");
             editBtn.setVisibility(View.GONE);
-        }else{
-            userID = user.getUid();
         }
 
         Log.d("userID",userID);

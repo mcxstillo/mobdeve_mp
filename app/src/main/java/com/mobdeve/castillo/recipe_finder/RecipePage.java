@@ -61,6 +61,12 @@ public class RecipePage extends AppCompatActivity {
         String recipeKey = fromOthers.getStringExtra("recipeID");
         // insert db read here yey
 
+
+        Intent toProfile = new Intent(RecipePage.this, profile.class);
+
+        //fix get user's id
+
+
         Log.d("ChosenRecipeKey",recipeKey);
 
         //create arraylist of all recipes
@@ -91,6 +97,8 @@ public class RecipePage extends AppCompatActivity {
                                     Log.d("recipeITEMID",recipeItem.name);
                                     String imgUri=recipeItem.getImgUri();
                                     Picasso.get().load(imgUri).into(photo);
+
+                                    toProfile.putExtra("userID",usersList.get(finalI).userID);
 
                                     nameTv.setText(recipeItem.getName());
                                     creatorTv.setText("by "+ username);
@@ -129,8 +137,6 @@ public class RecipePage extends AppCompatActivity {
 
                                         }
                                     });
-
-
 
 
                                     DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Ingredients").addValueEventListener(new ValueEventListener() {
@@ -199,6 +205,7 @@ public class RecipePage extends AppCompatActivity {
 
                                 User userID = snapshot.getValue(User.class);
                                 creatorTv.setText("by "+ userID.name);
+                                toProfile.putExtra("userID",FirebaseAuth.getInstance().getCurrentUser().getUid());
                                 navUsernameTv.setText(userID.name);
 
                                 //gets UserID
@@ -355,10 +362,7 @@ public class RecipePage extends AppCompatActivity {
         this.creatorTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent toProfile = new Intent(RecipePage.this, profile.class);
 
-                //fix get user's id
-                toProfile.putExtra("userID",FirebaseAuth.getInstance().getCurrentUser().getUid());
                 startActivity(toProfile);
             }
         });
