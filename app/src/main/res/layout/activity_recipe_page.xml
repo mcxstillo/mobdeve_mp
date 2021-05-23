@@ -78,6 +78,7 @@
                     android:id="@+id/recipe_opTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
                     android:fontFamily="@font/open_sans_semibold"
                     android:text="@string/recipe_owner"
                     android:textAlignment="center"

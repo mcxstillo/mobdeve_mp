@@ -2,6 +2,7 @@ package com.mobdeve.castillo.recipe_finder;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.solver.widgets.analyzer.VerticalWidgetRun;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -430,20 +431,6 @@ public class RecipePage extends AppCompatActivity {
             }
         });
 
-//        like.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
-//
-//        dislike.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
-
         //redirect to user profile
         this.creatorTv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -453,7 +440,12 @@ public class RecipePage extends AppCompatActivity {
             }
         });
 
-
+        comments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(RecipePage.this, CommentSection.class));
+            }
+        });
 
     }
 
@@ -468,6 +460,7 @@ public class RecipePage extends AppCompatActivity {
         this.cuisineTv = findViewById(R.id.recipe_cuisineTv);
         this.servingsTv = findViewById(R.id.recipe_servingTv);
         this.preptimeTv = findViewById(R.id.recipe_prepTv);
+        this.comments = findViewById(R.id.commentsTv);
         this.cooktimeTv = findViewById(R.id.recipe_cookTv);
         this.comments = findViewById(R.id.commentsTv);
         this.descTv = findViewById(R.id.recipe_descTv);
