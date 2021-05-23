@@ -11,14 +11,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHolder>{
 
     private ArrayList<Recipe> recipes;
     private RecyclerViewClickListener listener;
+    DatabaseReference reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
 
     public ResultsAdapter (ArrayList<Recipe> recipes, RecyclerViewClickListener listener) {
         this.recipes = recipes;
@@ -101,13 +105,9 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
         String imgUri=recipes.get(position).getImgUri();
         Picasso.get().load(imgUri).into(holder.recipeImg);
 
-        if (recipes.get(position).getLikes() > 0) {
-            float rating = 0;
-            rating = (recipes.get(position).getLikes() / (recipes.get(position).getLikes() + recipes.get(position).getDislikes())) * 5;
-            holder.setRating(String.format("%.2f", rating));
-        } else
-            holder.setRating(String.valueOf(0));
 
+        DecimalFormat format = new DecimalFormat("0.##");
+        holder.setRating(format.format(recipes.get(position).getRating()));
         holder.setName(recipes.get(position).getName());
         holder.setDifficulty(recipes.get(position).getDifficulty());
     }

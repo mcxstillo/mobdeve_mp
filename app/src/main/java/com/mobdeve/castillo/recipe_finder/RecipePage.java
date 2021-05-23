@@ -90,7 +90,7 @@ public class RecipePage extends AppCompatActivity {
                             for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
                                 Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
 
-                                Log.d("this is a snapshot",snapshot.toString());
+//                                Log.d("this is a snapshot",snapshot.toString());
 
                                 if(snapshot.hasChild(recipeKey)){
 
@@ -107,6 +107,9 @@ public class RecipePage extends AppCompatActivity {
                                     preptimeTv.setText(recipeItem.getPreptime() + " MINUTES");
                                     cooktimeTv.setText(recipeItem.getCookingtime() + " MINUTES");
                                     descTv.setText(recipeItem.getDesc());
+                                    Log.d("tag","current amount of likes for this recipe is: "+ recipeItem.getLikes());
+                                    Log.d("tag","current amount of dislikes for this recipe is: "+ recipeItem.getDislikes());
+
 
 
                                     DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Steps").addValueEventListener(new ValueEventListener() {
@@ -166,6 +169,48 @@ public class RecipePage extends AppCompatActivity {
                                         }
                                     });
 
+
+
+                                    like.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+
+                                            int likes = recipeItem.getLikes();
+                                            int dislikes = recipeItem.getDislikes();
+                                            float rating = ((float)likes / (likes + dislikes)) * 5;
+
+                                            Log.d("rating[likes]","likes: "+likes+" dislikes: "+dislikes+" rating: "+rating+"");
+
+                                            likes++;
+                                            recipeItem.setLikes(likes);
+                                            recipeItem.setDislikes(dislikes);
+                                            recipeItem.setRating(rating);
+                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("rating").setValue(recipeItem.getRating());
+                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("likes").setValue(recipeItem.getLikes());
+                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("dislikes").setValue(recipeItem.getDislikes());
+
+                                        }
+                                    });
+
+                                    dislike.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            int likes = recipeItem.getLikes();
+                                            int dislikes = recipeItem.getDislikes();
+                                            float rating = ((float) likes / (likes + dislikes)) * 5;
+
+                                            Log.d("rating[dislikes]","likes: "+likes+" dislikes: "+dislikes+" rating: "+rating+"");
+                                            likes++;
+                                            recipeItem.setLikes(likes);
+                                            recipeItem.setDislikes(dislikes);
+                                            recipeItem.setRating(rating);
+                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("rating").setValue(recipeItem.getRating());
+                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("likes").setValue(recipeItem.getLikes());
+                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("dislikes").setValue(recipeItem.getDislikes());
+
+                                        }
+                                    });
+
                                 }
 
                             }
@@ -190,15 +235,15 @@ public class RecipePage extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    Log.d("datasnapshot count",dataSnapshot.getChildrenCount()+"");
+//                    Log.d("datasnapshot count",dataSnapshot.getChildrenCount()+"");
 
                     Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
-                    Log.d("recipeID",recipeItem.recipeID);
-                    Log.d("creator",recipeItem.creator);
+//                    Log.d("recipeID",recipeItem.recipeID);
+//                    Log.d("creator",recipeItem.creator);
 
                     if(recipeItem.recipeID.equals(recipeKey)){
 
-                        Log.d("recipe creator",recipeItem.creator);
+//                        Log.d("recipe creator",recipeItem.creator);
                         FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(recipeItem.creator).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -218,6 +263,47 @@ public class RecipePage extends AppCompatActivity {
                                 cooktimeTv.setText(recipeItem.getCookingtime() + " MINUTES");
                                 descTv.setText(recipeItem.getDesc());
 
+                                like.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        int likes = recipeItem.getLikes();
+                                        int dislikes = recipeItem.getDislikes();
+                                        float rating = ((float)likes / (likes + dislikes)) * 5;
+
+                                        Log.d("rating[likes]","likes: "+likes+" dislikes: "+dislikes+" rating: "+rating+"");
+
+                                        likes++;
+                                        recipeItem.setLikes(likes);
+                                        recipeItem.setDislikes(dislikes);
+                                        recipeItem.setRating(rating);
+                                        DB.child("Recipes").child(recipeKey).child("rating").setValue(recipeItem.getRating());
+                                        DB.child("Recipes").child(recipeKey).child("likes").setValue(recipeItem.getLikes());
+                                        DB.child("Recipes").child(recipeKey).child("dislikes").setValue(recipeItem.getDislikes());
+
+                                    }
+                                });
+
+                                dislike.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        int likes = recipeItem.getLikes();
+                                        int dislikes = recipeItem.getDislikes();
+                                        float rating = ((float) likes / (likes + dislikes)) * 5;
+
+                                        Log.d("rating[dislikes]","likes: "+likes+" dislikes: "+dislikes+" rating: "+rating+"");
+                                        likes++;
+                                        recipeItem.setLikes(likes);
+                                        recipeItem.setDislikes(dislikes);
+                                        recipeItem.setRating(rating);
+                                        DB.child("Recipes").child(recipeKey).child("rating").setValue(recipeItem.getRating());
+                                        DB.child("Recipes").child(recipeKey).child("likes").setValue(recipeItem.getLikes());
+                                        DB.child("Recipes").child(recipeKey).child("dislikes").setValue(recipeItem.getDislikes());
+
+                                    }
+                                });
+
+
                             }
 
                             @Override
@@ -233,15 +319,15 @@ public class RecipePage extends AppCompatActivity {
                 DB.child("Recipes").child(recipeKey).child("Steps").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        Log.d("sscountBFR",snapshot.getChildrenCount()+"");
+//                        Log.d("sscountBFR",snapshot.getChildrenCount()+"");
                         steps.clear();
                         for(int i =0;i<snapshot.getChildrenCount();i++){
                             DB.child("Recipes").child(recipeKey).child("Steps").child(String.valueOf(i)).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    Log.d("fromResultsKey","insidesteps"+recipeKey);
+//                                    Log.d("fromResultsKey","insidesteps"+recipeKey);
                                     Steps stepItem = snapshot.getValue(Steps.class);
-                                    Log.d("stepItem", Objects.requireNonNull(stepItem).step_desc);
+//                                    Log.d("stepItem", Objects.requireNonNull(stepItem).step_desc);
                                     //steps get added in the array here
                                     steps.add(stepItem);
                                     adapter.notifyDataSetChanged();
@@ -263,7 +349,7 @@ public class RecipePage extends AppCompatActivity {
                 DB.child("Recipes").child(recipeKey).child("Ingredients").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        Log.d("sscountBFR",snapshot.getChildrenCount()+"");
+//                        Log.d("sscountBFR",snapshot.getChildrenCount()+"");
                         ingredients.clear();
                         for(int i =0;i<snapshot.getChildrenCount();i++){
 
@@ -344,19 +430,19 @@ public class RecipePage extends AppCompatActivity {
             }
         });
 
-        like.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        dislike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+//        like.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
+//
+//        dislike.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
 
         //redirect to user profile
         this.creatorTv.setOnClickListener(new View.OnClickListener() {
@@ -366,6 +452,9 @@ public class RecipePage extends AppCompatActivity {
                 startActivity(toProfile);
             }
         });
+
+
+
     }
 
 

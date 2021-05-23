@@ -11,6 +11,7 @@ public class Recipe {
     public String serving_size;
     public int likes;
     public int dislikes;
+    public float rating;
     public String difficulty;
     public String preptime;
     public String cookingtime;
@@ -24,8 +25,8 @@ public class Recipe {
         this.cuisine = "";
         this.creator = "";
         this.serving_size = "0";
-        this.likes = 0;
-        this.dislikes = 0;
+//        this.likes = 0;
+//        this.dislikes = 0;
         this.difficulty = "";
         this.preptime = "";
         this.cookingtime = "";
@@ -146,7 +147,17 @@ public class Recipe {
     }
 
 
+
+
     public String getRecipeID(){
         return recipeID;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 }

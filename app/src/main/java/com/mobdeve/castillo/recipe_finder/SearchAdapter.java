@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder>{
@@ -97,16 +98,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         } else
             holder.setPreptime("not specified");
 
-        if (recipes.get(position).getLikes() > 0) {
-            float rating = 0;
-            rating = (recipes.get(position).getLikes() / (recipes.get(position).getLikes() + recipes.get(position).getDislikes())) * 5;
-            holder.setRating(String.format("%.2f", rating));
-        } else
-            holder.setRating(String.valueOf(0));
-
         String imgUri=recipes.get(position).getImgUri();
         Picasso.get().load(imgUri).into(holder.recipeImg);
 
+        DecimalFormat format = new DecimalFormat("0.##");
+        holder.setRating(format.format(recipes.get(position).getRating()));
         holder.setName(recipes.get(position).getName());
         holder.setDifficulty(recipes.get(position).getDifficulty());
     }
