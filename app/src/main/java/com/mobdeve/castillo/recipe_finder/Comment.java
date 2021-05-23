@@ -1,19 +1,26 @@
 package com.mobdeve.castillo.recipe_finder;
 
 public class Comment {
-    public User user;
+    public String user;
     public String comment;
+    public String imgUri;
 
-    public Comment(User user, String comment) {
+    public Comment(String user, String comment, String imgUri) {
         this.user = user;
         this.comment = comment;
+        this.imgUri = imgUri;
+
     }
 
-    public User getUser() {
+    public Comment() {
+
+    }
+
+    public String getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(String user) {
         this.user = user;
     }
 
@@ -24,4 +31,15 @@ public class Comment {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+     public String getImgUri() {
+        return imgUri;
+    }
+
+    public void setImgUri(String imgUri) {
+        this.imgUri = imgUri;
+    }
+
+
+
 }

@@ -61,7 +61,7 @@ public class RecipePage extends AppCompatActivity {
         Intent fromOthers = getIntent();
         String recipeKey = fromOthers.getStringExtra("recipeID");
         // insert db read here yey
-
+        Intent toComments = new Intent(RecipePage.this, CommentSection.class);
 
         Intent toProfile = new Intent(RecipePage.this, profile.class);
 
@@ -99,6 +99,7 @@ public class RecipePage extends AppCompatActivity {
                                     String imgUri=recipeItem.getImgUri();
                                     Picasso.get().load(imgUri).into(photo);
 
+                                    toComments.putExtra("userIDComments",usersList.get(finalI).userID);
                                     toProfile.putExtra("userID",usersList.get(finalI).userID);
 
                                     nameTv.setText(recipeItem.getName());
@@ -251,6 +252,7 @@ public class RecipePage extends AppCompatActivity {
 
                                 User userID = snapshot.getValue(User.class);
                                 creatorTv.setText("by "+ userID.name);
+
                                 toProfile.putExtra("userID",FirebaseAuth.getInstance().getCurrentUser().getUid());
                                 navUsernameTv.setText(userID.name);
 
@@ -375,7 +377,6 @@ public class RecipePage extends AppCompatActivity {
                     }
                 });
 
-//                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -443,7 +444,10 @@ public class RecipePage extends AppCompatActivity {
         comments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(RecipePage.this, CommentSection.class));
+                //pass recipe key
+
+                toComments.putExtra("recipeKey",recipeKey);
+                startActivity(toComments);
             }
         });
 
@@ -460,7 +464,6 @@ public class RecipePage extends AppCompatActivity {
         this.cuisineTv = findViewById(R.id.recipe_cuisineTv);
         this.servingsTv = findViewById(R.id.recipe_servingTv);
         this.preptimeTv = findViewById(R.id.recipe_prepTv);
-        this.comments = findViewById(R.id.commentsTv);
         this.cooktimeTv = findViewById(R.id.recipe_cookTv);
         this.comments = findViewById(R.id.commentsTv);
         this.descTv = findViewById(R.id.recipe_descTv);
