@@ -75,8 +75,21 @@ public class CommentSection extends AppCompatActivity {
                     Log.d("commentItem",commentItem+"");
                     comments.add(commentItem);
                 }
+                //when user submits a comment
+                sendBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        comment.setUser(userID);
+                        comment.setComment(commentEt.getText().toString());
+                        DBComment.child(commentKey).setValue(comment);
+                        comments.clear();
+
+                    }
+                });
                 adapter.notifyDataSetChanged();
             }
+
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -84,37 +97,7 @@ public class CommentSection extends AppCompatActivity {
             }
         });
 
-        //when user submits a comment
-        sendBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                // put database activity for adding comment :D
-                comment.setUser(userID);
-                comment.setComment(commentEt.getText().toString());
-                DBComment.child(commentKey).setValue(comment);
-                Log.d("comments size",comments.size()+"");
-
-
-                DBComment.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        comments.clear();
-                        for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            Comment commentItem = dataSnapshot.getValue(Comment.class);
-                            Log.d("commentItem",commentItem+"");
-                            comments.add(commentItem);
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            }
-        });
 
 
 
