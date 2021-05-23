@@ -79,6 +79,8 @@ public class CommentSection extends AppCompatActivity {
                 sendBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        String commentKey = DBComment.push().getKey();
+                        //comment overwrites, fix
                         comment.setUser(userID);
                         comment.setComment(commentEt.getText().toString());
                         DBComment.child(commentKey).setValue(comment);
