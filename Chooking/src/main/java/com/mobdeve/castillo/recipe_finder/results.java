@@ -7,14 +7,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class results extends AppCompatActivity{
 
@@ -143,7 +140,7 @@ public class results extends AppCompatActivity{
     }
 
     public void ClickProfile (View view){
-        startActivity(new Intent(results.this, profile.class));
+        startActivity(new Intent(results.this, Profile.class));
     }
 
     public void ClickRecipebook (View view){

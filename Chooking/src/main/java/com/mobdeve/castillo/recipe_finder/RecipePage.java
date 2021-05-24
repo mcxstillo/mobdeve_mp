@@ -2,7 +2,6 @@ package com.mobdeve.castillo.recipe_finder;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.solver.widgets.analyzer.VerticalWidgetRun;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,7 +23,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -63,7 +61,7 @@ public class RecipePage extends AppCompatActivity {
         // insert db read here yey
         Intent toComments = new Intent(RecipePage.this, CommentSection.class);
 
-        Intent toProfile = new Intent(RecipePage.this, profile.class);
+        Intent toProfile = new Intent(RecipePage.this, OtherProfile.class);
 
         //fix get user's id
 
@@ -187,7 +185,7 @@ public class RecipePage extends AppCompatActivity {
                                             recipeItem.setLikes(likes);
                                             recipeItem.setDislikes(dislikes);
                                             recipeItem.setRating(rating);
-                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("rating").setValue(recipeItem.getRating());
+//                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("rating").setValue(recipeItem.getRating());
                                             DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("likes").setValue(recipeItem.getLikes());
                                             DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("dislikes").setValue(recipeItem.getDislikes());
 
@@ -492,7 +490,7 @@ public class RecipePage extends AppCompatActivity {
     }
 
     public void ClickProfile (View view){
-        startActivity(new Intent(RecipePage.this, profile.class));
+        startActivity(new Intent(RecipePage.this, Profile.class));
         finish();
     }
 

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -33,9 +34,7 @@ public class CommentSection extends AppCompatActivity {
     private ImageButton sendBtn;
     private ArrayList<Comment> comments;
     private CommentAdapter adapter;
-
-
-
+    private TextView navUsernameTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +110,8 @@ public class CommentSection extends AppCompatActivity {
     }
 
     private void init() {
+        this.navbar = findViewById(R.id.navdrawer);
+        this.navUsernameTv = findViewById(R.id.navUsernameTv);
         this.commentsRv = (RecyclerView) findViewById(R.id.commentsRv);
         this.commentEt = findViewById(R.id.commentEt);
         this.sendBtn = findViewById(R.id.sendBtn);
@@ -134,7 +135,7 @@ public class CommentSection extends AppCompatActivity {
     }
 
     public void ClickProfile (View view){
-        startActivity(new Intent(CommentSection.this, profile.class));
+        startActivity(new Intent(CommentSection.this, Profile.class));
     }
 
     public void ClickRecipebook (View view){

@@ -26,7 +26,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,7 +40,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -108,7 +106,7 @@ public class editprofile extends AppCompatActivity {
 //                        setName(profile_nameEt.getText().toString());
 //                userEdited.setDesc(descEt.getText().toString());
 //                reference.child(userID).setValue(userEdited);
-                startActivity(new Intent(editprofile.this,profile.class));
+                startActivity(new Intent(editprofile.this, OtherProfile.class));
             }
         });
 
@@ -292,7 +290,7 @@ public class editprofile extends AppCompatActivity {
     }
 
     public void ClickProfile (View view){
-        startActivity(new Intent(editprofile.this, profile.class));
+        startActivity(new Intent(editprofile.this, Profile.class));
     }
 
     public void ClickRecipebook (View view){

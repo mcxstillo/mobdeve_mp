@@ -12,7 +12,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -367,7 +366,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void ClickProfile (View view){
-        startActivity(new Intent(CreateRecipe.this, profile.class));
+        startActivity(new Intent(CreateRecipe.this, Profile.class));
     }
 
     public void ClickRecipebook (View view){

@@ -1,2 +1,2 @@
 rootProject.name = "recipe_finder"
-include ':app'
+include ':Chooking'

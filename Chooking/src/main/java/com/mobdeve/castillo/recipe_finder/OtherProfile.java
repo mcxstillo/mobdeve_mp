@@ -7,7 +7,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,7 +29,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class profile extends AppCompatActivity {
+public class OtherProfile extends AppCompatActivity {
 
     DrawerLayout navbar;
     private FirebaseUser user;
@@ -38,7 +37,6 @@ public class profile extends AppCompatActivity {
     private String userID;
     private ImageView imgProfile;
     private TextView emailProfile, nameProfile, descProfile,navUsernameTv;
-    private Button editBtn;
     private RecyclerView recipesRv;
     private ResultsAdapter adapter;
     private ResultsAdapter.RecyclerViewClickListener listener;
@@ -48,7 +46,7 @@ public class profile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_other_profile);
 
         currentUserID =FirebaseAuth.getInstance().getCurrentUser().getUid();
         this.emailProfile = findViewById(R.id.emailProfile);
@@ -58,7 +56,7 @@ public class profile extends AppCompatActivity {
         init();
         initFirebase();
 
-        LinearLayoutManager lm = new LinearLayoutManager(profile.this);
+        LinearLayoutManager lm = new LinearLayoutManager(OtherProfile.this);
         recipesRv.setLayoutManager(lm);
         adapter = new ResultsAdapter(recipes, listener);
         recipesRv.setAdapter(adapter);
@@ -83,7 +81,6 @@ public class profile extends AppCompatActivity {
             userID = user.getUid();
         }else{
             userID =fromRecipePage.getStringExtra("userID");
-            editBtn.setVisibility(View.GONE);
         }
 
         Log.d("userID",userID);
@@ -131,13 +128,6 @@ public class profile extends AppCompatActivity {
 
             }
         });
-
-        this.editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(profile.this, editprofile.class));
-            }
-        });
     }
 
 
@@ -173,12 +163,11 @@ public class profile extends AppCompatActivity {
 
     private void init() {
         this.navbar = findViewById(R.id.navdrawer);
-        this.imgProfile = findViewById(R.id.imgProfile);
+        this.imgProfile = findViewById(R.id.userImgProfile);
         imgProfile.setImageResource(R.drawable.ic_profilephoto);
-        this.emailProfile = findViewById(R.id.emailProfile);
-        this.nameProfile = findViewById(R.id.nameProfile);
-        this.descProfile = findViewById(R.id.descProfile);
-        this.editBtn = findViewById(R.id.editBtn);
+        this.emailProfile = findViewById(R.id.userEmailProfile);
+        this.nameProfile = findViewById(R.id.userNameProfile);
+        this.descProfile = findViewById(R.id.userDescProfile);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
         this.recipes = new ArrayList<Recipe>();
         setOnClickListener();
@@ -189,7 +178,7 @@ public class profile extends AppCompatActivity {
         this.listener = new ResultsAdapter.RecyclerViewClickListener() {
             @Override
             public void onClick(View v, int position) {
-                Intent viewRecipe = new Intent(profile.this, RecipePage.class);
+                Intent viewRecipe = new Intent(OtherProfile.this, RecipePage.class);
 
                 String recipeID = recipes.get(position).getRecipeID();
                 Log.d("RecipeID",recipeID);
@@ -221,11 +210,11 @@ public class profile extends AppCompatActivity {
     }
 
     public void ClickRecipebook (View view){
-        startActivity(new Intent(profile.this, RecipeBook.class));
+        startActivity(new Intent(OtherProfile.this, Profile.class));
     }
 
     public void ClickMyRecipes (View view){
-        Intent type = new Intent(profile.this, results.class);
+        Intent type = new Intent(OtherProfile.this, results.class);
         type.putExtra("TYPE", "MY_RECIPES");
         startActivity(type);
     }
@@ -239,7 +228,7 @@ public class profile extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // Logout user form firebase in this function and redirect to MainActivity
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(profile.this,login.class));
+                startActivity(new Intent(OtherProfile.this,login.class));
             }
         });
 

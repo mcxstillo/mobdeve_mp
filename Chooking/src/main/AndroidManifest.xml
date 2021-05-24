@@ -11,14 +11,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Recipe_finder">
-        <activity android:name=".CommentSection"></activity>
+        <activity android:name=".Profile"></activity>
+        <activity android:name=".CommentSection" />
         <activity android:name=".CreateIngredients" />
         <activity android:name=".RecipePage" />
         <activity android:name=".RecipeBook" />
         <activity android:name=".CreateRecipe" />
         <activity android:name=".CreateSteps" />
         <activity android:name=".editprofile" />
-        <activity android:name=".profile" />
+        <activity android:name=".OtherProfile" />
         <activity android:name=".results" />
         <activity android:name=".register" />
         <activity android:name=".login" />
