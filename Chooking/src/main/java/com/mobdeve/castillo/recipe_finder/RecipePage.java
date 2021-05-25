@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,13 @@ public class RecipePage extends AppCompatActivity {
             .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
     DatabaseReference DBOthers = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
 
+//    private ArrayList<User> usersList;
+    private ArrayList<Recipe> recipesList;
+    private ArrayList<Recipe> searchRecipes;
+    private SearchView searchBtn;
+    private RecyclerView searchRv;
+    private SearchAdapter searchResultsAdapter;
+    private SearchAdapter.RecyclerViewClickListener searchListener;
     //database reference for the recipe's ID
 
     @Override
@@ -63,7 +71,105 @@ public class RecipePage extends AppCompatActivity {
 
         Intent toProfile = new Intent(RecipePage.this, OtherProfile.class);
 
+
+
+        //SEARCH FUNCTION---
+        //makes arraylist of users
+        DBOthers.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    User userID = dataSnapshot.getValue(User.class);
+                    usersList.add(userID);
+                    Log.d("userid",userID.userID);
+
+                    //this is causing the error itself
+                    DBOthers.child(userID.userID).child("Recipes").addValueEventListener(new ValueEventListener() {
+                        //                    DBSearch.child(dataSnapshot.getValue(User.class).userID).child("Recipes").addValueEventListener(new ValueEventListener() {
+//                      reference.child("Recipes").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
+                            for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                Recipe recipe = dataSnapshot.getValue(Recipe.class);
+                                recipesList.add(recipe);
+                                Log.d("array",recipesList+"");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
+
+
+
+        searchBtn.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+//                Log.d("recipesListSize",recipesList.size()+"");
+//                Log.d("searchRecipesSize",searchRecipes.size()+"");
+                Log.d("onQueryTextSubmit", query);
+                searchRecipes.clear();
+                for(Recipe object : recipesList){
+                    Log.d("objectname",object.name);
+                    if(object.name.toLowerCase().contains(query.toLowerCase())){
+                        Log.d("objectname",object.name);
+                        searchRecipes.add(object);
+                    }
+                }
+
+                //MAKE INTENT TO PASS ARRAY TO DISPLAY SEARCH RESULTS
+//                searchResultsAdapter = new ResultsAdapter(searchRecipes,listener);
+                if (searchRecipes == null || searchRecipes.isEmpty()) {
+                    searchRv.setVisibility(View.GONE);
+//                    recipesRv.setVisibility(View.VISIBLE);
+//                    notice.setVisibility(View.VISIBLE);
+                    Log.d("secondIF","hi");
+                }
+                else {
+                    LinearLayoutManager llm = new LinearLayoutManager(RecipePage.this);
+                    searchRv.setLayoutManager(llm);
+                    searchResultsAdapter = new SearchAdapter(searchRecipes, searchListener);
+//                    recipesRv.setVisibility(View.GONE);
+                    searchRv.setVisibility(View.VISIBLE);
+//                    notice.setVisibility(View.GONE);
+                    searchRv.setAdapter(searchResultsAdapter);
+                    Log.d("secondELSE","hi");
+                    Log.d("searchResultsAdapter",searchResultsAdapter.getItemCount()+"");
+                    searchResultsAdapter.notifyDataSetChanged();
+
+
+                }
+                Intent toRecipeBook = new Intent(RecipePage.this, RecipeBook.class);
+                startActivity(toRecipeBook);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d("onQueryTextChange", newText);
+                return false;
+            }
+        });
+
+
+        //SEARCH FUNCTION---
+
+
         //fix get user's id
+
 
 
         Log.d("ChosenRecipeKey",recipeKey);
@@ -91,8 +197,10 @@ public class RecipePage extends AppCompatActivity {
 
 //                                Log.d("this is a snapshot",snapshot.toString());
 
-                                if(snapshot.hasChild(recipeKey)){
 
+                                if(snapshot.hasChild(recipeKey)){
+                                    Log.d("recipeKey",recipeKey);
+                                    Log.d("recipeName",recipeItem.name);
                                     Log.d("recipeITEMID",recipeItem.name);
                                     String imgUri=recipeItem.getImgUri();
                                     Picasso.get().load(imgUri).into(photo);
@@ -118,6 +226,7 @@ public class RecipePage extends AppCompatActivity {
                                             Log.d("sscountBFR",snapshot.getChildrenCount()+"");
                                             steps.clear();
                                             for(int i =0;i<snapshot.getChildrenCount();i++){
+                                                steps.clear();
                                                 DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Steps").child(String.valueOf(i)).addValueEventListener(new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -125,20 +234,29 @@ public class RecipePage extends AppCompatActivity {
                                                         Steps stepItem = snapshot.getValue(Steps.class);
                                                         Log.d("stepItem", Objects.requireNonNull(stepItem).step_desc);
                                                         //steps get added in the array here
+
                                                         steps.add(stepItem);
+                                                        Log.d("stepssize",steps.size()+"");
                                                         adapter.notifyDataSetChanged();
+
                                                     }
+
                                                     @Override
                                                     public void onCancelled(@NonNull DatabaseError error) {
 
                                                     }
+
                                                 });
+                                                steps.clear();
                                             }
+
                                         }
+
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError error) {
 
                                         }
+
                                     });
 
 
@@ -148,18 +266,24 @@ public class RecipePage extends AppCompatActivity {
                                             Log.d("sscountBFR",snapshot.getChildrenCount()+"");
                                             ingredients.clear();
                                             for(int i =0;i<snapshot.getChildrenCount();i++){
+                                                ingredients.clear();
                                                 DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Ingredients").child(String.valueOf(i)).addValueEventListener(new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                         String item = snapshot.getValue(String.class);
+
                                                         ingredients.add(item);
+                                                        Log.d("ingsize",ingredients.size()+"");
                                                         ingrAdapter.notifyDataSetChanged();
+
                                                     }
+
                                                     @Override
                                                     public void onCancelled(@NonNull DatabaseError error) {
 
                                                     }
                                                 });
+                                                ingredients.clear();
                                             }
                                         }
 
@@ -211,6 +335,8 @@ public class RecipePage extends AppCompatActivity {
                                         }
                                     });
 
+                                    //IMPORTANT!
+                                    break;
                                 }
 
                             }
@@ -323,6 +449,7 @@ public class RecipePage extends AppCompatActivity {
 //                        Log.d("sscountBFR",snapshot.getChildrenCount()+"");
                         steps.clear();
                         for(int i =0;i<snapshot.getChildrenCount();i++){
+                            steps.clear();
                             DB.child("Recipes").child(recipeKey).child("Steps").child(String.valueOf(i)).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -338,6 +465,7 @@ public class RecipePage extends AppCompatActivity {
 
                                 }
                             });
+
                         }
                     }
                     @Override
@@ -353,7 +481,7 @@ public class RecipePage extends AppCompatActivity {
 //                        Log.d("sscountBFR",snapshot.getChildrenCount()+"");
                         ingredients.clear();
                         for(int i =0;i<snapshot.getChildrenCount();i++){
-
+                            ingredients.clear();
                             DB.child("Recipes").child(recipeKey).child("Ingredients").child(String.valueOf(i)).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -366,6 +494,7 @@ public class RecipePage extends AppCompatActivity {
 
                                 }
                             });
+                            ingredients.clear();
                         }
                     }
 
@@ -397,36 +526,35 @@ public class RecipePage extends AppCompatActivity {
         faveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                steps.clear();
+                ingredients.clear();
                 Toast.makeText(RecipePage.this, "Saved to Recipe Book", Toast.LENGTH_SHORT).show();
+                for(int i =0;i<usersList.size();i++){
+                    String userIDofRecipe = usersList.get(i).userID;
+                    steps.clear();
+                    ingredients.clear();
+                    DBOthers.child(userIDofRecipe).child("Recipes").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange( DataSnapshot snapshot) {
+                            for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                steps.clear();
+                                ingredients.clear();
+                                Recipe currentRecipe = dataSnapshot.getValue(Recipe.class);
 
-                //passes entire recipe to the DB [1]
-                DB.child("Recipes").child(recipeKey).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        Recipe likedRecipe = snapshot.getValue(Recipe.class);
+                                if(currentRecipe.recipeID.equals(recipeKey)) {
+                                    Log.d("currentRecipe", currentRecipe + "");
+                                    DB.child("Liked").child(recipeKey).setValue(currentRecipe);
+//                                    DBOthers.child(userIDofRecipe).child("Recipes").child(recipeKey).child("Steps").setValue(steps);
+//                                    DBOthers.child(userIDofRecipe).child("Recipes").child(recipeKey).child("Ingredients").setValue(ingredients);
 
-                            //passes steps within the recipe[2]
-                            DB.child("Recipes").child(recipeKey).child("Steps").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    DB.child("Liked").child(likedRecipe.recipeID).child("Steps").setValue(steps);
                                 }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-
-                        // [1]
-                        DB.child("Liked").child(likedRecipe.recipeID).setValue(likedRecipe);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                        }
+                    });
+                }
             }
         });
 
@@ -472,6 +600,28 @@ public class RecipePage extends AppCompatActivity {
         this.steps = new ArrayList<Steps>();
         this.usersList = new ArrayList<User>();
         this.ingredients = new ArrayList<String>();
+        this.searchBtn = findViewById(R.id.searchBtn);
+        this.searchRecipes = new ArrayList<>();
+        this.usersList = new ArrayList<>();
+        this.recipesList = new ArrayList<>();
+        this.searchRv = (RecyclerView) findViewById(R.id.searchRv);
+        SearchsetOnClickListener();
+    }
+
+    private void SearchsetOnClickListener() {
+        this.searchListener = new SearchAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent viewRecipe = new Intent(RecipePage.this, RecipePage.class);
+
+                String recipeID = searchRecipes.get(position).getRecipeID();
+                Log.d("RecipeID",recipeID);
+                viewRecipe.putExtra("recipeID",recipeID);
+                //in going to recipebook, pass arraylist of recipes, loop that in the thing to see if nag match ba sa clinick nung user, then display the details
+//                viewRecipe.putExtra("position",position);
+                startActivity(viewRecipe);
+            }
+        };
     }
 
     // NAVBAR FUNCTIONS

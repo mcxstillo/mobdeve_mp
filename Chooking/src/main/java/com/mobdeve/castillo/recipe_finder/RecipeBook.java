@@ -25,12 +25,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.lang.reflect.Type;
 
-public class RecipeBook extends AppCompatActivity {
+public class RecipeBook extends AppCompatActivity implements Serializable {
 
     //LIKED RECIPES/LANDING PAGE?
     //SEARCH PAGE
@@ -68,70 +72,21 @@ public class RecipeBook extends AppCompatActivity {
 
 
 
+
         //SEARCH FUNCTION---
         //makes arraylist of users
-//        DBSearch.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-////                Log.d("snapshotusercount",snapshot.getChildrenCount()+"");
-//                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
-//                    User userID = dataSnapshot.getValue(User.class);
-//                    Log.d("userIDdapat",userID.getUserID()+"");
-//                    usersList.add(userID);
-//                }
-//                //makes arraylist of all recipes created (recipeID)
-//                for(int i=0;i<usersList.size();i++){
-//                    Log.d("userSize",""+usersList.size());
-//                    Log.d("userID",""+usersList.get(i).userID);
-//
-//                    int finalI = i;
-//                    DBSearch.child(usersList.get(i).userID).addValueEventListener(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
-//                            DBSearch.child(usersList.get(finalI).userID).child("Recipes").addValueEventListener(new ValueEventListener() {
-//                                @Override
-//                                public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
-////                                    Recipe recipeID = snapshot.getValue(Recipe.class);
-//                                    for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
-//                                Recipe recipeID = dataSnapshot.getValue(Recipe.class);
-//                                        Log.d("recipeIDdapat",recipeID.getRecipeID()+"");
-//                                        recipesList.add(recipeID);
-//                                        Log.d("recipesListSize",recipesList.size()+"");
-//
-//
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
-//
-//                                }
-//                            });
-//
-//
-//                        }
-//                        @Override
-//                        public void onCancelled(DatabaseError error) {
-//                        }
-//                    });
-//                }
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-
         DBSearch.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     User userID = dataSnapshot.getValue(User.class);
                     usersList.add(userID);
+                    Log.d("userid",userID.userID);
 
+                    //this is causing the error itself
                     DBSearch.child(userID.userID).child("Recipes").addValueEventListener(new ValueEventListener() {
-//                    DBSearch.child(userID.userID).addValueEventListener(new ValueEventListener() {
-//                    reference.child("Recipes").addValueEventListener(new ValueEventListener() {
+//                    DBSearch.child(dataSnapshot.getValue(User.class).userID).child("Recipes").addValueEventListener(new ValueEventListener() {
+//                      reference.child("Recipes").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
                             for(DataSnapshot dataSnapshot : snapshot.getChildren()){
@@ -146,7 +101,6 @@ public class RecipeBook extends AppCompatActivity {
 
                         }
                     });
-
                 }
             }
 
@@ -156,13 +110,24 @@ public class RecipeBook extends AppCompatActivity {
             }
         });
 
+//        Log.d("onQueryTextSubmit", query);
+        Intent fromOthers = getIntent();
 
+
+
+
+        //di nattrigger if galing sa iba
         searchBtn.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
 //                Log.d("recipesListSize",recipesList.size()+"");
 //                Log.d("searchRecipesSize",searchRecipes.size()+"");
-                Log.d("onQueryTextSubmit", query);
+
+                Log.d("query",query);
+                //if query from get intent is null, yung nasa baba
+                //put query here
+
+
                 searchRecipes.clear();
                 for(Recipe object : recipesList){
                     Log.d("objectname",object.name);
@@ -194,6 +159,7 @@ public class RecipeBook extends AppCompatActivity {
 
 
                 }
+
                 return false;
             }
 
@@ -206,7 +172,6 @@ public class RecipeBook extends AppCompatActivity {
 
 
         //SEARCH FUNCTION---
-
 
 
         //loading recyclerview and array
@@ -225,6 +190,7 @@ public class RecipeBook extends AppCompatActivity {
                         Log.d("afteradding",""+recipes.size());
 
                     }
+
 
                     if (recipes == null || recipes.isEmpty()) {
                         recipesRv.setVisibility(View.GONE);
@@ -271,17 +237,17 @@ public class RecipeBook extends AppCompatActivity {
     private void init() {
         this.navbar = findViewById(R.id.navdrawer);
         this.recipes = new ArrayList<>();
-        this.usersList = new ArrayList<>();
-        this.recipesList = new ArrayList<>();
         this.recipesRv = (RecyclerView) findViewById(R.id.recipesRv);
-        this.searchRv = (RecyclerView) findViewById(R.id.searchRv);
         this.createBtn = findViewById(R.id.createBtn);
         this.notice = findViewById(R.id.noticeTv);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
         this.searchBtn = findViewById(R.id.searchBtn);
         this.searchRecipes = new ArrayList<>();
-        setOnClickListener();
+        this.usersList = new ArrayList<>();
+        this.recipesList = new ArrayList<>();
+        this.searchRv = (RecyclerView) findViewById(R.id.searchRv);
         SearchsetOnClickListener();
+        setOnClickListener();
     }
 
     private void setOnClickListener() {

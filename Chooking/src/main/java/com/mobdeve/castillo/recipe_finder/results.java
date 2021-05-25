@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +38,15 @@ public class results extends AppCompatActivity{
     private TextView noticeTv;
     ArrayList<Recipe> recipes;
     private TextView navUsernameTv;
+    private ArrayList<User> usersList;
+    private ArrayList<Recipe> recipesList;
+    private ArrayList<Recipe> searchRecipes;
+    private SearchView searchBtn;
+    private RecyclerView searchRv;
+    private SearchAdapter searchResultsAdapter;
+    private SearchAdapter.RecyclerViewClickListener searchListener;
 
+    DatabaseReference DBSearch = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
     DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
     @Override
@@ -97,7 +106,106 @@ public class results extends AppCompatActivity{
             resultsRv.setAdapter(adapter);
         }
 
-        }
+
+        //SEARCH FUNCTION---
+        //makes arraylist of users
+        DBSearch.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    User userID = dataSnapshot.getValue(User.class);
+                    usersList.add(userID);
+                    Log.d("userid",userID.userID);
+
+                    //this is causing the error itself
+                    DBSearch.child(userID.userID).child("Recipes").addValueEventListener(new ValueEventListener() {
+                        //                    DBSearch.child(dataSnapshot.getValue(User.class).userID).child("Recipes").addValueEventListener(new ValueEventListener() {
+//                      reference.child("Recipes").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
+                            for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                Recipe recipe = dataSnapshot.getValue(Recipe.class);
+                                recipesList.add(recipe);
+                                Log.d("array",recipesList+"");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
+
+
+
+        searchBtn.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+//                Log.d("recipesListSize",recipesList.size()+"");
+//                Log.d("searchRecipesSize",searchRecipes.size()+"");
+                Log.d("onQueryTextSubmit", query);
+                searchRecipes.clear();
+                for(Recipe object : recipesList){
+                    Log.d("objectname",object.name);
+                    if(object.name.toLowerCase().contains(query.toLowerCase())){
+                        Log.d("objectname",object.name);
+                        searchRecipes.add(object);
+                    }
+                }
+
+                //MAKE INTENT TO PASS ARRAY TO DISPLAY SEARCH RESULTS
+//                searchResultsAdapter = new ResultsAdapter(searchRecipes,listener);
+                if (searchRecipes == null || searchRecipes.isEmpty()) {
+                    searchRv.setVisibility(View.GONE);
+                    Log.d("secondIF","hi");
+                }
+                else {
+                    LinearLayoutManager llm = new LinearLayoutManager(results.this);
+                    searchRv.setLayoutManager(llm);
+                    searchResultsAdapter = new SearchAdapter(searchRecipes, searchListener);
+//                    recipesRv.setVisibility(View.GONE);
+                    searchRv.setVisibility(View.VISIBLE);
+//                    notice.setVisibility(View.GONE);
+                    searchRv.setAdapter(searchResultsAdapter);
+                    Log.d("secondELSE","hi");
+                    Log.d("searchResultsAdapter",searchResultsAdapter.getItemCount()+"");
+                    searchResultsAdapter.notifyDataSetChanged();
+
+
+                }
+                Intent toRecipeBook = new Intent(results.this, RecipeBook.class);
+                startActivity(toRecipeBook);
+                return false;
+
+
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d("onQueryTextChange", newText);
+                return false;
+            }
+
+
+
+        });
+
+
+        //SEARCH FUNCTION---
+
+
+    }
 
     private void init() {
         this.navbar = findViewById(R.id.navdrawer);
@@ -106,7 +214,29 @@ public class results extends AppCompatActivity{
         this.createBtn = findViewById(R.id.createBtn);
         this.noticeTv = findViewById(R.id.recipes_noticeTv);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
+        this.searchBtn = findViewById(R.id.searchBtn);
+        this.searchRecipes = new ArrayList<>();
+        this.usersList = new ArrayList<>();
+        this.recipesList = new ArrayList<>();
+        this.searchRv = (RecyclerView) findViewById(R.id.searchRv);
+        SearchsetOnClickListener();
         setOnClickListener();
+    }
+
+    private void SearchsetOnClickListener() {
+        this.searchListener = new SearchAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent viewRecipe = new Intent(results.this, RecipePage.class);
+
+                String recipeID = searchRecipes.get(position).getRecipeID();
+                Log.d("RecipeID",recipeID);
+                viewRecipe.putExtra("recipeID",recipeID);
+                //in going to recipebook, pass arraylist of recipes, loop that in the thing to see if nag match ba sa clinick nung user, then display the details
+//                viewRecipe.putExtra("position",position);
+                startActivity(viewRecipe);
+            }
+        };
     }
 
     private void setOnClickListener() {

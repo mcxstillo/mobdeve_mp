@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,6 +25,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +47,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class editprofile extends AppCompatActivity {
@@ -61,6 +65,13 @@ public class editprofile extends AppCompatActivity {
     public Button updateBtn, camBtn, gallBtn;
     User userEdited;
     private TextView navUsernameTv;
+    private ArrayList<User> usersList;
+    private ArrayList<Recipe> recipesList;
+    private ArrayList<Recipe> searchRecipes;
+    private SearchView searchBtn;
+    private RecyclerView searchRv;
+    private SearchAdapter searchResultsAdapter;
+    private SearchAdapter.RecyclerViewClickListener searchListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +82,104 @@ public class editprofile extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
         userID = user.getUid();
+
+
+
+
+        //SEARCH FUNCTION---
+        //makes arraylist of users
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    User userID = dataSnapshot.getValue(User.class);
+                    usersList.add(userID);
+                    Log.d("userid",userID.userID);
+
+                    //this is causing the error itself
+                    reference.child(userID.userID).child("Recipes").addValueEventListener(new ValueEventListener() {
+                        //                    DBSearch.child(dataSnapshot.getValue(User.class).userID).child("Recipes").addValueEventListener(new ValueEventListener() {
+//                      reference.child("Recipes").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
+                            for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                Recipe recipe = dataSnapshot.getValue(Recipe.class);
+                                recipesList.add(recipe);
+                                Log.d("array",recipesList+"");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
+
+
+
+        searchBtn.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+//                Log.d("recipesListSize",recipesList.size()+"");
+//                Log.d("searchRecipesSize",searchRecipes.size()+"");
+                Log.d("onQueryTextSubmit", query);
+                searchRecipes.clear();
+                for(Recipe object : recipesList){
+                    Log.d("objectname",object.name);
+                    if(object.name.toLowerCase().contains(query.toLowerCase())){
+                        Log.d("objectname",object.name);
+                        searchRecipes.add(object);
+                    }
+                }
+
+                //MAKE INTENT TO PASS ARRAY TO DISPLAY SEARCH RESULTS
+//                searchResultsAdapter = new ResultsAdapter(searchRecipes,listener);
+                if (searchRecipes == null || searchRecipes.isEmpty()) {
+                    searchRv.setVisibility(View.GONE);
+                    Log.d("secondIF","hi");
+                }
+                else {
+                    LinearLayoutManager llm = new LinearLayoutManager(editprofile.this);
+                    searchRv.setLayoutManager(llm);
+                    searchResultsAdapter = new SearchAdapter(searchRecipes, searchListener);
+//                    recipesRv.setVisibility(View.GONE);
+                    searchRv.setVisibility(View.VISIBLE);
+//                    notice.setVisibility(View.GONE);
+                    searchRv.setAdapter(searchResultsAdapter);
+                    Log.d("secondELSE","hi");
+                    Log.d("searchResultsAdapter",searchResultsAdapter.getItemCount()+"");
+                    searchResultsAdapter.notifyDataSetChanged();
+
+
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d("onQueryTextChange", newText);
+                return false;
+            }
+        });
+
+
+        //SEARCH FUNCTION---
+
+
+
+
+
 
         //get current data and display on fields.
         reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -272,6 +381,31 @@ public class editprofile extends AppCompatActivity {
         userEdited = new User();
         this.storageReference =  FirebaseStorage.getInstance("gs://mobdeve-b369a.appspot.com/").getReference();
         photo.setImageResource(R.drawable.ic_profilephoto);
+
+        this.searchBtn = findViewById(R.id.searchBtn);
+        this.searchRecipes = new ArrayList<>();
+        this.usersList = new ArrayList<>();
+        this.recipesList = new ArrayList<>();
+        this.searchRv = (RecyclerView) findViewById(R.id.searchRv);
+        SearchsetOnClickListener();
+    }
+
+
+
+    private void SearchsetOnClickListener() {
+        this.searchListener = new SearchAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent viewRecipe = new Intent(editprofile.this, RecipePage.class);
+
+                String recipeID = searchRecipes.get(position).getRecipeID();
+                Log.d("RecipeID",recipeID);
+                viewRecipe.putExtra("recipeID",recipeID);
+                //in going to recipebook, pass arraylist of recipes, loop that in the thing to see if nag match ba sa clinick nung user, then display the details
+//                viewRecipe.putExtra("position",position);
+                startActivity(viewRecipe);
+            }
+        };
     }
 
     // NAVBAR FUNCTIONS

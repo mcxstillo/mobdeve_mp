@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,13 @@ public class OtherProfile extends AppCompatActivity {
     private ResultsAdapter.RecyclerViewClickListener listener;
     private ArrayList<Recipe> recipes;
     private String currentUserID;
+    private ArrayList<User> usersList;
+    private ArrayList<Recipe> recipesList;
+    private ArrayList<Recipe> searchRecipes;
+    private SearchView searchBtn;
+    private RecyclerView searchRv;
+    private SearchAdapter searchResultsAdapter;
+    private SearchAdapter.RecyclerViewClickListener searchListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +64,7 @@ public class OtherProfile extends AppCompatActivity {
         init();
         initFirebase();
 
+
         LinearLayoutManager lm = new LinearLayoutManager(OtherProfile.this);
         recipesRv.setLayoutManager(lm);
         adapter = new ResultsAdapter(recipes, listener);
@@ -65,7 +74,95 @@ public class OtherProfile extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
+        //SEARCH FUNCTION---
+        //makes arraylist of users
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    User userID = dataSnapshot.getValue(User.class);
+                    usersList.add(userID);
+                    Log.d("userid",userID.userID);
 
+                    //this is causing the error itself
+                    reference.child(userID.userID).child("Recipes").addValueEventListener(new ValueEventListener() {
+                        //                    DBSearch.child(dataSnapshot.getValue(User.class).userID).child("Recipes").addValueEventListener(new ValueEventListener() {
+//                      reference.child("Recipes").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
+                            for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                Recipe recipe = dataSnapshot.getValue(Recipe.class);
+                                recipesList.add(recipe);
+                                Log.d("array",recipesList+"");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
+
+
+
+        searchBtn.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+//                Log.d("recipesListSize",recipesList.size()+"");
+//                Log.d("searchRecipesSize",searchRecipes.size()+"");
+                Log.d("onQueryTextSubmit", query);
+                searchRecipes.clear();
+                for(Recipe object : recipesList){
+                    Log.d("objectname",object.name);
+                    if(object.name.toLowerCase().contains(query.toLowerCase())){
+                        Log.d("objectname",object.name);
+                        searchRecipes.add(object);
+                    }
+                }
+
+                //MAKE INTENT TO PASS ARRAY TO DISPLAY SEARCH RESULTS
+//                searchResultsAdapter = new ResultsAdapter(searchRecipes,listener);
+                if (searchRecipes == null || searchRecipes.isEmpty()) {
+                    searchRv.setVisibility(View.GONE);
+                    Log.d("secondIF","hi");
+                }
+                else {
+                    LinearLayoutManager llm = new LinearLayoutManager(OtherProfile.this);
+                    searchRv.setLayoutManager(llm);
+                    searchResultsAdapter = new SearchAdapter(searchRecipes, searchListener);
+                    searchRv.setVisibility(View.VISIBLE);
+                    searchRv.setAdapter(searchResultsAdapter);
+                    Log.d("secondELSE","hi");
+                    Log.d("searchResultsAdapter",searchResultsAdapter.getItemCount()+"");
+                    searchResultsAdapter.notifyDataSetChanged();
+
+
+                }
+                Intent toRecipeBook = new Intent(OtherProfile.this, RecipeBook.class);
+                startActivity(toRecipeBook);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d("onQueryTextChange", newText);
+                return false;
+            }
+        });
+
+
+        //SEARCH FUNCTION---
 
         //check if user's profile or others
 
@@ -136,12 +233,27 @@ public class OtherProfile extends AppCompatActivity {
     private void initFirebase() {
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
-        userID = user.getUid();
 
         DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        DB.child("Recipes").addValueEventListener(new ValueEventListener() {
+        Intent fromRecipePage = getIntent();
+
+
+        //if user doesnt own the recipe
+        if(fromRecipePage.getStringExtra("userID").equals(currentUserID)){
+            //pass user's ID
+
+            userID = user.getUid();
+        }else{
+            userID =fromRecipePage.getStringExtra("userID");
+        }
+
+
+
+
+        Log.d("userIDinpProfile",userID);
+        FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(userID).child("Recipes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
@@ -172,7 +284,31 @@ public class OtherProfile extends AppCompatActivity {
         this.recipes = new ArrayList<Recipe>();
         setOnClickListener();
         this.recipesRv = (RecyclerView) findViewById(R.id.user_recipesRv);
+        this.searchBtn = findViewById(R.id.searchBtn);
+        this.searchRecipes = new ArrayList<>();
+        this.usersList = new ArrayList<>();
+        this.recipesList = new ArrayList<>();
+        this.searchRv = (RecyclerView) findViewById(R.id.searchRv);
+        SearchsetOnClickListener();
     }
+
+    private void SearchsetOnClickListener() {
+        this.searchListener = new SearchAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent viewRecipe = new Intent(OtherProfile.this, RecipePage.class);
+
+                String recipeID = searchRecipes.get(position).getRecipeID();
+                Log.d("RecipeID",recipeID);
+                viewRecipe.putExtra("recipeID",recipeID);
+                //in going to recipebook, pass arraylist of recipes, loop that in the thing to see if nag match ba sa clinick nung user, then display the details
+//                viewRecipe.putExtra("position",position);
+                startActivity(viewRecipe);
+            }
+        };
+    }
+
+
 
     private void setOnClickListener() {
         this.listener = new ResultsAdapter.RecyclerViewClickListener() {
