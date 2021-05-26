@@ -85,17 +85,85 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                     usersList.add(userID);
                     Log.d("userid",userID.userID);
 
-                    //this is causing the error itself
+
                     DBSearch.child(userID.userID).child("Recipes").addValueEventListener(new ValueEventListener() {
 //                    DBSearch.child(dataSnapshot.getValue(User.class).userID).child("Recipes").addValueEventListener(new ValueEventListener() {
 //                      reference.child("Recipes").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
+                            recipes.clear();
                             for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                                 Recipe recipe = dataSnapshot.getValue(Recipe.class);
                                 recipesList.add(recipe);
                                 Log.d("array",recipesList+"");
                             }
+
+
+                            reference.child("Liked").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    Log.d("snapshotcount",snapshot.getChildrenCount()+"");
+                                    recipes.clear();
+                                    Log.d("beforeadding",""+recipes.size());
+
+                                    for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+
+                                        Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
+                                        Log.d("recipeboookitem",recipeItem.recipeID);
+                                        dataSnapshot.getValue(Recipe.class);
+
+                                        //check if the recipe exists before adding to liked
+                                        Log.d("recipesListcontains",recipesList.contains(recipeItem)+"");
+
+                                            for(int i =0;i<recipesList.size();i++){
+                                                Log.d("nameofrecipe",recipesList.get(i).recipeID);
+                                                 if(recipesList.get(i).recipeID.equals(recipeItem.recipeID)){
+                                                    recipes.add(recipeItem);
+                                                 }
+                                            }
+
+                                    }
+
+                                    if (recipes == null || recipes.isEmpty()) {
+                                        recipesRv.setVisibility(View.GONE);
+                                        notice.setVisibility(View.VISIBLE);
+                                        Log.d("secondIF","hi");
+                                    }
+                                    else {
+                                        LinearLayoutManager lm = new LinearLayoutManager(RecipeBook.this);
+                                        recipesRv.setLayoutManager(lm);
+                                        adapter = new ResultsAdapter(recipes, listener);
+                                        searchRv.setVisibility(View.GONE);
+                                        recipesRv.setVisibility(View.VISIBLE);
+                                        notice.setVisibility(View.GONE);
+                                        recipesRv.setAdapter(adapter);
+                                        Log.d("secondELSE","hi");
+                                        Log.d("adaptercount",adapter.getItemCount()+"");
+                                        adapter.notifyDataSetChanged();
+                                    }
+
+
+                                }
+
+                                @Override
+                                public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
+
+                                }
+                            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         }
 
                         @Override
@@ -212,48 +280,53 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
 
 
         //loading recyclerview and array
-        reference.child("Liked").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("snapshotcount",snapshot.getChildrenCount()+"");
+//        reference.child("Liked").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                Log.d("snapshotcount",snapshot.getChildrenCount()+"");
+//                recipes.clear();
+//
+//                //check if the recipe exists before adding to liked
+//
+//                Log.d("beforeadding",""+recipes.size());
+//                    for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+//                        Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
+//                        Log.d("recipeboookitem",recipeItem.recipeID);
+//                        dataSnapshot.getValue(Recipe.class);
+//
+//
+//
+//                        recipes.add(recipeItem);
+//                        Log.d("afteradding",""+recipes.size());
+//
+//                    }
+//
+//                        if (recipes == null || recipes.isEmpty()) {
+//                            recipesRv.setVisibility(View.GONE);
+//                            notice.setVisibility(View.VISIBLE);
+//                            Log.d("secondIF","hi");
+//                        }
+//                        else {
+//                            LinearLayoutManager lm = new LinearLayoutManager(RecipeBook.this);
+//                            recipesRv.setLayoutManager(lm);
+//                            adapter = new ResultsAdapter(recipes, listener);
+//                            searchRv.setVisibility(View.GONE);
+//                            recipesRv.setVisibility(View.VISIBLE);
+//                            notice.setVisibility(View.GONE);
+//                            recipesRv.setAdapter(adapter);
+//                            Log.d("secondELSE","hi");
+//                            Log.d("adaptercount",adapter.getItemCount()+"");
+//                            adapter.notifyDataSetChanged();
+//                        }
+//
+//                }
+//
+//            @Override
+//            public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
+//
+//            }
+//        });
 
-                recipes.clear();
-                Log.d("beforeadding",""+recipes.size());
-                    for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                        Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
-                        Log.d("recipeboookitem",recipeItem.recipeID);
-                        dataSnapshot.getValue(Recipe.class);
-                        recipes.add(recipeItem);
-                        Log.d("afteradding",""+recipes.size());
-
-                    }
-
-
-                    if (recipes == null || recipes.isEmpty()) {
-                        recipesRv.setVisibility(View.GONE);
-                        notice.setVisibility(View.VISIBLE);
-                        Log.d("secondIF","hi");
-                    }
-                    else {
-                        LinearLayoutManager lm = new LinearLayoutManager(RecipeBook.this);
-                        recipesRv.setLayoutManager(lm);
-                        adapter = new ResultsAdapter(recipes, listener);
-                        searchRv.setVisibility(View.GONE);
-                        recipesRv.setVisibility(View.VISIBLE);
-                        notice.setVisibility(View.GONE);
-                        recipesRv.setAdapter(adapter);
-                        Log.d("secondELSE","hi");
-                        Log.d("adaptercount",adapter.getItemCount()+"");
-                        adapter.notifyDataSetChanged();
-                    }
-
-                }
-
-            @Override
-            public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
-
-            }
-        });
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
