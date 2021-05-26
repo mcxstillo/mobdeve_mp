@@ -220,9 +220,9 @@ public class RecipePage extends AppCompatActivity {
                                             recipeItem.setDislikes(dislikes);
                                             recipeItem.setRating(rating);
 
-//                                            Log.d("rating[likes]","likes: "+likes+" dislikes: "+dislikes+" rating: "+rating+"");
+                                            Log.d("rating[likes]","likes: "+likes+" dislikes: "+dislikes+" rating: "+rating+"");
                                             Log.d("RATING LANG",((float)likes / (likes + dislikes)) * 5+"");
-//                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("rating").setValue(recipeItem.getRating());
+                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("rating").setValue(recipeItem.getRating());
                                             DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("likes").setValue(recipeItem.getLikes());
                                             DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("dislikes").setValue(recipeItem.getDislikes());
 
@@ -236,14 +236,15 @@ public class RecipePage extends AppCompatActivity {
                                             int dislikes = recipeItem.getDislikes();
                                             float rating = ((float) likes / (likes + dislikes)) * 5;
 
-
                                             dislikes++;
                                             recipeItem.setLikes(likes);
                                             recipeItem.setDislikes(dislikes);
                                             recipeItem.setRating(rating);
-//                                            Log.d("rating[dislikes]","likes: "+likes+" dislikes: "+dislikes+" rating: "+rating+"");
+                                            Log.d("rating[dislikes]","likes: "+likes+" dislikes: "+dislikes+" rating: "+rating+"");
+                                            Log.d("RATING LANG",((float)likes / (likes + dislikes)) * 5+"");
                                             DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("likes").setValue(recipeItem.getLikes());
                                             DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("dislikes").setValue(recipeItem.getDislikes());
+                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("rating").setValue(recipeItem.getRating());
 
                                         }
                                     });
