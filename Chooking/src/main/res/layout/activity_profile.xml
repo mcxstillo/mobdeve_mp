@@ -15,7 +15,7 @@
 
         <include
             android:id="@+id/action_bar"
-            layout="@layout/main_toolbar"
+            layout="@layout/toolbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

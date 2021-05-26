@@ -22,6 +22,7 @@
     <string name="tagline">crave. locate. create</string>
 
     // Row layout strings
+    <string name="no_results">No recipe found.</string>
     <string name="recipe_name">Recipe name</string>
     <string name="difficulty">Difficulty:</string>
     <string name="total_time">Total time:</string>
@@ -46,6 +47,7 @@
     <string name="create_update">Update</string>
 
     // Recipe Page Placeholders
+    <string name="search_results">Search results</string>
     <string name="cuisine">cuisine</string>
     <string name="servingsize">serving size</string>
     <string name="preptime">prep time</string>

@@ -57,7 +57,6 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
         public void onClick(View v) {
 //            listener.onClick(v, getAdapterPosition());
             listener.onClick(v, getBindingAdapterPosition());
-
         }
 
         public void setName(String name) {
@@ -101,13 +100,16 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
         } else
             holder.setPreptime("not specified");
 
+        int likes = recipes.get(position).getLikes();
+        int dislikes = recipes.get(position).getDislikes();
+        float rating = ((float) likes / (likes + dislikes)) * 5;
+
 
         String imgUri=recipes.get(position).getImgUri();
         Picasso.get().load(imgUri).into(holder.recipeImg);
 
-
         DecimalFormat format = new DecimalFormat("0.##");
-        holder.setRating(format.format(recipes.get(position).getRating()));
+        holder.setRating(format.format(rating));
         holder.setName(recipes.get(position).getName());
         holder.setDifficulty(recipes.get(position).getDifficulty());
     }

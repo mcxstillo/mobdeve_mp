@@ -27,8 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+/*import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;*/
 
 import java.io.Serializable;
 import java.util.ArrayList;

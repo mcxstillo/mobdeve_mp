@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +49,6 @@ public class RecipePage extends AppCompatActivity {
     private static String currentUserID;
     private ArrayList<Recipe> recipesList;
     private ArrayList<Recipe> searchRecipes;
-    private SearchView searchBtn;
     private RecyclerView searchRv;
 
 
@@ -98,6 +96,67 @@ public class RecipePage extends AppCompatActivity {
                                 Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
                                 Log.d("RECIPEID1234",recipeItem.recipeID);
                                 Log.d("RECIPEID5678",recipeKey);
+
+                                //if the user's recipe matches
+                                if(recipeItem.recipeID.equals(recipeKey)){
+                                    Log.d("usernameINSIDE",username);
+                                    Log.d("yes",recipeKey+" matches "+recipeItem.recipeID);
+                                    String imgUri=recipeItem.getImgUri();
+                                    Picasso.get().load(imgUri).into(photo);
+
+                                    toComments.putExtra("userIDComments",usersList.get(finalI).userID);
+                                    toProfile.putExtra("userID",usersList.get(finalI).userID);
+
+                                    nameTv.setText(recipeItem.getName());
+                                    creatorTv.setText("by "+ username);
+                                    cuisineTv.setText(recipeItem.getCuisine().toUpperCase());
+                                    servingsTv.setText(recipeItem.getServing_size() + " SERVINGS");
+                                    preptimeTv.setText(recipeItem.getPreptime() + " MINUTES");
+                                    cooktimeTv.setText(recipeItem.getCookingtime() + " MINUTES");
+                                    descTv.setText(recipeItem.getDesc());
+//                                        Log.d("tag","current amount of likes for this recipe is: "+ recipeItem.getLikes());
+//                                        Log.d("tag","current amount of dislikes for this recipe is: "+ recipeItem.getDislikes());
+
+
+                                    like.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+
+                                            int likes = recipeItem.getLikes();
+                                            int dislikes = recipeItem.getDislikes();
+                                            float rating = ((float)likes / (likes + dislikes)) * 5;
+
+                                            likes++;
+                                            recipeItem.setLikes(likes);
+                                            recipeItem.setDislikes(dislikes);
+
+//                                            Log.d("rating[likes]","likes: "+likes+" dislikes: "+dislikes+" rating: "+rating+"");
+                                            Log.d("RATING LANG",((float)likes / (likes + dislikes)) * 5+"");
+//                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("rating").setValue(recipeItem.getRating());
+                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("likes").setValue(recipeItem.getLikes());
+                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("dislikes").setValue(recipeItem.getDislikes());
+
+                                        }
+                                    });
+
+                                    dislike.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            int likes = recipeItem.getLikes();
+                                            int dislikes = recipeItem.getDislikes();
+
+                                            dislikes++;
+                                            recipeItem.setLikes(likes);
+                                            recipeItem.setDislikes(dislikes);
+//                                            Log.d("rating[dislikes]","likes: "+likes+" dislikes: "+dislikes+" rating: "+rating+"");
+                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("likes").setValue(recipeItem.getLikes());
+                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("dislikes").setValue(recipeItem.getDislikes());
+                                        }
+                                    });
+                                    //IMPORTANT!
+                                    break;
+                                }
+
                                 //for steps
                                 DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Steps").addValueEventListener(new ValueEventListener() {
                                     @Override
@@ -218,11 +277,8 @@ public class RecipePage extends AppCompatActivity {
                                             likes++;
                                             recipeItem.setLikes(likes);
                                             recipeItem.setDislikes(dislikes);
-                                            recipeItem.setRating(rating);
 
                                             Log.d("rating[likes]","likes: "+likes+" dislikes: "+dislikes+" rating: "+rating+"");
-                                            Log.d("RATING LANG",((float)likes / (likes + dislikes)) * 5+"");
-                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("rating").setValue(recipeItem.getRating());
                                             DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("likes").setValue(recipeItem.getLikes());
                                             DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("dislikes").setValue(recipeItem.getDislikes());
 
@@ -239,13 +295,10 @@ public class RecipePage extends AppCompatActivity {
                                             dislikes++;
                                             recipeItem.setLikes(likes);
                                             recipeItem.setDislikes(dislikes);
-                                            recipeItem.setRating(rating);
                                             Log.d("rating[dislikes]","likes: "+likes+" dislikes: "+dislikes+" rating: "+rating+"");
                                             Log.d("RATING LANG",((float)likes / (likes + dislikes)) * 5+"");
                                             DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("likes").setValue(recipeItem.getLikes());
                                             DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("dislikes").setValue(recipeItem.getDislikes());
-                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("rating").setValue(recipeItem.getRating());
-
                                         }
                                     });
                                     //IMPORTANT!
@@ -440,7 +493,6 @@ public class RecipePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //pass recipe key
-
                 toComments.putExtra("recipeKey",recipeKey);
                 startActivity(toComments);
             }
@@ -469,7 +521,6 @@ public class RecipePage extends AppCompatActivity {
         this.steps = new ArrayList<Steps>();
         this.usersList = new ArrayList<User>();
         this.ingredients = new ArrayList<String>();
-        this.searchBtn = findViewById(R.id.searchBtn);
         this.searchRecipes = new ArrayList<>();
         this.usersList = new ArrayList<>();
         this.recipesList = new ArrayList<>();

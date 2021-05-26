@@ -119,7 +119,7 @@ public class editprofile extends AppCompatActivity {
 //                        setName(profile_nameEt.getText().toString());
 //                userEdited.setDesc(descEt.getText().toString());
 //                reference.child(userID).setValue(userEdited);
-                startActivity(new Intent(editprofile.this, OtherProfile.class));
+                startActivity(new Intent(editprofile.this, Profile.class));
             }
         });
 
