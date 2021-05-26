@@ -31,6 +31,7 @@ public class Recipe {
         this.preptime = "";
         this.cookingtime = "";
         this.desc = "";
+        this.rating = 0;
     }
 
 
@@ -146,9 +147,6 @@ public class Recipe {
     public void setRecipeID(String recipeID) {
         this.recipeID = recipeID;
     }
-
-
-
 
     public String getRecipeID(){
         return recipeID;

@@ -7,11 +7,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -113,6 +115,42 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
 //        Log.d("onQueryTextSubmit", query);
         Intent fromOthers = getIntent();
 
+        if(fromOthers.getStringExtra("query")!=null){
+
+            Log.d("objectnamefromOthers","INSIDE THE IF STATEMETN "+fromOthers.getStringExtra("query"));
+            searchRecipes.clear();
+            for(Recipe object : recipesList){
+                Log.d("objectnamefromOthers","inside for loop "+object.name);
+                if(object.name.toLowerCase().contains(fromOthers.getStringExtra("query").toLowerCase())){
+                    Log.d("objectnamefromOthers","inside in statemnet "+object.name);
+                    searchRecipes.add(object);
+                    Log.d("searchRecipes.size",searchRecipes.size()+"");
+                }
+            }
+
+            //MAKE INTENT TO PASS ARRAY TO DISPLAY SEARCH RESULTS
+//                searchResultsAdapter = new ResultsAdapter(searchRecipes,listener);
+            if (searchRecipes == null || searchRecipes.isEmpty()) {
+                searchRv.setVisibility(View.GONE);
+                recipesRv.setVisibility(View.VISIBLE);
+                notice.setVisibility(View.VISIBLE);
+                Log.d("secondIF","hi");
+            }
+            else {
+                LinearLayoutManager llm = new LinearLayoutManager(RecipeBook.this);
+                searchRv.setLayoutManager(llm);
+                searchResultsAdapter = new SearchAdapter(searchRecipes, searchListener);
+                recipesRv.setVisibility(View.GONE);
+                searchRv.setVisibility(View.VISIBLE);
+                notice.setVisibility(View.GONE);
+                searchRv.setAdapter(searchResultsAdapter);
+                Log.d("secondELSE","hi");
+                Log.d("searchResultsAdapter",searchResultsAdapter.getItemCount()+"");
+                searchResultsAdapter.notifyDataSetChanged();
+
+
+            }
+        }
 
 
 
@@ -159,8 +197,7 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
 
 
                 }
-
-                return false;
+                return true;
             }
 
             @Override
