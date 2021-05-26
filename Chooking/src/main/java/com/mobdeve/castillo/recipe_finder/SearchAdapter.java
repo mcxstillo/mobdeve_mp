@@ -30,8 +30,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         this.recipes = recipes;
     }
 
-
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView name, rating, difficulty, preptime;
@@ -101,8 +99,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         String imgUri=recipes.get(position).getImgUri();
         Picasso.get().load(imgUri).into(holder.recipeImg);
 
+        int likes = recipes.get(position).getLikes();
+        int dislikes = recipes.get(position).getDislikes();
+        float rating = ((float) likes / (likes + dislikes)) * 5;
+
         DecimalFormat format = new DecimalFormat("0.##");
-        holder.setRating(format.format(recipes.get(position).getRating()));
+        holder.setRating(format.format(rating));
         holder.setName(recipes.get(position).getName());
         holder.setDifficulty(recipes.get(position).getDifficulty());
     }
