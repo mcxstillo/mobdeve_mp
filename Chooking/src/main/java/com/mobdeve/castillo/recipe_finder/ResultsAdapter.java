@@ -102,7 +102,14 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
 
         int likes = recipes.get(position).getLikes();
         int dislikes = recipes.get(position).getDislikes();
+
         float rating = ((float) likes / (likes + dislikes)) * 5;
+        if(!(rating>=0)){
+            rating = 0;
+        }
+        else{
+            rating =((float) likes / (likes + dislikes)) * 5;
+        }
 
 
         String imgUri=recipes.get(position).getImgUri();

@@ -37,6 +37,7 @@ public class Profile extends AppCompatActivity {
     DrawerLayout navbar;
     private FirebaseUser user;
     private DatabaseReference reference;
+    private DatabaseReference DB;
     private String userID, currentUserID;
     private ImageView profilepic;
     private TextView navUsernameTv, nameProfile, emailProfile, descProfile;
@@ -56,6 +57,20 @@ public class Profile extends AppCompatActivity {
 
         init();
         initFirebase();
+
+        //display's current users name
+        DB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User currentUser = snapshot.getValue(User.class);
+                navUsernameTv.setText(currentUser.name);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
         currentUserID =FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -106,7 +121,7 @@ public class Profile extends AppCompatActivity {
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
         userID = user.getUid();
 
-        DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
+        DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
     }
 

@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.NamedNodeMap;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -101,7 +103,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         int likes = recipes.get(position).getLikes();
         int dislikes = recipes.get(position).getDislikes();
+
         float rating = ((float) likes / (likes + dislikes)) * 5;
+        if(!(rating>=0)){
+            rating = 0;
+        }
+        else{
+            rating =((float) likes / (likes + dislikes)) * 5;
+        }
 
         DecimalFormat format = new DecimalFormat("0.##");
         holder.setRating(format.format(rating));

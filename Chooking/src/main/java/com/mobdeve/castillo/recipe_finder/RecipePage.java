@@ -77,10 +77,122 @@ public class RecipePage extends AppCompatActivity {
                     usersList.add(userID);
                 }
 
+                //display's current users name
+                DB.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        User currentUser = snapshot.getValue(User.class);
+                        navUsernameTv.setText(currentUser.name);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+
+
+
                 //loops all the users to get their UserID
                 for(int i =0;i<usersList.size();i++){
                     Log.d("usersList","userID is "+usersList.get(i).userID);
                     int finalI = i;
+
+                    DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Steps").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Log.d("refsteps",DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Steps")+"");
+                            Log.d("snapshotsteps",snapshot+"");
+                            Log.d("childrencountsteps",snapshot.getChildrenCount()+"");
+                            final long childrenCount = snapshot.getChildrenCount();
+                            steps.clear();
+                            for(int i =0;i<snapshot.getChildrenCount();i++){
+                                Log.d("stepssizefor",steps.size()+"");
+                                int finalI1 = i;
+                                DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Steps").child(String.valueOf(i)).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        Log.d("stepssizebefore",steps.size()+"");
+                                        Log.d("fromResultsKey", finalI1 +"insidesteps"+recipeKey);
+                                        Steps stepItem = snapshot.getValue(Steps.class);
+                                        Log.d("stepItem", Objects.requireNonNull(stepItem).step_desc);
+                                        //steps get added in the array here
+                                        Log.d("stepschildcount",childrenCount+"");
+
+                                        if(steps.size()<childrenCount)
+                                            steps.add(stepItem);
+                                        Log.d("stepssizeafter",steps.size()+"");
+                                        adapter.notifyDataSetChanged();
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+
+                                });
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+
+                    });
+
+                    //for ingredients
+                    DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Ingredients").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Log.d("refingr",DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Ingredients")+"");
+                            Log.d("snapshotingr",snapshot+"");
+                            Log.d("childrencountingr",snapshot.getChildrenCount()+"");
+                            final long childrenCount = snapshot.getChildrenCount();
+                            ingredients.clear();
+
+                            for(int i =0;i<snapshot.getChildrenCount();i++){
+
+                                Log.d("ingsizefor",ingredients.size()+"");
+
+                                DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Ingredients").child(String.valueOf(i)).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        Log.d("ingsizebefore",ingredients.size()+"");
+                                        String item = snapshot.getValue(String.class);
+                                        Log.d("ingchildcount",childrenCount+"");
+                                        if(ingredients.size()<childrenCount)
+                                            ingredients.add(item);
+                                        Log.d("ingsizeafter",ingredients.size()+"");
+                                        ingrAdapter.notifyDataSetChanged();
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+
+                    });
+
+
+
+
 
                     //gets the user and checks their recipes
                     DBOthers.child(usersList.get(finalI).userID).child("Recipes").addValueEventListener(new ValueEventListener() {
@@ -108,6 +220,8 @@ public class RecipePage extends AppCompatActivity {
                                     toProfile.putExtra("userID",usersList.get(finalI).userID);
 
                                     nameTv.setText(recipeItem.getName());
+
+
                                     creatorTv.setText("by "+ username);
                                     cuisineTv.setText(recipeItem.getCuisine().toUpperCase());
                                     servingsTv.setText(recipeItem.getServing_size() + " SERVINGS");
@@ -157,94 +271,9 @@ public class RecipePage extends AppCompatActivity {
                                     break;
                                 }
 
-                                //for steps
-                                DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Steps").addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        Log.d("refsteps",DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Steps")+"");
-                                        Log.d("childrencountsteps",snapshot.getChildrenCount()+"");
-                                        final long childrenCount = snapshot.getChildrenCount();
-                                        steps.clear();
-                                        for(int i =0;i<snapshot.getChildrenCount();i++){
-                                            Log.d("stepssizefor",steps.size()+"");
-                                            int finalI1 = i;
-                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Steps").child(String.valueOf(i)).addValueEventListener(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                    Log.d("stepssizebefore",steps.size()+"");
-                                                    Log.d("fromResultsKey", finalI1 +"insidesteps"+recipeKey);
-                                                    Steps stepItem = snapshot.getValue(Steps.class);
-                                                    Log.d("stepItem", Objects.requireNonNull(stepItem).step_desc);
-                                                    //steps get added in the array here
-                                                    Log.d("stepschildcount",childrenCount+"");
+                                //for steps -- does not show if you put here
 
-                                                    if(steps.size()<childrenCount)
-                                                        steps.add(stepItem);
-                                                    Log.d("stepssizeafter",steps.size()+"");
-                                                    adapter.notifyDataSetChanged();
 
-                                                }
-
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                                }
-
-                                            });
-
-                                        }
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                    }
-
-                                });
-
-                                //for ingredients
-                                DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Ingredients").addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        Log.d("refingr",DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Ingredients")+"");
-                                        Log.d("childrencountingr",snapshot.getChildrenCount()+"");
-                                        final long childrenCount = snapshot.getChildrenCount();
-                                        ingredients.clear();
-
-                                        for(int i =0;i<snapshot.getChildrenCount();i++){
-
-                                            Log.d("ingsizefor",ingredients.size()+"");
-
-                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("Ingredients").child(String.valueOf(i)).addValueEventListener(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                    Log.d("ingsizebefore",ingredients.size()+"");
-                                                    String item = snapshot.getValue(String.class);
-                                                    Log.d("ingchildcount",childrenCount+"");
-                                                    if(ingredients.size()<childrenCount)
-                                                        ingredients.add(item);
-                                                    Log.d("ingsizeafter",ingredients.size()+"");
-                                                    ingrAdapter.notifyDataSetChanged();
-
-                                                }
-
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                                }
-                                            });
-
-                                        }
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                    }
-
-                                });
                                 //if the user's recipe matches
                                 if(recipeItem.recipeID.equals(recipeKey)){
                                     Log.d("usernameINSIDE",username);
@@ -335,6 +364,9 @@ public class RecipePage extends AppCompatActivity {
                     Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
                     Log.d("ownrecipesnapshot",recipeItem+"");
 
+
+
+
                     if(recipeItem.recipeID.equals(recipeKey)){
 
                         FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(recipeItem.creator).addValueEventListener(new ValueEventListener() {
@@ -369,61 +401,93 @@ public class RecipePage extends AppCompatActivity {
                 }
 
 
+
+
                 DB.child("Recipes").child(recipeKey).child("Steps").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Log.d("OWNsnapshotsteps",snapshot+"");
+                        Log.d("OWNchildrencountsteps",snapshot.getChildrenCount()+"");
+                        final long childrenCount = snapshot.getChildrenCount();
                         steps.clear();
                         for(int i =0;i<snapshot.getChildrenCount();i++){
-                            steps.clear();
+                            Log.d("OWNstepssizefor",steps.size()+"");
+
                             DB.child("Recipes").child(recipeKey).child("Steps").child(String.valueOf(i)).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    Log.d("OWNstepssizebefore",steps.size()+"");
                                     Steps stepItem = snapshot.getValue(Steps.class);
-                                    steps.add(stepItem);
+                                    Log.d("stepItem", Objects.requireNonNull(stepItem).step_desc);
+                                    //steps get added in the array here
+                                    Log.d("OWNstepschildcount",childrenCount+"");
+
+                                    if(steps.size()<childrenCount)
+                                        steps.add(stepItem);
+                                    Log.d("OWNstepssizeafter",steps.size()+"");
                                     adapter.notifyDataSetChanged();
+
                                 }
+
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
 
                                 }
+
                             });
 
                         }
+
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
 
                     }
+
                 });
 
-
+                //for ingredients
                 DB.child("Recipes").child(recipeKey).child("Ingredients").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Log.d("OWNsnapshotingr",snapshot+"");
+                        Log.d("OWNchildrencountingr",snapshot.getChildrenCount()+"");
+                        final long childrenCount = snapshot.getChildrenCount();
                         ingredients.clear();
+
                         for(int i =0;i<snapshot.getChildrenCount();i++){
-                            ingredients.clear();
+                            Log.d("OWNingsizefor",ingredients.size()+"");
                             DB.child("Recipes").child(recipeKey).child("Ingredients").child(String.valueOf(i)).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    Log.d("OWNingsizebefore",ingredients.size()+"");
                                     String item = snapshot.getValue(String.class);
-                                    ingredients.add(item);
+                                    Log.d("OWNingchildcount",childrenCount+"");
+                                    if(ingredients.size()<childrenCount)
+                                        ingredients.add(item);
+                                    Log.d("OWNingsizeafter",ingredients.size()+"");
                                     ingrAdapter.notifyDataSetChanged();
+
                                 }
+
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
 
                                 }
                             });
-                            ingredients.clear();
+
                         }
+
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
 
                     }
+
                 });
+
 
             }
 

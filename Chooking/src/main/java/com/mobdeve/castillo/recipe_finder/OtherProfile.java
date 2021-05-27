@@ -34,7 +34,7 @@ public class OtherProfile extends AppCompatActivity {
 
     DrawerLayout navbar;
     private FirebaseUser user;
-    private DatabaseReference reference;
+    private DatabaseReference reference, DB;
     private String userID;
     private ImageView imgProfile;
     private TextView emailProfile, nameProfile, descProfile,navUsernameTv;
@@ -64,6 +64,18 @@ public class OtherProfile extends AppCompatActivity {
         init();
         initFirebase();
 
+        DB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User currentUser = snapshot.getValue(User.class);
+                navUsernameTv.setText(currentUser.name);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         LinearLayoutManager lm = new LinearLayoutManager(OtherProfile.this);
         recipesRv.setLayoutManager(lm);
@@ -92,18 +104,7 @@ public class OtherProfile extends AppCompatActivity {
         }
 
         Log.d("userID",userID);
-        reference.child(userID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User userID = snapshot.getValue(User.class);
-                navUsernameTv.setText(userID.name);
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
 
 
         Log.d("INPROFILE","HELLO");
@@ -145,7 +146,7 @@ public class OtherProfile extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
 
-        DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
+        DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         Intent fromRecipePage = getIntent();
