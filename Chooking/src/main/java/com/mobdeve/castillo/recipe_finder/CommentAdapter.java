@@ -86,6 +86,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                             Picasso.get().load(imgUri).into(holder.profilepic);
 
                             holder.setName(user.name);
+                            holder.name.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent toProfile = new Intent(v.getContext(),OtherProfile.class);
+                                    toProfile.putExtra("userID",user.userID);
+                                    v.getContext().startActivity(toProfile);
+                                }
+                            });
                             holder.setComment(comments.get(position).getComment());
                         }
 

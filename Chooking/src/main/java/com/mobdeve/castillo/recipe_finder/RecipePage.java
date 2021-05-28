@@ -548,7 +548,6 @@ public class RecipePage extends AppCompatActivity {
         this.creatorTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 startActivity(toProfile);
             }
         });
