@@ -201,13 +201,6 @@
                     android:textColor="#686868"
                     android:textSize="16sp" />
 
-                <Button
-                    android:id="@+id/editRecipeBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Edit Recipe" />
-
                 <TextView
                     android:id="@+id/textView9"
                     android:layout_width="match_parent"

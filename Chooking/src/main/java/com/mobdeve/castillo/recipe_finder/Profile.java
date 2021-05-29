@@ -166,7 +166,7 @@ public class Profile extends AppCompatActivity {
     }
 
     public void ClickMyRecipes (View view){
-        Intent type = new Intent(Profile.this, results.class);
+        Intent type = new Intent(Profile.this, SwipeRecipes.class);
         type.putExtra("TYPE", "MY_RECIPES");
         startActivity(type);
     }

@@ -11,7 +11,7 @@ import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -50,7 +50,6 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
     private RecyclerView searchRv;
     private ResultsAdapter adapter;
     private SearchAdapter searchResultsAdapter;
-    private FloatingActionButton createBtn;
     private ResultsAdapter.RecyclerViewClickListener listener;
     private SearchAdapter.RecyclerViewClickListener searchListener;
     private TextView notice;
@@ -348,7 +347,6 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
         this.navbar = findViewById(R.id.navdrawer);
         this.recipes = new ArrayList<>();
         this.recipesRv = (RecyclerView) findViewById(R.id.recipesRv);
-        this.createBtn = findViewById(R.id.createBtn);
         this.notice = findViewById(R.id.noticeTv);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
         this.searchBtn = findViewById(R.id.searchBtn);
@@ -368,7 +366,6 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                 String recipeID = recipes.get(position).getRecipeID();
                 Log.d("RecipeID",recipeID);
                 viewRecipe.putExtra("recipeID",recipeID);
-//                viewRecipe.putExtra("position",position);
                 startActivity(viewRecipe);
             }
         };
@@ -423,7 +420,7 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
     }
 
     public void ClickMyRecipes (View view){
-        Intent type = new Intent(RecipeBook.this, results.class);
+        Intent type = new Intent(RecipeBook.this, SwipeRecipes.class);
         type.putExtra("TYPE", "MY_RECIPES");
         startActivity(type);
     }

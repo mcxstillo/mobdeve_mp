@@ -143,7 +143,7 @@ public class CommentSection extends AppCompatActivity {
     }
 
     public void ClickMyRecipes (View view){
-        Intent type = new Intent(CommentSection.this, results.class);
+        Intent type = new Intent(CommentSection.this, SwipeRecipes.class);
         type.putExtra("TYPE", "MY_RECIPES");
         startActivity(type);
     }

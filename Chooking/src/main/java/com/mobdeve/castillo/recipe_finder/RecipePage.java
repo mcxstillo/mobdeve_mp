@@ -51,8 +51,6 @@ public class RecipePage extends AppCompatActivity {
     private ArrayList<Recipe> recipesList;
     private ArrayList<Recipe> searchRecipes;
     private RecyclerView searchRv;
-    private Button editRecipeBtn;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +69,7 @@ public class RecipePage extends AppCompatActivity {
         //create arraylist of all recipes
         DBOthers.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@android.support.annotation.NonNull DataSnapshot snapshot) {
+            public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
                 //all the users in the DB get added to usersList
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     User userID = dataSnapshot.getValue(User.class);
@@ -218,9 +216,6 @@ public class RecipePage extends AppCompatActivity {
                                     String imgUri=recipeItem.getImgUri();
                                     Picasso.get().load(imgUri).into(photo);
 
-                                    //since own recipe, show edit btn
-                                    editRecipeBtn.setVisibility(View.GONE);
-
                                     toComments.putExtra("userIDComments",usersList.get(finalI).userID);
                                     toProfile.putExtra("userID",usersList.get(finalI).userID);
 
@@ -353,7 +348,7 @@ public class RecipePage extends AppCompatActivity {
 
             }
             @Override
-            public void onCancelled(@android.support.annotation.NonNull DatabaseError error) {
+            public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
 
             }
 
@@ -377,7 +372,6 @@ public class RecipePage extends AppCompatActivity {
 
                                 User userID = snapshot.getValue(User.class);
                                 //since own recipe, show edit btn
-                                editRecipeBtn.setVisibility(View.VISIBLE);
                                 creatorTv.setText("by "+ userID.name);
 
                                 toProfile.putExtra("userID",FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -564,19 +558,6 @@ public class RecipePage extends AppCompatActivity {
                 startActivity(toComments);
             }
         });
-
-        this.editRecipeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent toEditRecipe = new Intent(RecipePage.this,CreateRecipe.class);
-                toEditRecipe.putExtra("TYPE","UPDATE");
-                toEditRecipe.putExtra("recipeID",recipeKey);
-
-                startActivity(toEditRecipe);
-            }
-        });
-
-
     }
 
 
@@ -604,8 +585,6 @@ public class RecipePage extends AppCompatActivity {
         this.usersList = new ArrayList<>();
         this.recipesList = new ArrayList<>();
         this.searchRv = (RecyclerView) findViewById(R.id.searchRv);
-        this.editRecipeBtn = findViewById(R.id.editRecipeBtn);
-
     }
 
 
@@ -635,7 +614,7 @@ public class RecipePage extends AppCompatActivity {
     }
 
     public void ClickMyRecipes (View view){
-        Intent type = new Intent(RecipePage.this, results.class);
+        Intent type = new Intent(RecipePage.this, SwipeRecipes.class);
         type.putExtra("TYPE", "MY_RECIPES");
         startActivity(type);
         finish();

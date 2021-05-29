@@ -233,9 +233,8 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         this.updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // lagay mo nalang update stuff here yey
 
-                
+                reference.child(userID).child("Recipes").child(editRecipeID).child("name").setValue(name.getText().toString());
                 reference.child(userID).child("Recipes").child(editRecipeID).child("cuisine").setValue(selected_cuisine);
                 reference.child(userID).child("Recipes").child(editRecipeID).child("serving_size").setValue(selected_size);
                 reference.child(userID).child("Recipes").child(editRecipeID).child("difficulty").setValue(selected_diff);
@@ -318,7 +317,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                         String t = task.getResult().toString();
 
                         if(type.equals("UPDATE")) {
-                            reference.child(userID).child("Recipes").child(editRecipeID).child("name").setValue(t);
+                            reference.child(userID).child("Recipes").child(editRecipeID).child("imgUri").setValue(t);
                         }else{
                             recipe.setImgUri(t);
                         }
@@ -460,7 +459,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void ClickMyRecipes (View view){
-        Intent type = new Intent(CreateRecipe.this, results.class);
+        Intent type = new Intent(CreateRecipe.this, SwipeRecipes.class);
         type.putExtra("TYPE", "MY_RECIPES");
         startActivity(type);
     }

@@ -153,7 +153,7 @@ public class CreateSteps extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         DBRecipe.child("Steps").setValue(steps);
-                        Intent toResults = new Intent(CreateSteps.this,results.class);
+                        Intent toResults = new Intent(CreateSteps.this,SwipeRecipes.class);
 //                        toResults.putExtra("recipeKey",DBRecipe.getKey());
                         startActivity(toResults);
                     }

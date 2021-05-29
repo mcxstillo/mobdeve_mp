@@ -22,7 +22,6 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
 
     private ArrayList<Recipe> recipes;
     private RecyclerViewClickListener listener;
-    DatabaseReference reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
 
     public ResultsAdapter (ArrayList<Recipe> recipes, RecyclerViewClickListener listener) {
         this.recipes = recipes;
@@ -32,8 +31,6 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
     public ResultsAdapter (ArrayList<Recipe> recipes) {
         this.recipes = recipes;
     }
-
-
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -56,7 +53,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
         @Override
         public void onClick(View v) {
 //            listener.onClick(v, getAdapterPosition());
-            listener.onClick(v, getBindingAdapterPosition());
+            listener.onClick(v, getAdapterPosition());
         }
 
         public void setName(String name) {

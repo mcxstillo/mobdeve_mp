@@ -313,7 +313,7 @@ public class editprofile extends AppCompatActivity {
     }
 
     public void ClickMyRecipes (View view){
-        Intent type = new Intent(editprofile.this, results.class);
+        Intent type = new Intent(editprofile.this, SwipeRecipes.class);
         type.putExtra("TYPE", "MY_RECIPES");
         startActivity(type);
     }

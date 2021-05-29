@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,26 +24,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
-public class results extends AppCompatActivity{
+public class SwipeRecipes extends AppCompatActivity {
 
-    //POSTED RECIPES/SEARCH RESULTS
     DrawerLayout navbar;
-    private RecyclerView resultsRv;
-    private ResultsAdapter adapter;
+    private ArrayList<Recipe> recipes;
+    private SwipeAdapter adapter;
+    private RecyclerView recipeRv;
+    private TextView navUsernameTv, noticeTv;
     private FloatingActionButton createBtn;
-    private ResultsAdapter.RecyclerViewClickListener listener;
-    private TextView noticeTv;
-    ArrayList<Recipe> recipes;
-    private TextView navUsernameTv;
-    private ArrayList<User> usersList;
-    private ArrayList<Recipe> recipesList;
-    private ArrayList<Recipe> searchRecipes;
-    private SearchView searchBtn;
-    private RecyclerView searchRv;
-    private SearchAdapter searchResultsAdapter;
-    private SearchAdapter.RecyclerViewClickListener searchListener;
+    private SwipeAdapter.RecyclerViewClickListener listener;
 
     DatabaseReference DBSearch = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
     DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -52,9 +44,10 @@ public class results extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_results);
+        setContentView(R.layout.activity_swipe_recipes);
 
         init();
+
         DB.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -67,7 +60,7 @@ public class results extends AppCompatActivity{
 
             }
         });
-        //gets all the recipes to display
+
         DB.child("Recipes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -85,11 +78,10 @@ public class results extends AppCompatActivity{
             }
         });
 
-
         this.createBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent create = new Intent(results.this, CreateRecipe.class);
+                Intent create = new Intent(SwipeRecipes.this, CreateRecipe.class);
                 create.putExtra("TYPE", "CREATE");
                 startActivity(create);
             }
@@ -97,47 +89,23 @@ public class results extends AppCompatActivity{
 
         if(recipes == null) {
             noticeTv.setVisibility(View.VISIBLE);
-            resultsRv.setVisibility(View.GONE);
+            recipeRv.setVisibility(View.GONE);
         } else {
             noticeTv.setVisibility(View.GONE);
-            LinearLayoutManager lm = new LinearLayoutManager(results.this);
-            resultsRv.setLayoutManager(lm);
-            adapter = new ResultsAdapter(recipes, listener);
-            resultsRv.setAdapter(adapter);
+            LinearLayoutManager lm = new LinearLayoutManager(SwipeRecipes.this);
+            recipeRv.setLayoutManager(lm);
+            adapter = new SwipeAdapter(recipes, listener);
+            recipeRv.setAdapter(adapter);
         }
-
-
     }
 
     private void init() {
+        this.noticeTv = findViewById(R.id.swipe_noticeTv);
         this.navbar = findViewById(R.id.navdrawer);
-        this.resultsRv = findViewById(R.id.resultsRv);
-        this.recipes = new ArrayList<Recipe>();
-        this.createBtn = findViewById(R.id.createBtn);
-        this.noticeTv = findViewById(R.id.recipes_noticeTv);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
-        this.searchBtn = findViewById(R.id.searchBtn);
-        this.searchRecipes = new ArrayList<>();
-        this.usersList = new ArrayList<>();
-        this.recipesList = new ArrayList<>();
-        this.searchRv = (RecyclerView) findViewById(R.id.searchRv);
-        setOnClickListener();
-    }
-
-
-    private void setOnClickListener() {
-        this.listener = new ResultsAdapter.RecyclerViewClickListener() {
-            @Override
-            public void onClick(View v, int position) {
-                Intent viewRecipe = new Intent(results.this, RecipePage.class);
-
-                String recipeID = recipes.get(position).getRecipeID();
-                Log.d("RecipeID",recipeID);
-                viewRecipe.putExtra("recipeID",recipeID);
-//                viewRecipe.putExtra("position",position);
-                startActivity(viewRecipe);
-            }
-        };
+        this.recipes = new ArrayList<Recipe>();
+        this.recipeRv = (RecyclerView) findViewById(R.id.swipeRecipesRv);
+        this.createBtn = findViewById(R.id.swipe_createRecBtn);
     }
 
     // NAVBAR FUNCTIONS
@@ -156,11 +124,11 @@ public class results extends AppCompatActivity{
     }
 
     public void ClickProfile (View view){
-        startActivity(new Intent(results.this, Profile.class));
+        startActivity(new Intent(SwipeRecipes.this, Profile.class));
     }
 
     public void ClickRecipebook (View view){
-        startActivity(new Intent(results.this, RecipeBook.class));
+        startActivity(new Intent(SwipeRecipes.this, RecipeBook.class));
     }
 
     public void ClickMyRecipes (View view){
@@ -177,7 +145,7 @@ public class results extends AppCompatActivity{
             public void onClick(DialogInterface dialog, int which) {
                 // Logout user form firebase in this function and redirect to MainActivity
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(results.this,MainActivity.class));
+                startActivity(new Intent(SwipeRecipes.this,MainActivity.class));
             }
         });
 
@@ -190,6 +158,4 @@ public class results extends AppCompatActivity{
 
         builder.show();
     }
-
-
 }
