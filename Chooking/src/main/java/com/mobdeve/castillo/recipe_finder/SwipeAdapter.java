@@ -2,6 +2,7 @@ package com.mobdeve.castillo.recipe_finder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -138,9 +139,11 @@ public class SwipeAdapter extends RecyclerView.Adapter<SwipeAdapter.ViewHolder>{
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                reference.child(recipes.get(position).creator).child("Recipes").child(recipes.get(position).recipeID).removeValue();
                 recipes.remove(position);
                 notifyDataSetChanged();
-                // insert delete for the database yey
+
             }
         });
     }
