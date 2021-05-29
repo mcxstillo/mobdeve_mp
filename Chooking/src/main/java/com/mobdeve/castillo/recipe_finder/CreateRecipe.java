@@ -46,6 +46,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -110,6 +111,9 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Recipe currentRecipe = snapshot.getValue(Recipe.class);
+
+                    String imgUri=currentRecipe.imgUri;
+                    Picasso.get().load(imgUri).into(recipeimg);
                     name.setText(currentRecipe.name);
 
 
