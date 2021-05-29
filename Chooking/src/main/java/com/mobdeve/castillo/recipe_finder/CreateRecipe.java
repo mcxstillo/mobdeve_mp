@@ -235,7 +235,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
             public void onClick(View v) {
                 // lagay mo nalang update stuff here yey
 
-                reference.child(userID).child("Recipes").child(editRecipeID).child("name").setValue(name.getText().toString());
+                
                 reference.child(userID).child("Recipes").child(editRecipeID).child("cuisine").setValue(selected_cuisine);
                 reference.child(userID).child("Recipes").child(editRecipeID).child("serving_size").setValue(selected_size);
                 reference.child(userID).child("Recipes").child(editRecipeID).child("difficulty").setValue(selected_diff);
@@ -317,7 +317,12 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                         Toast.makeText(CreateRecipe.this,"Image Uploaded to Firebase", Toast.LENGTH_LONG).show();
                         String t = task.getResult().toString();
 
-                        recipe.setImgUri(t);
+                        if(type.equals("UPDATE")) {
+                            reference.child(userID).child("Recipes").child(editRecipeID).child("name").setValue(t);
+                        }else{
+                            recipe.setImgUri(t);
+                        }
+
                         Log.d("add uri",t);
                     }
                 });
