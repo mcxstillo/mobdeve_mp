@@ -67,6 +67,52 @@ public class CreateSteps extends AppCompatActivity {
             }
         });
 
+        if(fromCreate.getStringExtra("TYPE").equals("UPDATE")){
+            Log.d("from ingr edit","in steps");
+            for(int i=0;i<textFields.size();i++){
+                DB.child("Recipes").child(recipeKey).child("Steps").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        int stepCtr=0;
+                        for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                            Steps stepItem = dataSnapshot.getValue(Steps.class);
+                            Log.d("step is ",stepItem.step_desc);
+                            Log.d("ingr ",stepItem.step_desc+"");
+                            textFields.get(stepCtr).setText(stepItem.step_desc);
+
+                            if(stepCtr== snapshot.getChildrenCount()-1){
+                                break;
+                            }else{
+
+                                stepCtr++;
+                                LinearLayout ll = new LinearLayout(CreateSteps.this);
+                                ll.setLayoutParams(params);
+                                ll.setGravity(17);
+
+                                EditText step = new EditText(CreateSteps.this);
+                                step.setWidth(760);
+                                step.setHint("Add ingredient");
+                                textFields.add(step);
+
+                                ll.addView(step);
+                                mainLayout.addView(ll);
+
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+        }
+
+
+
 
         addBtn.setOnClickListener(new View.OnClickListener() {
 

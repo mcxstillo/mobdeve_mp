@@ -50,6 +50,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
@@ -75,7 +76,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     ArrayAdapter<CharSequence> cuisine_adapter, size_adapter, difficulty_adapter;
     private String selected_cuisine, selected_size, selected_diff; // hi cams use this string to get values ng cuisine and size since dito ko inassign yung values for dropdown
     private Button nextBtn, updateBtn, img_cameraBtn, img_galleryBtn;
-    public String type;
+    public String type,editRecipeID;
     Recipe recipe = new Recipe();
 
 
@@ -84,9 +85,14 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe);
 
+        String[] cuisineArray = getResources().getStringArray(R.array.cuisine_array);
+        String[] sizeArray = getResources().getStringArray(R.array.size_array);
+        String[] difficultyArray = getResources().getStringArray(R.array.difficulty);
+
+
         Intent intent_type = getIntent();
         type = intent_type.getStringExtra("TYPE");
-
+        editRecipeID = intent_type.getStringExtra("recipeID");
 
         init();
 
@@ -95,6 +101,62 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         userID = user.getUid();
         DatabaseReference DB = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         this.recipeKey =Objects.requireNonNull(DB.push().getKey());
+
+
+
+        //if user will edit the recipe
+        if(type.equals("UPDATE")){
+            reference.child(userID).child("Recipes").child(editRecipeID).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Recipe currentRecipe = snapshot.getValue(Recipe.class);
+                    name.setText(currentRecipe.name);
+
+
+                    int c =0;
+                    for(String cuisineStr : cuisineArray){
+                       Log.d("cuisineStr",cuisineStr);
+                        if(cuisineStr.equals(currentRecipe.cuisine)){
+                            cuisine.setSelection(c);
+                            break;
+                        }
+                        c++;
+                    }
+
+                    int ss =0;
+                    for(String sizeStr : sizeArray){
+
+                        if(sizeStr.equals(currentRecipe.serving_size)){
+                            size.setSelection(ss);
+                            break;
+                        }
+                        ss++;
+                    }
+
+                    int d =0;
+                    for(String diffStr : difficultyArray){
+                        if(diffStr.equals(currentRecipe.difficulty)){
+                            difficulty.setSelection(d);
+                            break;
+                        }
+                    d++;
+                    }
+
+                    preptime.setText(currentRecipe.preptime);
+                    cooktime.setText(currentRecipe.cookingtime);
+                    desc.setText(currentRecipe.desc);
+
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.d("Sad", "User Profile Cannot be Displayed");
+                }
+            });
+        }
+
+
+
+
         reference.child(userID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -168,6 +230,21 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View v) {
                 // lagay mo nalang update stuff here yey
+
+                reference.child(userID).child("Recipes").child(editRecipeID).child("name").setValue(name.getText().toString());
+                reference.child(userID).child("Recipes").child(editRecipeID).child("cuisine").setValue(selected_cuisine);
+                reference.child(userID).child("Recipes").child(editRecipeID).child("serving_size").setValue(selected_size);
+                reference.child(userID).child("Recipes").child(editRecipeID).child("difficulty").setValue(selected_diff);
+                reference.child(userID).child("Recipes").child(editRecipeID).child("preptime").setValue(preptime.getText().toString());
+                reference.child(userID).child("Recipes").child(editRecipeID).child("cookingtime").setValue(cooktime.getText().toString());
+                reference.child(userID).child("Recipes").child(editRecipeID).child("desc").setValue(desc.getText().toString());
+
+                Intent toIngr = new Intent(CreateRecipe.this, CreateIngredients.class);
+                Log.d("recipekeycreaterecipe",editRecipeID);
+                toIngr.putExtra("RecipeKey",editRecipeID);
+                toIngr.putExtra("TYPE","UPDATE");
+                startActivity(toIngr);
+
             }
         });
 

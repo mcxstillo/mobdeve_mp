@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +51,7 @@ public class RecipePage extends AppCompatActivity {
     private ArrayList<Recipe> recipesList;
     private ArrayList<Recipe> searchRecipes;
     private RecyclerView searchRv;
+    private Button editRecipeBtn;
 
 
     @Override
@@ -216,6 +218,9 @@ public class RecipePage extends AppCompatActivity {
                                     String imgUri=recipeItem.getImgUri();
                                     Picasso.get().load(imgUri).into(photo);
 
+                                    //since own recipe, show edit btn
+                                    editRecipeBtn.setVisibility(View.GONE);
+
                                     toComments.putExtra("userIDComments",usersList.get(finalI).userID);
                                     toProfile.putExtra("userID",usersList.get(finalI).userID);
 
@@ -364,9 +369,6 @@ public class RecipePage extends AppCompatActivity {
                     Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
                     Log.d("ownrecipesnapshot",recipeItem+"");
 
-
-
-
                     if(recipeItem.recipeID.equals(recipeKey)){
 
                         FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(recipeItem.creator).addValueEventListener(new ValueEventListener() {
@@ -374,6 +376,8 @@ public class RecipePage extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                 User userID = snapshot.getValue(User.class);
+                                //since own recipe, show edit btn
+                                editRecipeBtn.setVisibility(View.VISIBLE);
                                 creatorTv.setText("by "+ userID.name);
 
                                 toProfile.putExtra("userID",FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -561,6 +565,18 @@ public class RecipePage extends AppCompatActivity {
             }
         });
 
+        this.editRecipeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toEditRecipe = new Intent(RecipePage.this,CreateRecipe.class);
+                toEditRecipe.putExtra("TYPE","UPDATE");
+                toEditRecipe.putExtra("recipeID",recipeKey);
+
+                startActivity(toEditRecipe);
+            }
+        });
+
+
     }
 
 
@@ -588,6 +604,7 @@ public class RecipePage extends AppCompatActivity {
         this.usersList = new ArrayList<>();
         this.recipesList = new ArrayList<>();
         this.searchRv = (RecyclerView) findViewById(R.id.searchRv);
+        this.editRecipeBtn = findViewById(R.id.editRecipeBtn);
 
     }
 

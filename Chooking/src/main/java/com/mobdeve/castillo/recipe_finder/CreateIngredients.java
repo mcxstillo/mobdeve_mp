@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.service.autofill.Dataset;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -46,6 +47,8 @@ public class CreateIngredients extends AppCompatActivity {
         //gets the reference of recipes posted
         DatabaseReference DBRecipe = DB.child("Recipes").child(recipeKey);
         String ingrKey = DBRecipe.push().getKey();
+        Intent toSteps = new Intent(CreateIngredients.this, CreateSteps.class);
+
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 50, 0, 50);
@@ -63,8 +66,56 @@ public class CreateIngredients extends AppCompatActivity {
             }
         });
 
-        addBtn.setOnClickListener(new View.OnClickListener() {
+        if(fromCreate.getStringExtra("TYPE").equals("UPDATE")){
+            Log.d("from edit","lesgo");
+            toSteps.putExtra("TYPE","UPDATE");
+            for(int i=0;i<textFields.size();i++){
+                int finalI = i;
 
+                DB.child("Recipes").child(recipeKey).child("Ingredients").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Log.d("there are ", snapshot.getChildrenCount() +" ingredients");
+                        int ingr = 0;
+                        for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                            String ingredient = dataSnapshot.getValue(String.class);
+                            Log.d("ingredient is ",ingredient);
+                            Log.d("ingr ",ingr+"");
+                            textFields.get(ingr).setText(ingredient);
+
+                            if(ingr== snapshot.getChildrenCount()-1){
+                                break;
+                            }else{
+
+                                ingr++;
+                                LinearLayout ll = new LinearLayout(CreateIngredients.this);
+                                ll.setLayoutParams(params);
+                                ll.setGravity(17);
+
+                                EditText step = new EditText(CreateIngredients.this);
+                                step.setWidth(760);
+                                step.setHint("Add ingredient");
+                                textFields.add(step);
+
+                                ll.addView(step);
+                                mainLayout.addView(ll);
+
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+        }
+
+
+        addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DBRecipe.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -102,7 +153,6 @@ public class CreateIngredients extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         DBRecipe.child("Ingredients").setValue(ingredients);
-                        Intent toSteps = new Intent(CreateIngredients.this, CreateSteps.class);
                         toSteps.putExtra("RecipeKey", fromCreate.getStringExtra("RecipeKey"));
                         startActivity(toSteps);
                     }
