@@ -25,6 +25,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -55,7 +56,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
-public class CreateRecipe extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class CreateRecipe extends AppCompatActivity{
 
 
     StorageReference storageReference;
@@ -73,9 +74,8 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
     private ImageView recipeimg;
     private TextView navUsernameTv;
     private EditText name, preptime, cooktime, desc;
-    private Spinner cuisine, size, difficulty;
+    private AutoCompleteTextView cuisine, size, difficulty;
     ArrayAdapter<CharSequence> cuisine_adapter, size_adapter, difficulty_adapter;
-    private String selected_cuisine, selected_size, selected_diff; // hi cams use this string to get values ng cuisine and size since dito ko inassign yung values for dropdown
     private Button nextBtn, updateBtn, img_cameraBtn, img_galleryBtn;
     public String type,editRecipeID;
     Recipe recipe = new Recipe();
@@ -116,12 +116,11 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                     Picasso.get().load(imgUri).into(recipeimg);
                     name.setText(currentRecipe.name);
 
-
                     int c =0;
                     for(String cuisineStr : cuisineArray){
                        Log.d("cuisineStr",cuisineStr);
                         if(cuisineStr.equals(currentRecipe.cuisine)){
-                            cuisine.setSelection(c);
+                            cuisine.setText(currentRecipe.cuisine, false);
                             break;
                         }
                         c++;
@@ -131,7 +130,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                     for(String sizeStr : sizeArray){
 
                         if(sizeStr.equals(currentRecipe.serving_size)){
-                            size.setSelection(ss);
+                            size.setText(currentRecipe.serving_size, false);
                             break;
                         }
                         ss++;
@@ -140,7 +139,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                     int d =0;
                     for(String diffStr : difficultyArray){
                         if(diffStr.equals(currentRecipe.difficulty)){
-                            difficulty.setSelection(d);
+                            difficulty.setText(currentRecipe.difficulty, false);
                             break;
                         }
                     d++;
@@ -204,9 +203,9 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                         recipe.setName(name.getText().toString());
                         Log.d("user",userName.getName());
                         recipe.setCreator(userID);
-                        recipe.setCuisine(selected_cuisine);
-                        recipe.setServing_size(selected_size);
-                        recipe.setDifficulty(selected_diff);
+                        recipe.setCuisine(cuisine.getText().toString());
+                        recipe.setServing_size(size.getText().toString());
+                        recipe.setDifficulty(difficulty.getText().toString());
                         recipe.setPreptime(preptime.getText().toString());
                         recipe.setCookingtime(cooktime.getText().toString());
                         recipe.setDesc(desc.getText().toString());
@@ -225,6 +224,7 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                 Intent toIngr = new Intent(CreateRecipe.this, CreateIngredients.class);
                 Log.d("recipekeycreaterecipe",recipeKey);
                 toIngr.putExtra("RecipeKey",recipeKey);
+                toIngr.putExtra("TYPE", "CREATE");
                 startActivity(toIngr);
             }
         });
@@ -235,9 +235,9 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
             public void onClick(View v) {
 
                 reference.child(userID).child("Recipes").child(editRecipeID).child("name").setValue(name.getText().toString());
-                reference.child(userID).child("Recipes").child(editRecipeID).child("cuisine").setValue(selected_cuisine);
-                reference.child(userID).child("Recipes").child(editRecipeID).child("serving_size").setValue(selected_size);
-                reference.child(userID).child("Recipes").child(editRecipeID).child("difficulty").setValue(selected_diff);
+                reference.child(userID).child("Recipes").child(editRecipeID).child("cuisine").setValue(cuisine.getText().toString());
+                reference.child(userID).child("Recipes").child(editRecipeID).child("serving_size").setValue(size.getText().toString());
+                reference.child(userID).child("Recipes").child(editRecipeID).child("difficulty").setValue(difficulty.getText().toString());
                 reference.child(userID).child("Recipes").child(editRecipeID).child("preptime").setValue(preptime.getText().toString());
                 reference.child(userID).child("Recipes").child(editRecipeID).child("cookingtime").setValue(cooktime.getText().toString());
                 reference.child(userID).child("Recipes").child(editRecipeID).child("desc").setValue(desc.getText().toString());
@@ -380,28 +380,12 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String selected = parent.getItemAtPosition(position).toString();
-        switch (parent.getId()) {
-            case R.id.create_cuisineEt: this.selected_cuisine = selected; break;
-            case R.id.create_sizeEt: this.selected_size = selected; break;
-            case R.id.create_difficultyEt:Et: this.selected_diff = selected; break;
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
     private void init() {
         this.navbar = findViewById(R.id.navdrawer);
         this.name = findViewById(R.id.create_nameEt);
-        this.cuisine = (Spinner) findViewById(R.id.create_cuisineEt);
-        this.size = (Spinner) findViewById(R.id.create_sizeEt);
-        this.difficulty = (Spinner) findViewById(R.id.create_difficultyEt);
+        this.cuisine = findViewById(R.id.create_cuisineEt);
+        this.size = findViewById(R.id.create_sizeEt);
+        this.difficulty = findViewById(R.id.create_difficultyEt);
         this.preptime = findViewById(R.id.create_prepEt);
         this.cooktime = findViewById(R.id.create_cookEt);
         this.desc = findViewById(R.id.create_descEt);
@@ -420,19 +404,15 @@ public class CreateRecipe extends AppCompatActivity implements AdapterView.OnIte
                            updateBtn.setVisibility(View.VISIBLE); break;
         }
 
-        cuisine_adapter = ArrayAdapter.createFromResource(this,R.array.cuisine_array,R.layout.support_simple_spinner_dropdown_item);
-        size_adapter = ArrayAdapter.createFromResource(this, R.array.size_array,R.layout.support_simple_spinner_dropdown_item);
-        difficulty_adapter = ArrayAdapter.createFromResource(this, R.array.difficulty,R.layout.support_simple_spinner_dropdown_item);
+        cuisine_adapter = ArrayAdapter.createFromResource(this,R.array.cuisine_array,R.layout.dropdown_item);
+        size_adapter = ArrayAdapter.createFromResource(this, R.array.size_array,R.layout.dropdown_item);
+        difficulty_adapter = ArrayAdapter.createFromResource(this, R.array.difficulty,R.layout.dropdown_item);
         cuisine_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         size_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         cuisine.setAdapter(cuisine_adapter);
         size.setAdapter(size_adapter);
         difficulty.setAdapter(difficulty_adapter);
-
-        cuisine.setOnItemSelectedListener(this);
-        size.setOnItemSelectedListener(this);
-        difficulty.setOnItemSelectedListener(this);
     }
 
     // NAVBAR FUNCTIONS

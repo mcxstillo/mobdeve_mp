@@ -3,6 +3,7 @@ package com.mobdeve.castillo.recipe_finder;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +16,8 @@ import androidx.annotation.NonNull;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +48,7 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
     private DatabaseReference reference;
     private DatabaseReference DBSearch;
     private String userID;
+    private ImageView supportBtn;
     private ArrayList<Recipe> recipes;
     private RecyclerView recipesRv;
     private RecyclerView searchRv;
@@ -138,6 +142,21 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                                         recipesRv.setAdapter(adapter);
                                         Log.d("secondELSE","hi");
                                         Log.d("adaptercount",adapter.getItemCount()+"");
+
+                                        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                                            @Override
+                                            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                                                return false;
+                                            }
+
+                                            @Override
+                                            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                                                // put code for db delete here hehehehe
+                                                recipes.remove(viewHolder.getAdapterPosition());
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        }).attachToRecyclerView(recipesRv);
+
                                         adapter.notifyDataSetChanged();
                                     }
 
@@ -214,14 +233,29 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                 Log.d("secondELSE","hi");
                 Log.d("searchResultsAdapter",searchResultsAdapter.getItemCount()+"");
                 searchResultsAdapter.notifyDataSetChanged();
-
-
             }
         }
 
+        supportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(RecipeBook.this);
+                builder.setTitle("Recipe Book");
+                builder.setMessage("This is your recipe book where you can see recipes you have liked for easy access \n " +
+                        "\n" +
+                        "Swipe to remove any recipe from the recipe book");
+                builder.setNeutralButton("Got it", new DialogInterface.OnClickListener() {
 
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
 
-        //di nattrigger if galing sa iba
+                builder.show();
+            }
+        });
+
         searchBtn.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -261,8 +295,6 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                     Log.d("secondELSE","hi");
                     Log.d("searchResultsAdapter",searchResultsAdapter.getItemCount()+"");
                     searchResultsAdapter.notifyDataSetChanged();
-
-
                 }
                 return true;
             }
@@ -273,59 +305,6 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                 return false;
             }
         });
-
-
-        //SEARCH FUNCTION---
-
-
-        //loading recyclerview and array
-//        reference.child("Liked").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                Log.d("snapshotcount",snapshot.getChildrenCount()+"");
-//                recipes.clear();
-//
-//                //check if the recipe exists before adding to liked
-//
-//                Log.d("beforeadding",""+recipes.size());
-//                    for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-//                        Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
-//                        Log.d("recipeboookitem",recipeItem.recipeID);
-//                        dataSnapshot.getValue(Recipe.class);
-//
-//
-//
-//                        recipes.add(recipeItem);
-//                        Log.d("afteradding",""+recipes.size());
-//
-//                    }
-//
-//                        if (recipes == null || recipes.isEmpty()) {
-//                            recipesRv.setVisibility(View.GONE);
-//                            notice.setVisibility(View.VISIBLE);
-//                            Log.d("secondIF","hi");
-//                        }
-//                        else {
-//                            LinearLayoutManager lm = new LinearLayoutManager(RecipeBook.this);
-//                            recipesRv.setLayoutManager(lm);
-//                            adapter = new ResultsAdapter(recipes, listener);
-//                            searchRv.setVisibility(View.GONE);
-//                            recipesRv.setVisibility(View.VISIBLE);
-//                            notice.setVisibility(View.GONE);
-//                            recipesRv.setAdapter(adapter);
-//                            Log.d("secondELSE","hi");
-//                            Log.d("adaptercount",adapter.getItemCount()+"");
-//                            adapter.notifyDataSetChanged();
-//                        }
-//
-//                }
-//
-//            @Override
-//            public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
-//
-//            }
-//        });
-
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -342,10 +321,10 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
 
     }
 
-
     private void init() {
         this.navbar = findViewById(R.id.navdrawer);
         this.recipes = new ArrayList<>();
+        this.supportBtn = findViewById(R.id.book_supportBtn);
         this.recipesRv = (RecyclerView) findViewById(R.id.recipesRv);
         this.notice = findViewById(R.id.noticeTv);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);

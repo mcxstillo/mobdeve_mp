@@ -89,9 +89,10 @@ public class Profile extends AppCompatActivity {
                     nameProfile.setText(name);
                     descProfile.setText(desc);
 
-                    Picasso.get().load(userProfile.profPicID).into(profilepic);
-
-                    Picasso.get().load(userProfile.profPicID).into(profilepic);
+                    if (userProfile.getProfPicID() == null)
+                        profilepic.setImageResource(R.drawable.ic_profilephoto);
+                    else
+                        Picasso.get().load(userProfile.profPicID).into(profilepic);
 
                     Log.d("email",email +"");
                     Log.d("name",name +"");

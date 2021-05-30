@@ -19,64 +19,72 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:gravity="center"
-            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/action_bar">
 
-            <ImageView
-                android:id="@+id/imgProfile"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_marginTop="40dp"
-                android:clickable="false"
-                tools:srcCompat="@drawable/ic_profilephoto" />
-
-            <TextView
-                android:id="@+id/nameProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/copse"
-                android:text="@string/sample_name"
-                android:textColor="#000000"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/emailProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/open_sans"
-                android:text="@string/sample_email"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/descProfile"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:fontFamily="@font/open_sans"
-                android:hint="Add a description"
-                android:text="@string/sample_about"
-                android:textAlignment="center"
-                android:textColor="#000000"
-                android:textSize="16sp" />
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="20dp">
 
-            <Button
-                android:id="@+id/editBtn"
-                android:layout_width="137dp"
-                android:layout_height="wrap_content"
-                android:text="Edit Profile"
-                android:visibility="visible"
-                app:backgroundTint="#FF8227" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imgProfile"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="70dp"
+                    android:scaleType="centerCrop"
+                    app:civ_border_color="#FFFFFF"
+                    app:civ_border_width="4dp"
+                    app:srcCompat="@drawable/ic_profilephoto" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/nameProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/copse"
+                    android:text="@string/sample_name"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/emailProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/open_sans"
+                    android:text="@string/sample_email"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/descProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:fontFamily="@font/open_sans"
+                    android:hint="Add a description"
+                    android:text="@string/sample_about"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/editBtn"
+                    android:layout_width="137dp"
+                    android:layout_height="wrap_content"
+                    android:text="Edit Profile"
+                    android:visibility="visible"
+                    app:backgroundTint="#FF8227" />
+            </LinearLayout>
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

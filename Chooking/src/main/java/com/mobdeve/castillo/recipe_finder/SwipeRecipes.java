@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 public class SwipeRecipes extends AppCompatActivity {
 
     DrawerLayout navbar;
+    private ImageView supportBtn;
     private ArrayList<Recipe> recipes;
     private SwipeAdapter adapter;
     private RecyclerView recipeRv;
@@ -97,9 +99,31 @@ public class SwipeRecipes extends AppCompatActivity {
             adapter = new SwipeAdapter(recipes, listener);
             recipeRv.setAdapter(adapter);
         }
+
+        supportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(SwipeRecipes.this);
+                builder.setTitle("My Recipes");
+                builder.setMessage("This is where you can find recipes you have posted for the others to see! \n " +
+                        "\n" +
+                        "Swipe on your recipes if you wish to edit or delete your recipes");
+                builder.setNeutralButton("Got it", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.show();
+            }
+        });
     }
 
     private void init() {
+        this.supportBtn = findViewById(R.id.swipe_supportBtn);
+        supportBtn.setImageResource(R.drawable.ic_support);
         this.noticeTv = findViewById(R.id.swipe_noticeTv);
         this.navbar = findViewById(R.id.navdrawer);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);

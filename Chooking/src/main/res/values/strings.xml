@@ -3,6 +3,7 @@
     <string name="welcome">Welcome!</string>
     <string name="recipebook">My Recipe Book</string>
     <string name="myrecipes">My Recipes</string>
+    <string name="delete_recipebook">Swipe to delete from Recipe Book</string>
 
     // Registration strings
     <string name="register">REGISTER</string>

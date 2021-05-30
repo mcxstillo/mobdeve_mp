@@ -37,7 +37,6 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
         public TextView name, rating, difficulty, preptime;
         public ImageView recipeImg;
 
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 

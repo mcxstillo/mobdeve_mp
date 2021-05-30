@@ -2,7 +2,11 @@ package com.mobdeve.castillo.recipe_finder;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.service.autofill.Dataset;
@@ -24,6 +28,7 @@ import java.util.ArrayList;
 
 public class CreateIngredients extends AppCompatActivity {
 
+    DrawerLayout navbar;
     private ArrayList<String> ingredients;
     private ArrayList<EditText> textFields;
     private LinearLayout mainLayout;
@@ -93,7 +98,7 @@ public class CreateIngredients extends AppCompatActivity {
                                 ll.setGravity(17);
 
                                 EditText step = new EditText(CreateIngredients.this);
-                                step.setWidth(760);
+                                step.setWidth(770);
                                 step.setHint("Add ingredient");
                                 textFields.add(step);
 
@@ -129,7 +134,7 @@ public class CreateIngredients extends AppCompatActivity {
                         ll.setGravity(17);
 
                         EditText step = new EditText(CreateIngredients.this);
-                        step.setWidth(760);
+                        step.setWidth(770);
                         step.setHint("Add ingredient");
                         textFields.add(step);
 
@@ -154,7 +159,13 @@ public class CreateIngredients extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         DBRecipe.child("Ingredients").setValue(ingredients);
                         toSteps.putExtra("RecipeKey", fromCreate.getStringExtra("RecipeKey"));
-                        startActivity(toSteps);
+
+                        if (fromCreate.getStringExtra("TYPE").equals("CREATE"))
+                            toSteps.putExtra("TYPE", "CREATE");
+                        else if (fromCreate.getStringExtra("TYPE").equals("UPDATE"))
+                            toSteps.putExtra("TYPE", "UPDATE");
+
+                            startActivity(toSteps);
                     }
 
                     @Override
@@ -170,6 +181,7 @@ public class CreateIngredients extends AppCompatActivity {
     }
 
     private void init() {
+        this.navbar = findViewById(R.id.navdrawer);
         this.ingredients = new ArrayList<String>();
         this.textFields = new ArrayList<EditText>();
         this.firstIngr = findViewById(R.id.firstIngrEt);
@@ -178,5 +190,57 @@ public class CreateIngredients extends AppCompatActivity {
         this.nextBtn = findViewById(R.id.ingrNextBtn);
 
         textFields.add(firstIngr);
+    }
+
+    // NAVBAR FUNCTIONS
+    public void ClickMenu(View view) {
+        openDrawer(navbar);
+    }
+
+    public static void openDrawer (DrawerLayout drawer) {
+        drawer.openDrawer(GravityCompat.START);
+    }
+
+    public static void closeDrawer(DrawerLayout drawer) {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+    }
+
+    public void ClickProfile (View view){
+        startActivity(new Intent(CreateIngredients.this, Profile.class));
+    }
+
+    public void ClickRecipebook (View view){
+        startActivity(new Intent(CreateIngredients.this, RecipeBook.class));
+    }
+
+    public void ClickMyRecipes (View view){
+        Intent type = new Intent(CreateIngredients.this, SwipeRecipes.class);
+        type.putExtra("TYPE", "MY_RECIPES");
+        startActivity(type);
+    }
+
+    public void ClickLogout(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Logout");
+        builder.setMessage("Are you sure you want to logout?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Logout user form firebase in this function and redirect to MainActivity
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(CreateIngredients.this,MainActivity.class));
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
     }
 }

@@ -1,5 +1,7 @@
 package com.mobdeve.castillo.recipe_finder;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +30,7 @@ import java.util.Objects;
 
 public class CreateSteps extends AppCompatActivity {
 
+    DrawerLayout navbar;
     private ArrayList<Steps> steps;
     private ArrayList<EditText> textFields;
     private LinearLayout mainLayout;
@@ -90,7 +95,7 @@ public class CreateSteps extends AppCompatActivity {
                                 ll.setGravity(17);
 
                                 EditText step = new EditText(CreateSteps.this);
-                                step.setWidth(760);
+                                step.setWidth(770);
                                 step.setHint("Add ingredient");
                                 textFields.add(step);
 
@@ -156,6 +161,7 @@ public class CreateSteps extends AppCompatActivity {
                         Intent toResults = new Intent(CreateSteps.this,SwipeRecipes.class);
 //                        toResults.putExtra("recipeKey",DBRecipe.getKey());
                         startActivity(toResults);
+                        finish();
                     }
 
                     @Override
@@ -171,6 +177,7 @@ public class CreateSteps extends AppCompatActivity {
     }
 
     private void init() {
+        this.navbar = findViewById(R.id.navdrawer);
         this.steps = new ArrayList<Steps>();
         this.textFields = new ArrayList<EditText>();
         this.firstStep = findViewById(R.id.firstStepEt);
@@ -180,6 +187,58 @@ public class CreateSteps extends AppCompatActivity {
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
 
         textFields.add(firstStep);
+    }
+
+    // NAVBAR FUNCTIONS
+    public void ClickMenu(View view) {
+        openDrawer(navbar);
+    }
+
+    public static void openDrawer (DrawerLayout drawer) {
+        drawer.openDrawer(GravityCompat.START);
+    }
+
+    public static void closeDrawer(DrawerLayout drawer) {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+    }
+
+    public void ClickProfile (View view){
+        startActivity(new Intent(CreateSteps.this, Profile.class));
+    }
+
+    public void ClickRecipebook (View view){
+        startActivity(new Intent(CreateSteps.this, RecipeBook.class));
+    }
+
+    public void ClickMyRecipes (View view){
+        Intent type = new Intent(CreateSteps.this, SwipeRecipes.class);
+        type.putExtra("TYPE", "MY_RECIPES");
+        startActivity(type);
+    }
+
+    public void ClickLogout(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Logout");
+        builder.setMessage("Are you sure you want to logout?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Logout user form firebase in this function and redirect to MainActivity
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(CreateSteps.this,MainActivity.class));
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
     }
 }
 

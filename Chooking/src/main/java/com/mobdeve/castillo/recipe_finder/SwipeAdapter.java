@@ -131,7 +131,6 @@ public class SwipeAdapter extends RecyclerView.Adapter<SwipeAdapter.ViewHolder>{
                 Intent toEditRecipe = new Intent(context,CreateRecipe.class);
                 toEditRecipe.putExtra("TYPE","UPDATE");
                 toEditRecipe.putExtra("recipeID", recipes.get(position).getRecipeID());
-
                 context.startActivity(toEditRecipe);
             }
         });
