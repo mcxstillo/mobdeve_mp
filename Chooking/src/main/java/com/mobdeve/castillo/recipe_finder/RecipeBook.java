@@ -86,40 +86,29 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     User userID = dataSnapshot.getValue(User.class);
                     usersList.add(userID);
-                    Log.d("userid",userID.userID);
-
-
+                    recipesList.clear();
                     DBSearch.child(userID.userID).child("Recipes").addValueEventListener(new ValueEventListener() {
-//                    DBSearch.child(dataSnapshot.getValue(User.class).userID).child("Recipes").addValueEventListener(new ValueEventListener() {
-//                      reference.child("Recipes").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
                             recipes.clear();
                             for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                                 Recipe recipe = dataSnapshot.getValue(Recipe.class);
                                 recipesList.add(recipe);
-                                Log.d("array",recipesList+"");
                             }
 
 
                             reference.child("Liked").addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    Log.d("snapshotcount",snapshot.getChildrenCount()+"");
                                     recipes.clear();
-                                    Log.d("beforeadding",""+recipes.size());
 
                                     for(DataSnapshot dataSnapshot : snapshot.getChildren()){
 
                                         Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
-                                        Log.d("recipeboookitem",recipeItem.recipeID);
                                         dataSnapshot.getValue(Recipe.class);
 
                                         //check if the recipe exists before adding to liked
-                                        Log.d("recipesListcontains",recipesList.contains(recipeItem)+"");
-
                                             for(int i =0;i<recipesList.size();i++){
-                                                Log.d("nameofrecipe",recipesList.get(i).recipeID);
                                                  if(recipesList.get(i).recipeID.equals(recipeItem.recipeID)){
                                                     recipes.add(recipeItem);
                                                  }
@@ -130,7 +119,6 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                                     if (recipes == null || recipes.isEmpty()) {
                                         recipesRv.setVisibility(View.GONE);
                                         notice.setVisibility(View.VISIBLE);
-                                        Log.d("secondIF","hi");
                                     }
                                     else {
                                         LinearLayoutManager lm = new LinearLayoutManager(RecipeBook.this);
@@ -140,26 +128,26 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                                         recipesRv.setVisibility(View.VISIBLE);
                                         notice.setVisibility(View.GONE);
                                         recipesRv.setAdapter(adapter);
-                                        Log.d("secondELSE","hi");
-                                        Log.d("adaptercount",adapter.getItemCount()+"");
-
-                                        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-                                            @Override
-                                            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                                                return false;
-                                            }
-
-                                            @Override
-                                            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                                                // put code for db delete here hehehehe
-                                                recipes.remove(viewHolder.getAdapterPosition());
-                                                adapter.notifyDataSetChanged();
-                                            }
-                                        }).attachToRecyclerView(recipesRv);
 
                                         adapter.notifyDataSetChanged();
                                     }
 
+
+                                    new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                                        @Override
+                                        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                                            return false;
+                                        }
+
+                                        @Override
+                                        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                                            reference.child("Liked").child(recipes.get(viewHolder.getAdapterPosition()).recipeID).removeValue();
+                                            recipes.remove(viewHolder.getAdapterPosition());
+                                            adapter.notifyDataSetChanged();
+//                                            recipesRv.setAdapter(adapter);
+                                        }
+
+                                    }).attachToRecyclerView(recipesRv);
 
                                 }
 
@@ -168,19 +156,6 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
 
                                 }
                             });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                         }
 
@@ -203,24 +178,18 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
 
         if(fromOthers.getStringExtra("query")!=null){
 
-            Log.d("objectnamefromOthers","INSIDE THE IF STATEMETN "+fromOthers.getStringExtra("query"));
             searchRecipes.clear();
             for(Recipe object : recipesList){
-                Log.d("objectnamefromOthers","inside for loop "+object.name);
                 if(object.name.toLowerCase().contains(fromOthers.getStringExtra("query").toLowerCase())){
-                    Log.d("objectnamefromOthers","inside in statemnet "+object.name);
                     searchRecipes.add(object);
-                    Log.d("searchRecipes.size",searchRecipes.size()+"");
                 }
             }
 
             //MAKE INTENT TO PASS ARRAY TO DISPLAY SEARCH RESULTS
-//                searchResultsAdapter = new ResultsAdapter(searchRecipes,listener);
             if (searchRecipes == null || searchRecipes.isEmpty()) {
                 searchRv.setVisibility(View.GONE);
                 recipesRv.setVisibility(View.VISIBLE);
                 notice.setVisibility(View.VISIBLE);
-                Log.d("secondIF","hi");
             }
             else {
                 LinearLayoutManager llm = new LinearLayoutManager(RecipeBook.this);
@@ -230,8 +199,6 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                 searchRv.setVisibility(View.VISIBLE);
                 notice.setVisibility(View.GONE);
                 searchRv.setAdapter(searchResultsAdapter);
-                Log.d("secondELSE","hi");
-                Log.d("searchResultsAdapter",searchResultsAdapter.getItemCount()+"");
                 searchResultsAdapter.notifyDataSetChanged();
             }
         }
@@ -259,30 +226,22 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
         searchBtn.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                Log.d("recipesListSize",recipesList.size()+"");
-//                Log.d("searchRecipesSize",searchRecipes.size()+"");
 
                 Log.d("query",query);
                 //if query from get intent is null, yung nasa baba
                 //put query here
-
-
                 searchRecipes.clear();
                 for(Recipe object : recipesList){
-                    Log.d("objectname",object.name);
                     if(object.name.toLowerCase().contains(query.toLowerCase())){
-                        Log.d("objectname",object.name);
                         searchRecipes.add(object);
                     }
                 }
 
                 //MAKE INTENT TO PASS ARRAY TO DISPLAY SEARCH RESULTS
-//                searchResultsAdapter = new ResultsAdapter(searchRecipes,listener);
                 if (searchRecipes == null || searchRecipes.isEmpty()) {
                     searchRv.setVisibility(View.GONE);
                     recipesRv.setVisibility(View.VISIBLE);
                     notice.setVisibility(View.VISIBLE);
-                    Log.d("secondIF","hi");
                 }
                 else {
                     LinearLayoutManager llm = new LinearLayoutManager(RecipeBook.this);
@@ -292,8 +251,6 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                     searchRv.setVisibility(View.VISIBLE);
                     notice.setVisibility(View.GONE);
                     searchRv.setAdapter(searchResultsAdapter);
-                    Log.d("secondELSE","hi");
-                    Log.d("searchResultsAdapter",searchResultsAdapter.getItemCount()+"");
                     searchResultsAdapter.notifyDataSetChanged();
                 }
                 return true;
@@ -301,7 +258,6 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.d("onQueryTextChange", newText);
                 return false;
             }
         });
@@ -360,7 +316,6 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                 Log.d("RecipeID",recipeID);
                 viewRecipe.putExtra("recipeID",recipeID);
                 //in going to recipebook, pass arraylist of recipes, loop that in the thing to see if nag match ba sa clinick nung user, then display the details
-//                viewRecipe.putExtra("position",position);
                 startActivity(viewRecipe);
             }
         };
