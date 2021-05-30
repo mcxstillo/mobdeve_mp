@@ -64,6 +64,7 @@
     <string name="stepnum">1</string>
     <string name="comments">COMMENTS ></string>
     <string name="commentbtn">COMMENT</string>
+    <string name="comment_notice">No comments for this recipe yet.</string>
     <string name="comment_hint">What are your thoughts?</string>
     <string name="samplecomment">This was an interesting and easy recipe to follow</string>
     <string name="stepdesc">In a medium bowl, add milk, baking powder, vanilla, mayonnaise and egg yolks. Sift in cake flour using a flour sifter or fine mesh strainer. Mix with a whisk until batter is smooth and the mixture is a pale yellow.</string>

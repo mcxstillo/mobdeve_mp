@@ -14,15 +14,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,14 +26,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-/*import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;*/
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.lang.reflect.Type;
 
 public class RecipeBook extends AppCompatActivity implements Serializable {
 
@@ -113,7 +104,6 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                                                     recipes.add(recipeItem);
                                                  }
                                             }
-
                                     }
 
                                     if (recipes == null || recipes.isEmpty()) {
@@ -123,15 +113,14 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                                     else {
                                         LinearLayoutManager lm = new LinearLayoutManager(RecipeBook.this);
                                         recipesRv.setLayoutManager(lm);
-                                        adapter = new ResultsAdapter(recipes, listener);
-                                        searchRv.setVisibility(View.GONE);
                                         recipesRv.setVisibility(View.VISIBLE);
-                                        notice.setVisibility(View.GONE);
+                                        adapter = new ResultsAdapter(recipes, listener);
                                         recipesRv.setAdapter(adapter);
+                                        searchRv.setVisibility(View.GONE);
+                                        notice.setVisibility(View.GONE);
 
                                         adapter.notifyDataSetChanged();
                                     }
-
 
                                     new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                                         @Override

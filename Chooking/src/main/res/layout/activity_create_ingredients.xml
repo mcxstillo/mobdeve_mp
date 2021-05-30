@@ -61,8 +61,8 @@
                             android:layout_width="290dp"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:hint="@string/addingr"
-                            android:inputType="textPersonName" />
+                            android:inputType="textMultiLine"
+                            android:hint="@string/addingr" />
                     </LinearLayout>
                 </ScrollView>
 

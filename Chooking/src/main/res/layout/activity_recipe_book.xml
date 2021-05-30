@@ -78,6 +78,7 @@
                     android:id="@+id/recipesRv"
                     android:layout_width="391dp"
                     android:layout_height="match_parent"
+                    android:paddingBottom="30dp"
                     android:textAlignment="center">
 
                 </androidx.recyclerview.widget.RecyclerView>
@@ -86,6 +87,7 @@
                     android:id="@+id/searchRv"
                     android:layout_width="391dp"
                     android:layout_height="match_parent"
+                    android:paddingBottom="30dp"
                     android:textAlignment="center">
 
                 </androidx.recyclerview.widget.RecyclerView>

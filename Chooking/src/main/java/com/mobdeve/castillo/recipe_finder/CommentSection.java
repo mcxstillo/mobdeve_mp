@@ -34,7 +34,7 @@ public class CommentSection extends AppCompatActivity {
     private ImageButton sendBtn;
     private ArrayList<Comment> comments;
     private CommentAdapter adapter;
-    private TextView navUsernameTv;
+    private TextView navUsernameTv, notice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,17 +51,6 @@ public class CommentSection extends AppCompatActivity {
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Comment comment = new Comment();
 
-//        if (comments == null || comments.isEmpty()) {
-//            commentsRv.setVisibility(View.GONE);
-//        }
-//        else {
-//            LinearLayoutManager llm = new LinearLayoutManager(CommentSection.this);
-//            commentsRv.setLayoutManager(llm);
-//            this.adapter = new CommentAdapter(comments);
-//            commentsRv.setAdapter(adapter);
-//            adapter.notifyDataSetChanged();
-//        }
-
         Log.d("commentkey",commentKey);
         //loop the data in the db and put in array
         DBComment.addValueEventListener(new ValueEventListener() {
@@ -73,6 +62,15 @@ public class CommentSection extends AppCompatActivity {
 //                    String commentItem = dataSnapshot.getValue(String.class);
                     Log.d("commentItem",commentItem+"");
                     comments.add(commentItem);
+                }
+
+                if(comments == null || comments.isEmpty()) {
+                    Log.d("COMMENTS EMPTY", "" + comments);
+                    notice.setVisibility(View.VISIBLE);
+                }
+                else {
+                    Log.d("COMMENTS CONTENT", "" + comments);
+                    notice.setVisibility(View.GONE);
                 }
                 //when user submits a comment
                 sendBtn.setOnClickListener(new View.OnClickListener() {
@@ -87,6 +85,7 @@ public class CommentSection extends AppCompatActivity {
 
                     }
                 });
+
                 adapter.notifyDataSetChanged();
             }
 
@@ -98,20 +97,16 @@ public class CommentSection extends AppCompatActivity {
             }
         });
 
-
-
-
-
         LinearLayoutManager lm = new LinearLayoutManager(CommentSection.this);
         this.commentsRv.setLayoutManager(lm);
         this.adapter = new CommentAdapter(comments);
         this.commentsRv.setAdapter(this.adapter);
-
     }
 
     private void init() {
         this.navbar = findViewById(R.id.navdrawer);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
+        this.notice = findViewById(R.id.comments_noticeTv);
         this.commentsRv = (RecyclerView) findViewById(R.id.commentsRv);
         this.commentEt = findViewById(R.id.commentEt);
         this.sendBtn = findViewById(R.id.sendBtn);

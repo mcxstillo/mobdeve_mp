@@ -11,7 +11,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,8 +23,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -71,6 +68,18 @@ public class SwipeRecipes extends AppCompatActivity {
                     dataSnapshot.getValue(Recipe.class);
                     recipes.add(recipeItem);
                 }
+
+                if(recipes == null)
+                    noticeTv.setVisibility(View.VISIBLE);
+                else {
+                    noticeTv.setVisibility(View.GONE);
+                    noticeTv.setVisibility(View.GONE);
+                    LinearLayoutManager lm = new LinearLayoutManager(SwipeRecipes.this);
+                    recipeRv.setLayoutManager(lm);
+                    adapter = new SwipeAdapter(recipes, listener);
+                    recipeRv.setAdapter(adapter);
+                }
+
                 adapter.notifyDataSetChanged();
             }
 
@@ -88,17 +97,6 @@ public class SwipeRecipes extends AppCompatActivity {
                 startActivity(create);
             }
         });
-
-        if(recipes == null) {
-            noticeTv.setVisibility(View.VISIBLE);
-            recipeRv.setVisibility(View.GONE);
-        } else {
-            noticeTv.setVisibility(View.GONE);
-            LinearLayoutManager lm = new LinearLayoutManager(SwipeRecipes.this);
-            recipeRv.setLayoutManager(lm);
-            adapter = new SwipeAdapter(recipes, listener);
-            recipeRv.setAdapter(adapter);
-        }
 
         supportBtn.setOnClickListener(new View.OnClickListener() {
             @Override

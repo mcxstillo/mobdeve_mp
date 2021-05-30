@@ -249,6 +249,7 @@ public class RecipePage extends AppCompatActivity {
 //                                            DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("rating").setValue(recipeItem.getRating());
                                             DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("likes").setValue(recipeItem.getLikes());
                                             DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("dislikes").setValue(recipeItem.getDislikes());
+                                            Toast.makeText(RecipePage.this, "Left a like for this recipe", Toast.LENGTH_SHORT).show();
 
                                         }
                                     });
@@ -262,9 +263,9 @@ public class RecipePage extends AppCompatActivity {
                                             dislikes++;
                                             recipeItem.setLikes(likes);
                                             recipeItem.setDislikes(dislikes);
-//                                            Log.d("rating[dislikes]","likes: "+likes+" dislikes: "+dislikes+" rating: "+rating+"");
                                             DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("likes").setValue(recipeItem.getLikes());
                                             DBOthers.child(usersList.get(finalI).userID).child("Recipes").child(recipeKey).child("dislikes").setValue(recipeItem.getDislikes());
+                                            Toast.makeText(RecipePage.this, "Left a dislike for this recipe", Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                     //IMPORTANT!
