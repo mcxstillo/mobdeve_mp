@@ -58,7 +58,6 @@ public class SwipeAdapter extends RecyclerView.Adapter<SwipeAdapter.ViewHolder>{
 
         @Override
         public void onClick(View v) {
-//            listener.onClick(v, getAdapterPosition());
             listener.onClick(v, getAdapterPosition());
         }
 

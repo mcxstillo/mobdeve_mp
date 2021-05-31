@@ -51,7 +51,6 @@ public class register extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
-                                Log.d("TAG", "createUserWithEmail:success");
 
 //                                  FirebaseUser user = mAuth.getCurrentUser();
                                 User user = new User(reg_emailEt.getText().toString().trim(),reg_usernameEt.getText().toString().trim(),null, FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -64,9 +63,7 @@ public class register extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<Void> task) {
 
                                         if(task.isSuccessful()){
-                                            Log.d("yay","successful");
                                             updateUI(user);
-
                                         }
                                         else{
                                             Log.d("aw","not successful");
@@ -107,8 +104,6 @@ public class register extends AppCompatActivity {
 
     public void updateUI(User currentUser) {
         Intent Login = new Intent(getApplicationContext(), login.class);
-//        Login.putExtra("email", currentUser.getEmail());
-//        Log.v("DATA", currentUser.getUid());
         startActivity(Login);
     }
 }

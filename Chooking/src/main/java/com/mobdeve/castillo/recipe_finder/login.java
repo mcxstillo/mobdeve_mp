@@ -54,7 +54,6 @@ public class login extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    Log.d("LOGIN","successful!!!!!!");
                                     startActivity(new Intent(login.this, RecipeBook.class));
                                 }else{
                                     Toast.makeText(login.this, "Login failed.",

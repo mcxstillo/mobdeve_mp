@@ -52,7 +52,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             this.comment.setText(comment);
         }
 
-        //paadd na lang setter
     }
 
     @NonNull
@@ -79,7 +78,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                     User user = dataSnapshot.getValue(User.class);
                     //if a user from the db matches this user, display
                         if(user.userID != null&& !(user.userID.equals("")) && user.userID.equals(comments.get(position).getUser())){
-                            Log.d("UserinRV",user.name);
 
                             //set profile pic of commenter
                             String imgUri=user.profPicID;
@@ -106,8 +104,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             }
         });
 
-        //palagay just in case
-//        holder.setComment(comments.get(position).getComment());
     }
 
     @Override

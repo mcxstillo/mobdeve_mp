@@ -51,27 +51,22 @@ public class CommentSection extends AppCompatActivity {
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Comment comment = new Comment();
 
-        Log.d("commentkey",commentKey);
-        //loop the data in the db and put in array
         DBComment.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("snapshotcount",snapshot.getChildrenCount()+"");
+
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Comment commentItem = dataSnapshot.getValue(Comment.class);
-//                    String commentItem = dataSnapshot.getValue(String.class);
-                    Log.d("commentItem",commentItem+"");
                     comments.add(commentItem);
                 }
 
                 if(comments == null || comments.isEmpty()) {
-                    Log.d("COMMENTS EMPTY", "" + comments);
                     notice.setVisibility(View.VISIBLE);
                 }
                 else {
-                    Log.d("COMMENTS CONTENT", "" + comments);
                     notice.setVisibility(View.GONE);
                 }
+
                 //when user submits a comment
                 sendBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -88,8 +83,6 @@ public class CommentSection extends AppCompatActivity {
 
                 adapter.notifyDataSetChanged();
             }
-
-
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -111,7 +104,6 @@ public class CommentSection extends AppCompatActivity {
         this.commentEt = findViewById(R.id.commentEt);
         this.sendBtn = findViewById(R.id.sendBtn);
         this.comments = new ArrayList<Comment>();
-//        this.adapter = new CommentAdapter(comments);
     }
 
     // NAVBAR FUNCTIONS

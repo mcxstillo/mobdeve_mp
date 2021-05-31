@@ -28,11 +28,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class RecipeBook extends AppCompatActivity implements Serializable {
 
-    //LIKED RECIPES/LANDING PAGE?
+    //LIKED RECIPES/LANDING PAGE
     //SEARCH PAGE
     DrawerLayout navbar;
     private FirebaseUser user;
@@ -56,6 +57,8 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
     private TextView myRecipeBookTv;
     private TextView showingTv;
 
+    ArrayList<String> recipeIDs = new ArrayList<String>();
+    ArrayList<String> likedrecipes = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +66,9 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
         setContentView(R.layout.activity_recipe_book);
 
         init();
-        Log.d("recipebeforecondi",""+recipes.size());
 
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         DBSearch = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
-
-
-
 
         //SEARCH FUNCTION---
         //makes arraylist of users
@@ -87,6 +86,7 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                             for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                                 Recipe recipe = dataSnapshot.getValue(Recipe.class);
                                 recipesList.add(recipe);
+                                recipeIDs.add(recipe.getName());
                             }
 
 
@@ -104,6 +104,7 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                                             for(int i =0;i<recipesList.size();i++){
                                                  if(recipesList.get(i).recipeID.equals(recipeItem.recipeID)){
                                                     recipes.add(recipeItem);
+                                                    likedrecipes.add(recipeItem.getName());
                                                  }
                                             }
                                     }
@@ -136,7 +137,6 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                                             reference.child("Liked").child(recipes.get(viewHolder.getAdapterPosition()).recipeID).removeValue();
                                             recipes.remove(viewHolder.getAdapterPosition());
                                             adapter.notifyDataSetChanged();
-//                                            recipesRv.setAdapter(adapter);
                                         }
 
                                     }).attachToRecyclerView(recipesRv);
@@ -165,7 +165,7 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
             }
         });
 
-//        Log.d("onQueryTextSubmit", query);
+
         Intent fromOthers = getIntent();
 
         if(fromOthers.getStringExtra("query")!=null){
@@ -245,6 +245,7 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                     myRecipeBookTv.setVisibility(View.GONE);
                     showingTv.setVisibility(View.VISIBLE);
                     String str= "Showing search results for" +" '"+query+"'";
+                    supportBtn.setVisibility(View.GONE);
                     showingTv.setText(str);
                     notice.setVisibility(View.GONE);
                     searchRv.setAdapter(searchResultsAdapter);
@@ -271,7 +272,6 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
 
             }
         });
-
     }
 
     private void init() {
@@ -298,7 +298,6 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
             public void onClick(View v, int position) {
                 Intent viewRecipe = new Intent(RecipeBook.this, RecipePage.class);
                 String recipeID = recipes.get(position).getRecipeID();
-                Log.d("RecipeID",recipeID);
                 viewRecipe.putExtra("recipeID",recipeID);
                 startActivity(viewRecipe);
             }
@@ -312,7 +311,6 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                 Intent viewRecipe = new Intent(RecipeBook.this, RecipePage.class);
 
                 String recipeID = searchRecipes.get(position).getRecipeID();
-                Log.d("RecipeID",recipeID);
                 viewRecipe.putExtra("recipeID",recipeID);
                 //in going to recipebook, pass arraylist of recipes, loop that in the thing to see if nag match ba sa clinick nung user, then display the details
                 startActivity(viewRecipe);
@@ -348,8 +346,7 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
     }
 
     public void ClickRecipebook (View view){
-        Toast error = Toast.makeText(getApplicationContext(), "You are currently here.", Toast.LENGTH_SHORT);
-        error.show();
+        Toast.makeText(getApplicationContext(), "You are currently here.", Toast.LENGTH_SHORT).show();
     }
 
     public void ClickMyRecipes (View view){

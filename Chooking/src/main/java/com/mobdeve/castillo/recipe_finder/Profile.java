@@ -94,9 +94,6 @@ public class Profile extends AppCompatActivity {
                     else
                         Picasso.get().load(userProfile.profPicID).into(profilepic);
 
-                    Log.d("email",email +"");
-                    Log.d("name",name +"");
-
                 }
             }
 
@@ -136,7 +133,6 @@ public class Profile extends AppCompatActivity {
         this.emailProfile = findViewById(R.id.emailProfile);
         this.descProfile = findViewById(R.id.descProfile);
 
-
     }
 
 
@@ -158,8 +154,7 @@ public class Profile extends AppCompatActivity {
     }
 
     public void ClickProfile (View view){
-        Toast error = Toast.makeText(getApplicationContext(), "You are currently here.", Toast.LENGTH_SHORT);
-        error.show();
+        Toast.makeText(getApplicationContext(), "You are currently here.", Toast.LENGTH_SHORT).show();
     }
 
     public void ClickRecipebook (View view){

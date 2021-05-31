@@ -107,7 +107,6 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
             rating =((float) likes / (likes + dislikes)) * 5;
         }
 
-
         String imgUri=recipes.get(position).getImgUri();
         Picasso.get().load(imgUri).into(holder.recipeImg);
 

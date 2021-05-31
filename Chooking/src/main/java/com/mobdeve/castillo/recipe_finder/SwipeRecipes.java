@@ -63,13 +63,16 @@ public class SwipeRecipes extends AppCompatActivity {
         DB.child("Recipes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                recipes.clear();
+
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Recipe recipeItem = dataSnapshot.getValue(Recipe.class);
                     dataSnapshot.getValue(Recipe.class);
                     recipes.add(recipeItem);
                 }
 
-                if(recipes == null)
+                if(recipes == null || recipes.isEmpty())
                     noticeTv.setVisibility(View.VISIBLE);
                 else {
                     noticeTv.setVisibility(View.GONE);
@@ -78,9 +81,8 @@ public class SwipeRecipes extends AppCompatActivity {
                     recipeRv.setLayoutManager(lm);
                     adapter = new SwipeAdapter(recipes, listener);
                     recipeRv.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
                 }
-
-                adapter.notifyDataSetChanged();
             }
 
             @Override

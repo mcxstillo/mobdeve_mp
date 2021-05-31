@@ -31,7 +31,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="40dp">
 
                 <ScrollView
                     android:layout_width="match_parent"
@@ -61,8 +62,8 @@
                             android:layout_width="290dp"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:inputType="textMultiLine"
-                            android:hint="@string/addingr" />
+                            android:hint="@string/addingr"
+                            android:inputType="textMultiLine" />
                     </LinearLayout>
                 </ScrollView>
 

@@ -120,7 +120,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        Log.d("searchrecipessize",this.recipes.size()+"");
         return this.recipes.size();
     }
 

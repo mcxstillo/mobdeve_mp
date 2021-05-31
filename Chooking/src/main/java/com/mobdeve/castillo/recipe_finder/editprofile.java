@@ -43,6 +43,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -83,8 +84,6 @@ public class editprofile extends AppCompatActivity {
         reference = FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
         userID = user.getUid();
 
-
-
         //get current data and display on fields.
         reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -95,12 +94,13 @@ public class editprofile extends AppCompatActivity {
                 descEt.setText(userProfile.desc);
                 navUsernameTv.setText(userProfile.name);
 
+                if(userProfile.getProfPicID() != null)
+                    Picasso.get().load(userProfile.profPicID).into(photo);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d("Sad", "User Profile Cannot be Displayed");
-
             }
         });
 
@@ -109,16 +109,9 @@ public class editprofile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //error here, updates entire user model, not just specific fields
-//                userEdited = new User(user.getEmail(),profile_nameEt.getText().toString(),descEt.getText().toString());
-
                 reference.child(userID).child("name").setValue(profile_nameEt.getText().toString());
                 reference.child(userID).child("desc").setValue(descEt.getText().toString());
 
-
-//                        setName(profile_nameEt.getText().toString());
-//                userEdited.setDesc(descEt.getText().toString());
-//                reference.child(userID).setValue(userEdited);
                 startActivity(new Intent(editprofile.this, Profile.class));
                 finish();
             }
@@ -130,7 +123,6 @@ public class editprofile extends AppCompatActivity {
         this.camBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("clicked ","camera btn");
                 dispatchTakePictureIntent();
             }
         });
@@ -140,7 +132,6 @@ public class editprofile extends AppCompatActivity {
         this.gallBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("clicked ","gallery btn");
                 Intent openGallery = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(openGallery,GALLERY_REQUEST_CODE);
             }
@@ -158,7 +149,6 @@ public class editprofile extends AppCompatActivity {
                 File f = new File(currentPhotoPath);
                 //setting the IMAGE to the imageview
                 photo.setImageURI(Uri.fromFile(f));
-                Log.d("URI","Absolute URI of image is "+Uri.fromFile(f));
 
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 Uri contentUri = Uri.fromFile(f);
@@ -166,7 +156,6 @@ public class editprofile extends AppCompatActivity {
                 this.sendBroadcast(mediaScanIntent);
 
                 uploadImageToFirebase(f.getName(),contentUri);
-                Log.d("filename",f.getName()+"");
             }
 
         }
@@ -177,7 +166,6 @@ public class editprofile extends AppCompatActivity {
                 Uri contentUri = data.getData();
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                 String imageFileName = "JPEG_" + timeStamp + "." + getFileExt(contentUri);
-                Log.d("TAG","onActivityResult: Gallery Image Uri: "+imageFileName);
                 photo.setImageURI(contentUri);
                 uploadImageToFirebase(imageFileName,contentUri);
             }
@@ -194,28 +182,22 @@ public class editprofile extends AppCompatActivity {
     }
 
     private void uploadImageToFirebase(String name, Uri contentUri) {
-        Log.d("uploadtofb",name);
+
         final StorageReference imageRef = storageReference.child("profilepics/"+name);
-        Log.d("imageRef",imageRef.toString());
-        Log.d("imageRefputFile",imageRef.putFile(contentUri).toString());
 
         imageRef.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                Log.d("onSuccess","im in");
                 Task<Uri> downloadUrl=taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
-                        Log.d("onComplete","im in");
-                        Toast.makeText(editprofile.this,"Image Uploaded to Firebase", Toast.LENGTH_LONG).show();
+
+                        Toast.makeText(editprofile.this,"Uploaded profile photo", Toast.LENGTH_LONG).show();
                         String t = task.getResult().toString();
 
-                        Toast.makeText(editprofile.this,reference.toString(), Toast.LENGTH_LONG).show();
                         reference.child(userID).child("profPicID").setValue(t);
                         userEdited.setProfPicID("kura");
-
-                        Log.d("profpicID",t);
                     }
                 });
 
@@ -223,7 +205,6 @@ public class editprofile extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("upload failed","very sad");
                 userEdited.setProfPicID("cry for me");
             }
         });
@@ -254,8 +235,7 @@ public class editprofile extends AppCompatActivity {
         // Ensure that there's a camera activity to handle the intent
         if (getApplicationContext().getPackageManager().hasSystemFeature(
                 PackageManager.FEATURE_CAMERA)) {
-//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
+
             File photoFile = null;
             try {
                 photoFile = createImageFile();
@@ -286,7 +266,6 @@ public class editprofile extends AppCompatActivity {
         userEdited = new User();
         this.storageReference =  FirebaseStorage.getInstance("gs://mobdeve-b369a.appspot.com/").getReference();
         photo.setImageResource(R.drawable.ic_profilephoto);
-
     }
 
 

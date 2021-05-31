@@ -45,7 +45,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="50dp">
 
 
                 <LinearLayout
@@ -88,7 +89,7 @@
                     android:id="@+id/recipesRv"
                     android:layout_width="391dp"
                     android:layout_height="match_parent"
-                    android:paddingBottom="30dp"
+                    android:paddingBottom="40dp"
                     android:textAlignment="center">
 
                 </androidx.recyclerview.widget.RecyclerView>
@@ -97,7 +98,7 @@
                     android:id="@+id/searchRv"
                     android:layout_width="391dp"
                     android:layout_height="match_parent"
-                    android:paddingBottom="30dp"
+                    android:paddingBottom="40dp"
                     android:textAlignment="center">
 
                 </androidx.recyclerview.widget.RecyclerView>

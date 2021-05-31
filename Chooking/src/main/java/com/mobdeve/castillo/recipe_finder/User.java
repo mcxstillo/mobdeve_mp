@@ -5,8 +5,6 @@ import android.net.Uri;
 public class User {
 
     public String name, email,desc,userID,profPicID;
-
-
     public User(){
 
     }
@@ -25,8 +23,6 @@ public class User {
 
     }
 
-
-
     public User(String name,String desc){
         this.name = name;
         this.desc = desc;
@@ -36,8 +32,6 @@ public class User {
         this.profPicID = profPicID;
 
     }
-
-
 
     //getters
     public String getName(){
@@ -60,9 +54,6 @@ public class User {
         return this.profPicID;
     }
 
-
-
-
     //setters
     public void setName(String newName){
         this.name = newName;
@@ -83,7 +74,5 @@ public class User {
     public void setProfPicID(String profPicID){
         this.profPicID = Uri.parse(profPicID).toString();
     }
-
-
 
 }

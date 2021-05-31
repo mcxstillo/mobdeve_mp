@@ -177,7 +177,6 @@ public class CreateRecipe extends AppCompatActivity{
         this.img_cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("clicked ","camera btn");
                 dispatchTakePictureIntent();
             }
         });
@@ -187,7 +186,6 @@ public class CreateRecipe extends AppCompatActivity{
         this.img_galleryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("clicked ","gallery btn");
                 Intent gallery = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(gallery,GALLERY_REQUEST_CODE);
             }
@@ -201,7 +199,6 @@ public class CreateRecipe extends AppCompatActivity{
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         User userName = snapshot.getValue(User.class);
                         recipe.setName(name.getText().toString());
-                        Log.d("user",userName.getName());
                         recipe.setCreator(userID);
                         recipe.setCuisine(cuisine.getText().toString());
                         recipe.setServing_size(size.getText().toString());
@@ -211,7 +208,6 @@ public class CreateRecipe extends AppCompatActivity{
                         recipe.setDesc(desc.getText().toString());
                         recipe.setLikes(0);
 
-                        Log.d("recipekey?",recipeKey);
                         recipe.setRecipeID(recipeKey);
                         User userProfile = snapshot.getValue(User.class);
                         DB.child("Recipes").child(recipeKey).setValue(recipe);
@@ -222,7 +218,7 @@ public class CreateRecipe extends AppCompatActivity{
                     }
                 });
                 Intent toIngr = new Intent(CreateRecipe.this, CreateIngredients.class);
-                Log.d("recipekeycreaterecipe",recipeKey);
+
                 toIngr.putExtra("RecipeKey",recipeKey);
                 toIngr.putExtra("TYPE", "CREATE");
                 startActivity(toIngr);
@@ -243,7 +239,7 @@ public class CreateRecipe extends AppCompatActivity{
                 reference.child(userID).child("Recipes").child(editRecipeID).child("desc").setValue(desc.getText().toString());
 
                 Intent toIngr = new Intent(CreateRecipe.this, CreateIngredients.class);
-                Log.d("recipekeycreaterecipe",editRecipeID);
+
                 toIngr.putExtra("RecipeKey",editRecipeID);
                 toIngr.putExtra("TYPE","UPDATE");
                 startActivity(toIngr);
@@ -264,7 +260,6 @@ public class CreateRecipe extends AppCompatActivity{
                 File f = new File(currentPhotoPath);
                 //setting the IMAGE to the imageview
                 recipeimg.setImageURI(Uri.fromFile(f));
-                Log.d("URI","Absolute URI of image is "+Uri.fromFile(f));
 
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 Uri contentUri = Uri.fromFile(f);
@@ -272,7 +267,6 @@ public class CreateRecipe extends AppCompatActivity{
                 this.sendBroadcast(mediaScanIntent);
 
                 uploadImageToFirebase(f.getName(),contentUri);
-                Log.d("filename",f.getName()+"");
             }
 
         }
@@ -283,7 +277,6 @@ public class CreateRecipe extends AppCompatActivity{
                 Uri contentUri = data.getData();
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                 String imageFileName = "JPEG_" + timeStamp + "." + getFileExt(contentUri);
-                Log.d("TAG","onActivityResult: Gallery Image Uri: "+imageFileName);
                 recipeimg.setImageURI(contentUri);
                 uploadImageToFirebase(imageFileName,contentUri);
             }
@@ -300,19 +293,16 @@ public class CreateRecipe extends AppCompatActivity{
     }
 
     private void uploadImageToFirebase(String name, Uri contentUri) {
-        Log.d("uploadtofb",name);
+
         final StorageReference imageRef = storageReference.child("pictures/"+name);
-        Log.d("imageRef",imageRef.toString());
-        Log.d("imageRefputFile",imageRef.putFile(contentUri).toString());
         imageRef.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                Log.d("onSuccess","im in");
                 Task<Uri> downloadUrl=taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
-                        Log.d("onComplete","im in");
+
                         Toast.makeText(CreateRecipe.this,"Image Uploaded to Firebase", Toast.LENGTH_LONG).show();
                         String t = task.getResult().toString();
 
@@ -321,8 +311,6 @@ public class CreateRecipe extends AppCompatActivity{
                         }else{
                             recipe.setImgUri(t);
                         }
-
-                        Log.d("add uri",t);
                     }
                 });
 

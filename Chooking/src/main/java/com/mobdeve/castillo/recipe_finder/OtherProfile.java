@@ -59,7 +59,6 @@ public class OtherProfile extends AppCompatActivity {
         currentUserID =FirebaseAuth.getInstance().getCurrentUser().getUid();
         this.emailProfile = findViewById(R.id.emailProfile);
         this.nameProfile = findViewById(R.id.nameProfile);
-        // this.viewBtn = findViewById(R.id.viewBtn);
 
         init();
         initFirebase();
@@ -103,11 +102,6 @@ public class OtherProfile extends AppCompatActivity {
             userID =fromRecipePage.getStringExtra("userID");
         }
 
-        Log.d("userID",userID);
-
-
-
-        Log.d("INPROFILE","HELLO");
         reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -122,11 +116,6 @@ public class OtherProfile extends AppCompatActivity {
                     nameProfile.setText(name);
                     descProfile.setText(desc);
                     Picasso.get().load(userProfile.profPicID).into(imgProfile);
-
-                    Picasso.get().load(userProfile.profPicID).into(imgProfile);
-
-                    Log.d("email",email +"");
-                    Log.d("name",name +"");
 
                 }
             }
@@ -162,9 +151,6 @@ public class OtherProfile extends AppCompatActivity {
         }
 
 
-
-
-        Log.d("userIDinpProfile",userID);
         FirebaseDatabase.getInstance("https://mobdeve-b369a-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users").child(userID).child("Recipes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -205,8 +191,6 @@ public class OtherProfile extends AppCompatActivity {
     }
 
 
-
-
     private void setOnClickListener() {
         this.listener = new ResultsAdapter.RecyclerViewClickListener() {
             @Override
@@ -214,9 +198,7 @@ public class OtherProfile extends AppCompatActivity {
                 Intent viewRecipe = new Intent(OtherProfile.this, RecipePage.class);
 
                 String recipeID = recipes.get(position).getRecipeID();
-                Log.d("RecipeID",recipeID);
                 viewRecipe.putExtra("recipeID",recipeID);
-//                viewRecipe.putExtra("position",position);
                 startActivity(viewRecipe);
             }
         };
@@ -238,8 +220,7 @@ public class OtherProfile extends AppCompatActivity {
     }
 
     public void ClickProfile (View view){
-        Toast error = Toast.makeText(getApplicationContext(), "You are currently here.", Toast.LENGTH_SHORT);
-        error.show();
+        Toast.makeText(getApplicationContext(), "You are currently here.", Toast.LENGTH_SHORT).show();
     }
 
     public void ClickRecipebook (View view){

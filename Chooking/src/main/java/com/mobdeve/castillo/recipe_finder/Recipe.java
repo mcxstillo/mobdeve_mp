@@ -32,7 +32,6 @@ public class Recipe {
         this.desc = "";
     }
 
-
     public Recipe(String name, String creator,String cuisine, String serving_size, String difficulty, String preptime, String cookingtime, String desc) {
         this.name = name;
         this.creator = creator;

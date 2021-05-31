@@ -72,7 +72,7 @@ public class CreateIngredients extends AppCompatActivity {
         });
 
         if(fromCreate.getStringExtra("TYPE").equals("UPDATE")){
-            Log.d("from edit","lesgo");
+
             toSteps.putExtra("TYPE","UPDATE");
             for(int i=0;i<textFields.size();i++){
                 int finalI = i;
@@ -80,12 +80,10 @@ public class CreateIngredients extends AppCompatActivity {
                 DB.child("Recipes").child(recipeKey).child("Ingredients").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        Log.d("there are ", snapshot.getChildrenCount() +" ingredients");
+
                         int ingr = 0;
                         for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                             String ingredient = dataSnapshot.getValue(String.class);
-                            Log.d("ingredient is ",ingredient);
-                            Log.d("ingr ",ingr+"");
                             textFields.get(ingr).setText(ingredient);
 
                             if(ingr== snapshot.getChildrenCount()-1){

@@ -73,7 +73,7 @@ public class CreateSteps extends AppCompatActivity {
         });
 
         if(fromCreate.getStringExtra("TYPE").equals("UPDATE")){
-            Log.d("from ingr edit","in steps");
+
             for(int i=0;i<textFields.size();i++){
                 DB.child("Recipes").child(recipeKey).child("Steps").addValueEventListener(new ValueEventListener() {
                     @Override
@@ -81,8 +81,7 @@ public class CreateSteps extends AppCompatActivity {
                         int stepCtr=0;
                         for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                             Steps stepItem = dataSnapshot.getValue(Steps.class);
-                            Log.d("step is ",stepItem.step_desc);
-                            Log.d("ingr ",stepItem.step_desc+"");
+
                             textFields.get(stepCtr).setText(stepItem.step_desc);
 
                             if(stepCtr== snapshot.getChildrenCount()-1){
@@ -159,7 +158,7 @@ public class CreateSteps extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         DBRecipe.child("Steps").setValue(steps);
                         Intent toResults = new Intent(CreateSteps.this,SwipeRecipes.class);
-//                        toResults.putExtra("recipeKey",DBRecipe.getKey());
+
                         startActivity(toResults);
                         finish();
                     }
