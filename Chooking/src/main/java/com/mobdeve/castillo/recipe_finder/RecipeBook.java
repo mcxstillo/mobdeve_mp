@@ -53,6 +53,8 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
     private ArrayList<User> usersList;
     private ArrayList<Recipe> recipesList;
     private ArrayList<Recipe> searchRecipes;
+    private TextView myRecipeBookTv;
+    private TextView showingTv;
 
 
     @Override
@@ -109,6 +111,7 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                                     if (recipes == null || recipes.isEmpty()) {
                                         recipesRv.setVisibility(View.GONE);
                                         notice.setVisibility(View.VISIBLE);
+                                        showingTv.setVisibility(View.GONE);
                                     }
                                     else {
                                         LinearLayoutManager lm = new LinearLayoutManager(RecipeBook.this);
@@ -231,6 +234,7 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                     searchRv.setVisibility(View.GONE);
                     recipesRv.setVisibility(View.VISIBLE);
                     notice.setVisibility(View.VISIBLE);
+                    showingTv.setVisibility(View.GONE);
                 }
                 else {
                     LinearLayoutManager llm = new LinearLayoutManager(RecipeBook.this);
@@ -238,6 +242,10 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
                     searchResultsAdapter = new SearchAdapter(searchRecipes, searchListener);
                     recipesRv.setVisibility(View.GONE);
                     searchRv.setVisibility(View.VISIBLE);
+                    myRecipeBookTv.setVisibility(View.GONE);
+                    showingTv.setVisibility(View.VISIBLE);
+                    String str= "Showing search results for" +" '"+query+"'";
+                    showingTv.setText(str);
                     notice.setVisibility(View.GONE);
                     searchRv.setAdapter(searchResultsAdapter);
                     searchResultsAdapter.notifyDataSetChanged();
@@ -273,7 +281,9 @@ public class RecipeBook extends AppCompatActivity implements Serializable {
         this.recipesRv = (RecyclerView) findViewById(R.id.recipesRv);
         this.notice = findViewById(R.id.noticeTv);
         this.navUsernameTv = findViewById(R.id.navUsernameTv);
+        this.showingTv = findViewById(R.id.showingTv);
         this.searchBtn = findViewById(R.id.searchBtn);
+        this.myRecipeBookTv = findViewById(R.id.myRecipeBookTv);
         this.searchRecipes = new ArrayList<>();
         this.usersList = new ArrayList<>();
         this.recipesList = new ArrayList<>();
