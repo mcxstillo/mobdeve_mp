@@ -1,0 +1,48 @@
+Index: app/src/main/res/layout/activity_profile.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".profile\">\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_profile.xml	(revision 465d030a7b613dae3ff7d08a62f75b90dadf2bec)
++++ app/src/main/res/layout/activity_profile.xml	(date 1620913703493)
+@@ -6,4 +6,37 @@
+     android:layout_height="match_parent"
+     tools:context=".profile">
+ 
++    <androidx.constraintlayout.widget.ConstraintLayout
++        android:id="@+id/constraintLayout2"
++        android:layout_width="391dp"
++        android:layout_height="79dp"
++        android:background="#FEA841"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent">
++
++    </androidx.constraintlayout.widget.ConstraintLayout>
++
++    <ImageView
++        android:id="@+id/imageView2"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginTop="36dp"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintHorizontal_bias="0.498"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
++        tools:srcCompat="@tools:sample/avatars" />
++
++    <TextView
++        android:id="@+id/nameTv"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginTop="12dp"
++        android:text="User's name here"
++        android:textColor="#000000"
++        android:textSize="20sp"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
